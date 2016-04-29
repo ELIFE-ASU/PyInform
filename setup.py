@@ -1,6 +1,8 @@
 from distutils.cmd import Command
 from distutils.core import setup
 from distutils.extension import Extension
+from Cython.Build import cythonize
+
 import numpy
 
 with open('README.md') as f:
@@ -27,16 +29,9 @@ class TestCommand(Command):
         os.environ['PYTHONPATH'] = path
         raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest', 'discover']))
 
-extensions = []
-try:
-    from Cython.Build import cythonize
-    extensions = cythonize([Extension("pyinform", ["pyinform/pyinform.pyx"],
-                            libraries=["inform"],
-                            include_dirs=[numpy.get_include()])])
-except ImportError:
-    extensions = [Extension("pyinform", ["pyinform/pyinform.c"],
-                  libraries=["inform"],
-                  include_dirs=[numpy.get_include()])]
+extensions = cythonize([Extension("pyinform", ["pyinform/pyinform.pyx"],
+    libraries=["inform"],
+    include_dirs=[numpy.get_include()])])
 
 setup(
     name='pyinform',
