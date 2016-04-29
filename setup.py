@@ -25,7 +25,7 @@ class TestCommand(Command):
 
         path = "build/lib.{0}-{1}".format(get_platform(), get_python_version())
         os.environ['PYTHONPATH'] = path
-        raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest']))
+        raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest', 'discover']))
 
 extensions = []
 try:
