@@ -9,7 +9,7 @@ cdef extern from "inform/time_series.h":
     double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
 
 def activeinfo(xs, uint64_t k, uint64_t b = 0):
-    if not xs:
+    if len(xs) == 0:
         raise ValueError("active information not defined on empty containers")
 
     if b < 2:
