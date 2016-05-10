@@ -7,8 +7,6 @@ cdef extern from "stdint.h":
 
 cdef extern from "inform/time_series.h":
     double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
-
-cdef extern from "inform/time_series.h":
     double inform_active_info_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def activeinfo1d(arr, uint64_t k, uint64_t b):
