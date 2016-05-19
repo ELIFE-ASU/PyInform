@@ -5,10 +5,34 @@ import numpy
 cdef extern from "stdint.h":
     ctypedef unsigned long uint64_t
 
-cdef extern from "inform/time_series.h":
-    double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
+cdef extern from "inform/dist.h":
+    ctypedef struct inform_dist:
+        pass
+
+    inform_dist* inform_dist_alloc(size_t n)
+    void inform_dist_free(inform_dist* dist)
+
+    size_t inform_dist_size(const inform_dist* dist);
+
+cdef class Dist:
+    cdef inform_dist* _c_dist
+    def __cinit__(self, n):
+        if n <= 0:
+            raise ValueError("distributions require positive, nonzero support")
+
+        self._c_dist = inform_dist_alloc(n)
+        if self._c_dist is NULL:
+            raise MemoryError()
+
+    def __dealloc__(self):
+        if self._c_dist is not NULL:
+            inform_dist_free(self._c_dist)
+
+    def __len__(self):
+        return inform_dist_size(self._c_dist)
 
 cdef extern from "inform/time_series.h":
+    double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
     double inform_active_info_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def activeinfo1d(arr, uint64_t k, uint64_t b):
