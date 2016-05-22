@@ -88,12 +88,33 @@ def activeinfo(xs, uint64_t k, uint64_t b = 0):
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
 
+def transferentropy1d(ys, xs, uint64_t k, uint64_t b):
+    from math import isnan
+
+    if len(ys) < k+1 or len(ys) == 0:
+        raise ValueError("containers are too short ({0}) for history length ({1})".format(len(ys),k))
+
+    if k == 0:
+        raise ValueError("history length is too short")
+
+    if b < 2:
+        b = max(2,max(xs)+1,max(ys)+1)
+
+    cdef uint64_t [:] ysarr = ys
+    cdef uint64_t [:] xsarr = xs
+    te = inform_transfer_entropy(&ysarr[0], &xsarr[0], <uint64_t>len(ys), b, k)
+
+    if isnan(te):
+        raise ValueError("invalid transfer entropy computed (NaN)")
+
+    return te
+
 def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
     ysarr = numpy.asarray(ys, dtype=numpy.uint64)
     xsarr = numpy.asarray(xs, dtype=numpy.uint64)
     if ysarr.shape != xsarr.shape:
         raise ValueError("the x and y time series must have the same shape")
     elif ysarr.ndim == 1:
-        return 0
+        return transferentropy1d(ysarr, xsarr, k, b)
     else:
         raise ValueError("arrays of dimension greater than 1 are not yet supported")
