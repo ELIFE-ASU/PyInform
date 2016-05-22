@@ -87,3 +87,13 @@ def activeinfo(xs, uint64_t k, uint64_t b = 0):
         return activeinfo2d(array, k, b)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
+
+def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
+    ysarr = numpy.asarray(ys, dtype=numpy.uint64)
+    xsarr = numpy.asarray(xs, dtype=numpy.uint64)
+    if ysarr.shape != xsarr.shape:
+        raise ValueError("the x and y time series must have the same shape")
+    elif ysarr.ndim == 1:
+        return 0
+    else:
+        raise ValueError("arrays of dimension greater than 1 are not yet supported")
