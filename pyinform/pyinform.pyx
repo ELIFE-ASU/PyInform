@@ -35,6 +35,7 @@ cdef extern from "inform/time_series.h":
     double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
     double inform_active_info_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
     double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, uint64_t base, uint64_t k)
+    double inform_transfer_entropy_ensemble(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def activeinfo1d(arr, uint64_t k, uint64_t b):
     from math import isnan
@@ -109,6 +110,28 @@ def transferentropy1d(ys, xs, uint64_t k, uint64_t b):
 
     return te
 
+def transferentropy2d(ys, xs, uint64_t k, uint64_t b):
+    from math import isnan
+
+    shape = ys.shape
+    if shape[1] < k+1 or shape[0] == 0:
+        raise ValueError("container is too short ({0}) for history length ({1})".format(shape[1],k))
+
+    if k == 0:
+        raise ValueError("history length is too short")
+
+    if b < 2:
+        b = max(2, numpy.amax(xs)+1, numpy.amax(ys)+1)
+
+    cdef uint64_t [:] ysarr = ys.ravel()
+    cdef uint64_t [:] xsarr = xs.ravel()
+    te = inform_transfer_entropy_ensemble(&ysarr[0], &xsarr[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+
+    if isnan(te):
+        raise ValueError("invalid transfer entropy computed (NaN)")
+
+    return te
+
 def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
     ysarr = numpy.asarray(ys, dtype=numpy.uint64)
     xsarr = numpy.asarray(xs, dtype=numpy.uint64)
@@ -116,5 +139,7 @@ def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
         raise ValueError("the x and y time series must have the same shape")
     elif ysarr.ndim == 1:
         return transferentropy1d(ysarr, xsarr, k, b)
+    elif ysarr.ndim == 2:
+        return transferentropy2d(ysarr, xsarr, k, b)
     else:
-        raise ValueError("arrays of dimension greater than 1 are not yet supported")
+        raise ValueError("arrays of dimension greater than 2 are not yet supported")
