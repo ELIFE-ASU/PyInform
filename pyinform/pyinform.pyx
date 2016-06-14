@@ -36,6 +36,8 @@ cdef extern from "inform/time_series.h":
     double inform_active_info_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
     double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, uint64_t base, uint64_t k)
     double inform_transfer_entropy_ensemble(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
+    double inform_entropy_rate(const uint64_t* series, size_t n, uint64_t b, uint64_t k);
+    double inform_entropy_rate_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t b, uint64_t k);
 
 def activeinfo1d(arr, uint64_t k, uint64_t b):
     from math import isnan
@@ -141,5 +143,57 @@ def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
         return transferentropy1d(ysarr, xsarr, k, b)
     elif ysarr.ndim == 2:
         return transferentropy2d(ysarr, xsarr, k, b)
+    else:
+        raise ValueError("arrays of dimension greater than 2 are not yet supported")
+
+def entropyrate1d(arr, uint64_t k, uint64_t b):
+    from math import isnan
+
+    if len(arr) < k+1 or len(arr) == 0:
+        raise ValueError("container is too short ({0}) for history length ({1})".format(len(arr),k))
+
+    if k == 0:
+        raise ValueError("history length is too short")
+
+    if b < 2:
+        b = max(2,max(arr)+1)
+
+    cdef uint64_t [:] ys = arr
+    er = inform_entropy_rate(&ys[0], <uint64_t>len(arr), b, k)
+
+    if isnan(er):
+        raise ValueError("invalid entropy rate computed (NaN)")
+
+    return er
+
+def entropyrate2d(arr, uint64_t k, uint64_t b):
+    from math import isnan
+
+    shape = arr.shape
+    if shape[1] < k+1 or shape[0] == 0:
+        raise ValueError("container is too short ({0}) for history length ({1})".format(shape[1],k))
+
+    if k == 0:
+        raise ValueError("history length is too short")
+
+    if b < 2:
+        b = max(2,numpy.amax(arr)+1)
+
+    cdef uint64_t [:] ys = arr.ravel()
+    er = inform_entropy_rate_ensemble(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+
+    if isnan(er):
+        raise ValueError("invalid entropy rate computed (NaN)")
+
+    return er
+
+def entropyrate(xs, uint64_t k, uint64_t b = 0):
+    array = numpy.asarray(xs, dtype=numpy.uint64)
+    if array.ndim == 0:
+        raise ValueError("entropy rate is ill-defined on empty arrays")
+    elif array.ndim == 1:
+        return entropyrate1d(array, k, b)
+    elif array.ndim == 2:
+        return entropyrate2d(array, k, b)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")

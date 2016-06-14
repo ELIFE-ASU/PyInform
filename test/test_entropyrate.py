@@ -1,48 +1,62 @@
 import unittest
-from pyinform import activeinfo
+from pyinform import entropyrate
 from math import isnan
+import numpy
 
-class TestActiveInfo(unittest.TestCase):
+class EntropyRateHistoryTooLong(unittest.TestCase):
 
-    def testSeriesTooShort(self):
+    def testHistoryTooLongBase2(self):
+        series = numpy.random.randint(2,size = 30)
         with self.assertRaises(ValueError):
-            activeinfo([],2)
+            entropyrate(series,26,2)
 
+    def testHistoryTooLongBase3(self):
+        series = numpy.random.randint(3,size = 30)
         with self.assertRaises(ValueError):
-            activeinfo([1],2)
+            entropyrate(series,16,3)
 
-    def testHistoryLengthTooShort(self):
+    def testHistoryTooLongBase4(self):
+        series = numpy.random.randint(4,size = 30)
         with self.assertRaises(ValueError):
-            activeinfo([0,1,1,0,0,1,0], 0)
+            entropyrate(series,13,4)
 
-    def testEncodingError(self):
-        series = [2,1,0,0,1,0,0,1]
-        activeinfo(series, 2, 3)
+class TimeSeriesTooShort(unittest.TestCase):
+
+    def testTimeSeriesTooShort(self):
+        series = [1,0,1,0]
         with self.assertRaises(ValueError):
-            activeinfo(series, 2, 2)
+            entropyrate(series,4,2)
+
+
+class EntropyRateEncodingError(unittest.TestCase):
+
+    def testIncorrectBase(self):
+        with self.assertRaises(ValueError):
+            entropyrate([2,1,0,0,1,0,0,1],3,2)
+
+
+class TestEntropyRate(unittest.TestCase):
 
     def testBase2(self):
-        self.assertAlmostEqual(0.918296, activeinfo([1,1,0,0,1,0,0,1], 2), places=6)
-        self.assertAlmostEqual(0.000000, activeinfo([1,0,0,0,0,0,0,0,0], 2), places=6)
-        self.assertAlmostEqual(0.305958, activeinfo([0,0,1,1,1,1,0,0,0], 2), places=6)
-        self.assertAlmostEqual(0.347458, activeinfo([1,0,0,0,0,0,0,1,1], 2), places=6)
-        self.assertAlmostEqual(0.347458, activeinfo([1,0,0,0,0,0,0,1,1], 2), places=6);
-        self.assertAlmostEqual(0.399533, activeinfo([0,0,0,0,0,1,1,0,0], 2), places=6);
-        self.assertAlmostEqual(0.399533, activeinfo([0,0,0,0,1,1,0,0,0], 2), places=6);
-        self.assertAlmostEqual(0.305958, activeinfo([1,1,1,0,0,0,0,1,1], 2), places=6);
-        self.assertAlmostEqual(0.305958, activeinfo([0,0,0,1,1,1,1,0,0], 2), places=6);
-        self.assertAlmostEqual(0.347458, activeinfo([0,0,0,0,0,0,1,1,0], 2), places=6);
+        self.assertAlmostEqual(0.000000, entropyrate([1,1,0,0,1,0,0,1], 2, 2), places=6)
+        self.assertAlmostEqual(0.000000, entropyrate([1,0,0,0,0,0,0,0,0], 2, 2), places=6)
+        self.assertAlmostEqual(0.679270, entropyrate([0,0,1,1,1,1,0,0,0], 2, 2), places=6)
+        self.assertAlmostEqual(0.515663, entropyrate([1,0,0,0,0,0,0,1,1], 2, 2), places=6)
+        self.assertAlmostEqual(0.463587, entropyrate([0,0,0,0,0,1,1,0,0], 2, 2), places=6)
+        self.assertAlmostEqual(0.463587, entropyrate([0,0,0,0,1,1,0,0,0], 2, 2), places=6)
+        self.assertAlmostEqual(0.679270, entropyrate([1,1,1,0,0,0,0,1,1], 2, 2), places=6)
+        self.assertAlmostEqual(0.679270, entropyrate([0,0,0,1,1,1,1,0,0], 2, 2), places=6)
+        self.assertAlmostEqual(0.515663, entropyrate([0,0,0,0,0,0,1,1,0], 2, 2), places=6)
 
     def testBase4(self):
-        self.assertAlmostEqual(0.635471, activeinfo([3,3,3,2,1,0,0,0,1], 2, b=4), places=6);
-        self.assertAlmostEqual(0.635471, activeinfo([2,2,3,3,3,3,2,1,0], 2, b=4), places=6);
-        self.assertAlmostEqual(0.234783, activeinfo([2,2,2,2,2,2,1,1,1], 2, b=4), places=6);
+        self.assertAlmostEqual(0.285714, entropyrate([3,3,3,2,1,0,0,0,1], 2, 4), places=6)
+        self.assertAlmostEqual(0.196778, entropyrate([2,2,3,3,3,3,2,1,0], 2, 4), places=6)
+        self.assertAlmostEqual(0.257831, entropyrate([2,2,2,2,2,2,1,1,1], 2, 4), places=6)
 
-class TestActiveInfoEnsemble(unittest.TestCase):
+class TestEntropyRateEnsemble(unittest.TestCase):
 
     def testBase2(self):
-        self.assertAlmostEqual(0.459148, activeinfo([[1,1,0,0,1,0,0,1],[0,0,0,1,0,0,0,1]], 2), places=6)
-        self.assertAlmostEqual(0.308047, activeinfo([
+        self.assertAlmostEqual(0.610249, entropyrate([
             [1,0,0,0,0,0,0,0,0],
             [0,0,1,1,1,1,0,0,0],
             [1,0,0,0,0,0,0,1,1],
@@ -51,10 +65,10 @@ class TestActiveInfoEnsemble(unittest.TestCase):
             [0,0,0,0,1,1,0,0,0],
             [1,1,1,0,0,0,0,1,1],
             [0,0,0,1,1,1,1,0,0],
-            [0,0,0,0,0,0,1,1,0]], 2), places=6)
+            [0,0,0,0,0,0,1,1,0]], 2, 2), places=6)
 
     def testBase4(self):
-        self.assertAlmostEqual(0.662146, activeinfo([
+        self.assertAlmostEqual(0.272234, entropyrate([
             [3,3,3,2,1,0,0,0,1],
             [2,2,3,3,3,3,2,1,0],
             [0,0,0,0,1,1,0,0,0],
