@@ -43,5 +43,22 @@ class TestDist(unittest.TestCase):
         with self.assertRaises(IndexError):
             d[3] = 1
 
+    def testCounts(self):
+        d = Dist(2)
+        self.assertEqual(0, d.counts())
+
+        d[0] = 3
+        self.assertEqual(3, d.counts())
+
+        d[0] = 2
+        self.assertEqual(2, d.counts())
+
+        d[1] = 3
+        self.assertEqual(5, d.counts())
+
+        d[0] = 0
+        d[1] = 0
+        self.assertEqual(0, d.counts())
+
 if __name__ == "__main__":
     unittest.main()

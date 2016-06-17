@@ -13,6 +13,7 @@ cdef extern from "inform/dist.h":
     void inform_dist_free(inform_dist* dist)
 
     size_t inform_dist_size(const inform_dist* dist);
+    uint64_t inform_dist_counts(const inform_dist* dist);
 
     uint64_t inform_dist_get(const inform_dist* dist, uint64_t event);
     uint64_t inform_dist_set(const inform_dist* dist, uint64_t event, uint64_t value);
@@ -33,6 +34,9 @@ cdef class Dist:
 
     def __len__(self):
         return inform_dist_size(self._c_dist)
+
+    def counts(self):
+        return inform_dist_counts(self._c_dist)
 
     def __getitem__(self, index):
         if index >= len(self):
