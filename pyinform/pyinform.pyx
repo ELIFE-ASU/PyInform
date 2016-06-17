@@ -24,6 +24,7 @@ cdef extern from "inform/dist.h":
     uint64_t inform_dist_tick(inform_dist* dist, uint64_t event);
 
     double inform_dist_prob(const inform_dist* dist, uint64_t event);
+    int inform_dist_dump(const inform_dist* dist, double* probs, size_t n);
 
 cdef class Dist:
     cdef inform_dist* _c_dist
@@ -69,6 +70,17 @@ cdef class Dist:
         if index >= len(self):
             raise IndexError()
         return inform_dist_prob(self._c_dist, index)
+
+    def dump(self):
+        if not self.valid():
+            raise ValueError("invalid distribution")
+        n = len(self)
+        probs = numpy.empty(n, dtype=numpy.float64)
+        cdef double [:] arr = probs
+        m = inform_dist_dump(self._c_dist, &arr[0], n)
+        if m != n:
+            raise RuntimeError("cannot dump the distribution")
+        return probs
 
 
 cdef extern from "inform/time_series.h":

@@ -1,6 +1,7 @@
 import unittest
 from pyinform import Dist
 from math import isnan
+import numpy as np
 
 class TestDist(unittest.TestCase):
     def testCannotAllocZero(self):
@@ -103,6 +104,20 @@ class TestDist(unittest.TestCase):
         d[0] = 1
         with self.assertRaises(IndexError):
             d.probability(3)
+
+    def testInvalidDump(self):
+        d = Dist(2)
+        with self.assertRaises(ValueError):
+            d.dump()
+
+    def testValidDump(self):
+        d = Dist(5)
+        for i in range(1, len(d)):
+            d[i] = i+1
+        self.assertEqual(14, d.counts())
+        probs = d.dump()
+        self.assertTrue((probs == np.array([0., 2./14, 3./14, 4./14, 5./14])).all())
+
 
 if __name__ == "__main__":
     unittest.main()
