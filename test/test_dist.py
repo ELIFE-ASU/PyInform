@@ -118,6 +118,34 @@ class TestDist(unittest.TestCase):
         probs = d.dump()
         self.assertTrue((probs == np.array([0., 2./14, 3./14, 4./14, 5./14])).all())
 
+    def testResizeGrow(self):
+        d = Dist(3)
+        for i in range(len(d)):
+            d[i] = i+1
+        self.assertEqual(3, len(d))
+        self.assertEqual(6, d.counts())
+
+        d.resize(5)
+        self.assertEqual(5, len(d))
+        self.assertEqual(6, d.counts())
+        for i in range(3):
+            self.assertEqual(i+1, d[i])
+        for i in range(3,len(d)):
+            self.assertEqual(0, d[i])
+
+    def testResizeShrink(self):
+        d = Dist(5)
+        for i in range(len(d)):
+            d[i] = i+1
+        self.assertEqual(5, len(d))
+        self.assertEqual(15, d.counts())
+
+        d.resize(3)
+        self.assertEqual(3, len(d))
+        self.assertEqual(6, d.counts())
+        for i in range(len(d)):
+            self.assertEqual(i+1, d[i])
+
 
 if __name__ == "__main__":
     unittest.main()

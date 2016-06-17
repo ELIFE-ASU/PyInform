@@ -13,6 +13,7 @@ cdef extern from "inform/dist.h":
         pass
 
     inform_dist* inform_dist_alloc(size_t n)
+    inform_dist* inform_dist_realloc(inform_dist* dist, size_t n)
     void inform_dist_free(inform_dist* dist)
 
     size_t inform_dist_size(const inform_dist* dist);
@@ -42,6 +43,13 @@ cdef class Dist:
 
     def __len__(self):
         return inform_dist_size(self._c_dist)
+
+    def resize(self, n):
+        if n <= 0:
+            raise ValueError("distributions require positive, nonzero support")
+        self._c_dist = inform_dist_realloc(self._c_dist, n)
+        if self._c_dist is NULL:
+            raise MemoryError()
 
     def counts(self):
         return inform_dist_counts(self._c_dist)
