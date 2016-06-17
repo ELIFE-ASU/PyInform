@@ -60,5 +60,17 @@ class TestDist(unittest.TestCase):
         d[1] = 0
         self.assertEqual(0, d.counts())
 
+    def testIsValid(self):
+        d = Dist(2)
+        self.assertFalse(d.valid())
+        d[0] = 2
+        self.assertTrue(d.valid())
+        d[1] = 2
+        self.assertTrue(d.valid())
+        d[0] = 0
+        self.assertTrue(d.valid())
+        d[1] = 0
+        self.assertFalse(d.valid())
+
 if __name__ == "__main__":
     unittest.main()
