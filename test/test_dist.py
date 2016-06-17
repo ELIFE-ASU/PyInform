@@ -15,5 +15,33 @@ class TestDist(unittest.TestCase):
         self.assertEqual(5, d.__len__())
         self.assertEqual(5, len(d))
 
+    def testGetSet(self):
+        d = Dist(2)
+        self.assertEqual(0, d[0])
+
+        d[0] = 4
+        self.assertEqual(4, d[0])
+        self.assertEqual(0, d[1])
+
+        d[1] = 2
+        self.assertEqual(2, d[1])
+        self.assertEqual(4, d[0])
+
+    def testGetBoundsError(self):
+        d = Dist(2)
+        with self.assertRaises(OverflowError):
+            d[-1]
+
+        with self.assertRaises(IndexError):
+            d[3]
+
+    def testSetBoundsError(self):
+        d = Dist(2)
+        with self.assertRaises(OverflowError):
+            d[-1] = 3
+
+        with self.assertRaises(IndexError):
+            d[3] = 1
+
 if __name__ == "__main__":
     unittest.main()

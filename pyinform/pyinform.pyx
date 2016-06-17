@@ -14,6 +14,9 @@ cdef extern from "inform/dist.h":
 
     size_t inform_dist_size(const inform_dist* dist);
 
+    uint64_t inform_dist_get(const inform_dist* dist, uint64_t event);
+    uint64_t inform_dist_set(const inform_dist* dist, uint64_t event, uint64_t value);
+
 cdef class Dist:
     cdef inform_dist* _c_dist
     def __cinit__(self, n):
@@ -30,6 +33,17 @@ cdef class Dist:
 
     def __len__(self):
         return inform_dist_size(self._c_dist)
+
+    def __getitem__(self, index):
+        if index >= len(self):
+            raise IndexError()
+        return inform_dist_get(self._c_dist, index)
+
+    def __setitem__(self, index, value):
+        if index >= len(self):
+            raise IndexError()
+        inform_dist_set(self._c_dist, index, value)
+
 
 cdef extern from "inform/time_series.h":
     double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
