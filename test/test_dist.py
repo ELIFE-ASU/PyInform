@@ -72,5 +72,19 @@ class TestDist(unittest.TestCase):
         d[1] = 0
         self.assertFalse(d.valid())
 
+    def testTick(self):
+        d = Dist(2)
+
+        self.assertEqual(1, d.tick(0))
+        self.assertEqual(2, d.tick(0))
+        self.assertEqual(2, d.counts())
+        self.assertTrue(d.valid())
+
+    def testTickBoundsError(self):
+        d = Dist(2)
+        with self.assertRaises(IndexError):
+            d.tick(3)
+
+
 if __name__ == "__main__":
     unittest.main()

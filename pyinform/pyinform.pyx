@@ -21,6 +21,7 @@ cdef extern from "inform/dist.h":
 
     uint64_t inform_dist_get(const inform_dist* dist, uint64_t event);
     uint64_t inform_dist_set(inform_dist* dist, uint64_t event, uint64_t value);
+    uint64_t inform_dist_tick(inform_dist* dist, uint64_t event);
 
 cdef class Dist:
     cdef inform_dist* _c_dist
@@ -54,6 +55,11 @@ cdef class Dist:
         if index >= len(self):
             raise IndexError()
         inform_dist_set(self._c_dist, index, value)
+
+    def tick(self, index):
+        if index >= len(self):
+            raise IndexError()
+        return inform_dist_tick(self._c_dist, index)
 
 
 cdef extern from "inform/time_series.h":
