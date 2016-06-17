@@ -85,6 +85,24 @@ class TestDist(unittest.TestCase):
         with self.assertRaises(IndexError):
             d.tick(3)
 
+    def testValidProbability(self):
+        d = Dist(5)
+        for i in range(len(d)):
+            d[i] = i+1
+        for i in range(len(d)):
+            self.assertAlmostEqual((i+1)/15., d.probability(i))
+
+    def testInvalidProbability(self):
+        d = Dist(5)
+        for i in range(len(d)):
+            with self.assertRaises(ValueError):
+                d.probability(i)
+
+    def testProbabilityBoundsError(self):
+        d = Dist(2)
+        d[0] = 1
+        with self.assertRaises(IndexError):
+            d.probability(3)
 
 if __name__ == "__main__":
     unittest.main()
