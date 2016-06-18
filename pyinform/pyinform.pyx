@@ -17,16 +17,16 @@ cdef extern from "inform/dist.h":
     inform_dist* inform_dist_realloc(inform_dist* dist, size_t n)
     void inform_dist_free(inform_dist* dist)
 
-    size_t inform_dist_size(const inform_dist* dist);
-    uint64_t inform_dist_counts(const inform_dist* dist);
-    bool inform_dist_is_valid(const inform_dist* dist);
+    size_t inform_dist_size(const inform_dist* dist)
+    uint64_t inform_dist_counts(const inform_dist* dist)
+    bool inform_dist_is_valid(const inform_dist* dist)
 
-    uint64_t inform_dist_get(const inform_dist* dist, uint64_t event);
-    uint64_t inform_dist_set(inform_dist* dist, uint64_t event, uint64_t value);
-    uint64_t inform_dist_tick(inform_dist* dist, uint64_t event);
+    uint64_t inform_dist_get(const inform_dist* dist, uint64_t event)
+    uint64_t inform_dist_set(inform_dist* dist, uint64_t event, uint64_t value)
+    uint64_t inform_dist_tick(inform_dist* dist, uint64_t event)
 
-    double inform_dist_prob(const inform_dist* dist, uint64_t event);
-    int inform_dist_dump(const inform_dist* dist, double* probs, size_t n);
+    double inform_dist_prob(const inform_dist* dist, uint64_t event)
+    int inform_dist_dump(const inform_dist* dist, double* probs, size_t n)
 
 cdef class Dist:
     cdef inform_dist* _c_dist
