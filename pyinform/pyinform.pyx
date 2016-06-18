@@ -13,6 +13,7 @@ cdef extern from "inform/dist.h":
         pass
 
     inform_dist* inform_dist_alloc(size_t n)
+    inform_dist* inform_dist_copy(const inform_dist* src, inform_dist* dest)
     inform_dist* inform_dist_realloc(inform_dist* dist, size_t n)
     void inform_dist_free(inform_dist* dist)
 
@@ -50,6 +51,11 @@ cdef class Dist:
         self._c_dist = inform_dist_realloc(self._c_dist, n)
         if self._c_dist is NULL:
             raise MemoryError()
+
+    def copy(self):
+        d = Dist(len(self))
+        inform_dist_copy(self._c_dist, d._c_dist)
+        return d
 
     def counts(self):
         return inform_dist_counts(self._c_dist)

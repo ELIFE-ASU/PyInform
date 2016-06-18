@@ -146,6 +146,21 @@ class TestDist(unittest.TestCase):
         for i in range(len(d)):
             self.assertEqual(i+1, d[i])
 
+    def testCopy(self):
+        d = Dist(5)
+        for i in range(len(d)):
+            d[i] = i+1
+        self.assertEqual(5, len(d))
+        self.assertEqual(15, d.counts())
+
+        e = d.copy()
+        self.assertEqual(5, len(d))
+        self.assertEqual(15, d.counts())
+        for i in range(len(d)):
+            self.assertEqual(e[i], d[i])
+
+        d[0] = 5
+        self.assertNotEqual(e[0], d[0])
 
 if __name__ == "__main__":
     unittest.main()
