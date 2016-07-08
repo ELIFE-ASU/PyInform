@@ -31,11 +31,11 @@ cdef class Dist:
     def __len__(self):
         return inform_dist_size(self._c_dist)
 
-cdef extern from "inform/time_series.h":
-    double inform_active_info(const uint64_t* series, size_t n, uint64_t base, uint64_t k)
-    double inform_active_info_ensemble(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
-    double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, uint64_t base, uint64_t k)
-    double inform_transfer_entropy_ensemble(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
+cdef extern from "inform/active_info.h":
+    double inform_active_info(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
+
+cdef extern from "inform/transfer_entropy.h":
+    double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def activeinfo1d(arr, uint64_t k, uint64_t b):
     from math import isnan
@@ -50,7 +50,7 @@ def activeinfo1d(arr, uint64_t k, uint64_t b):
         b = max(2,max(arr)+1)
 
     cdef uint64_t [:] ys = arr
-    ai = inform_active_info(&ys[0], <uint64_t>len(arr), b, k)
+    ai = inform_active_info(&ys[0], 1, <uint64_t>len(arr), b, k)
 
     if isnan(ai):
         raise ValueError("invalid active information computed (NaN)")
@@ -71,7 +71,7 @@ def activeinfo2d(arr, uint64_t k, uint64_t b):
         b = max(2,numpy.amax(arr)+1)
 
     cdef uint64_t [:] ys = arr.ravel()
-    ai = inform_active_info_ensemble(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+    ai = inform_active_info(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
 
     if isnan(ai):
         raise ValueError("invalid active information computed (NaN)")
@@ -103,7 +103,7 @@ def transferentropy1d(ys, xs, uint64_t k, uint64_t b):
 
     cdef uint64_t [:] ysarr = ys
     cdef uint64_t [:] xsarr = xs
-    te = inform_transfer_entropy(&ysarr[0], &xsarr[0], <uint64_t>len(ys), b, k)
+    te = inform_transfer_entropy(&ysarr[0], &xsarr[0], 1, <uint64_t>len(ys), b, k)
 
     if isnan(te):
         raise ValueError("invalid transfer entropy computed (NaN)")
@@ -125,7 +125,7 @@ def transferentropy2d(ys, xs, uint64_t k, uint64_t b):
 
     cdef uint64_t [:] ysarr = ys.ravel()
     cdef uint64_t [:] xsarr = xs.ravel()
-    te = inform_transfer_entropy_ensemble(&ysarr[0], &xsarr[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+    te = inform_transfer_entropy(&ysarr[0], &xsarr[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
 
     if isnan(te):
         raise ValueError("invalid transfer entropy computed (NaN)")
