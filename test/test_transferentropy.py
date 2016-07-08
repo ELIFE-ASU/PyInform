@@ -57,7 +57,8 @@ class TestTransferEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             transferentropy(yseries, xseries, 2, 2)
 
-        transferentropy(xseries, yseries, 2, 2)
+        with self.assertRaises(ValueError):
+            transferentropy(xseries, yseries, 2, 2)
 
     def testSingleSeriesBase2(self):
         self.assertAlmostEqual(0.000000, transferentropy([1,1,1,0,0], [1,1,1,0,0], 2, 2), places=6)
