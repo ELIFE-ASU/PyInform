@@ -1,6 +1,7 @@
 import unittest
 from pyinform import activeinfo
 from math import isnan
+import numpy
 
 class TestActiveInfo(unittest.TestCase):
 
@@ -60,6 +61,21 @@ class TestActiveInfoEnsemble(unittest.TestCase):
             [0,0,0,0,1,1,0,0,0],
             [1,1,0,0,0,1,1,2,2]], 2, 4), places=6)
 
+class TestLocalActiveInfo(unittest.TestCase):
+
+    def testSingleSeriesAverages(self):
+        for i in range(1,100):
+            series = numpy.random.randint(5, size=1000)
+            ai = activeinfo(series, k=5, local=True)
+            self.assertEqual(995, len(ai))
+            self.assertAlmostEqual(activeinfo(series, k=5), numpy.mean(ai))
+
+    def testEnsembleSeriesAverages(self):
+        for i in range(1,100):
+            series = numpy.random.randint(5, size=(100,1000))
+            ai = activeinfo(series, k=5, local=True)
+            self.assertEqual((100,995), ai.shape)
+            self.assertAlmostEqual(activeinfo(series, k=5), numpy.mean(ai))
 
 if __name__ == "__main__":
     unittest.main()

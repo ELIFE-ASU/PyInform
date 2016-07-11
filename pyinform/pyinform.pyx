@@ -33,11 +33,12 @@ cdef class Dist:
 
 cdef extern from "inform/active_info.h":
     double inform_active_info(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
+    int inform_local_active_info(const uint64_t *series, size_t n, size_t m, uint64_t base, uint64_t k, double *ai)
 
 cdef extern from "inform/transfer_entropy.h":
     double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
 
-def activeinfo1d(arr, uint64_t k, uint64_t b):
+def activeinfo1d(arr, uint64_t k, uint64_t b, local):
     from math import isnan
 
     if len(arr) < k+1 or len(arr) == 0:
@@ -50,14 +51,22 @@ def activeinfo1d(arr, uint64_t k, uint64_t b):
         b = max(2,max(arr)+1)
 
     cdef uint64_t [:] ys = arr
-    ai = inform_active_info(&ys[0], 1, <uint64_t>len(arr), b, k)
+    cdef double [:] a
 
-    if isnan(ai):
-        raise ValueError("invalid active information computed (NaN)")
+    if local:
+        ai = numpy.empty(len(arr) - k, numpy.float64)
+        a = ai
+        err = inform_local_active_info(&ys[0], 1, <uint64_t>len(arr), b, k, &a[0]);
+        if err != 0:
+            raise ValueError("invalid local active information computed")
+        return ai
+    else:
+        ai = inform_active_info(&ys[0], 1, <uint64_t>len(arr), b, k)
+        if isnan(ai):
+            raise ValueError("invalid active information computed (NaN)")
+        return ai
 
-    return ai
-
-def activeinfo2d(arr, uint64_t k, uint64_t b):
+def activeinfo2d(arr, uint64_t k, uint64_t b, local):
     from math import isnan
 
     shape = arr.shape
@@ -71,21 +80,29 @@ def activeinfo2d(arr, uint64_t k, uint64_t b):
         b = max(2,numpy.amax(arr)+1)
 
     cdef uint64_t [:] ys = arr.ravel()
-    ai = inform_active_info(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+    cdef double [:] a;
 
-    if isnan(ai):
-        raise ValueError("invalid active information computed (NaN)")
+    if local:
+        ai = numpy.empty((shape[0], shape[1]-k), dtype=numpy.float64)
+        a = ai.ravel()
+        err = inform_local_active_info(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k, &a[0])
+        if err != 0:
+            raise ValueError("invalid local active information computed")
+        return ai
+    else:
+        ai = inform_active_info(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+        if isnan(ai):
+            raise ValueError("invalid active information computed (NaN)")
+        return ai
 
-    return ai
-
-def activeinfo(xs, uint64_t k, uint64_t b = 0):
+def activeinfo(xs, uint64_t k, uint64_t b = 0, local = False):
     array = numpy.asarray(xs, dtype=numpy.uint64)
     if array.ndim == 0:
         raise ValueError("active information is ill-defined on empty arrays")
     elif array.ndim == 1:
-        return activeinfo1d(array, k, b)
+        return activeinfo1d(array, k, b, local)
     elif array.ndim == 2:
-        return activeinfo2d(array, k, b)
+        return activeinfo2d(array, k, b, local)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
 
