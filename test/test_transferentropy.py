@@ -1,6 +1,7 @@
 import unittest
 from pyinform import transferentropy
 from math import isnan
+import numpy
 
 class TestTransferEntropy(unittest.TestCase):
 
@@ -117,6 +118,24 @@ class TestTransferEntropy(unittest.TestCase):
         self.assertAlmostEqual(0.031472, transferentropy(series2, series1, 2, 2), places=6)
         self.assertAlmostEqual(0.152561, transferentropy(series1, series2, 2, 2), places=6)
         self.assertAlmostEqual(0.000000, transferentropy(series2, series2, 2, 2), places=6)
+
+class TestLocalTransferEntropy(unittest.TestCase):
+
+    def testSingleSeriesAverages(self):
+        for i in range(1,100):
+            yseries = numpy.random.randint(5, size=1000)
+            xseries = numpy.random.randint(5, size=1000)
+            te = transferentropy(yseries, xseries, k=5, local=True)
+            self.assertEqual(995, len(te))
+            self.assertAlmostEqual(transferentropy(yseries, xseries, k=5), numpy.mean(te))
+
+    def testEnsembleSeriesAverages(self):
+        for i in range(1,100):
+            yseries = numpy.random.randint(5, size=(10,100))
+            xseries = numpy.random.randint(5, size=(10,100))
+            te = transferentropy(yseries, xseries, k=5, local=True)
+            self.assertEqual((10,95), te.shape)
+            self.assertAlmostEqual(transferentropy(yseries, xseries, k=5), numpy.mean(te))
 
 if __name__ == "__main__":
     unittest.main()

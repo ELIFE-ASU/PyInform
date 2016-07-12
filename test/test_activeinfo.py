@@ -72,9 +72,9 @@ class TestLocalActiveInfo(unittest.TestCase):
 
     def testEnsembleSeriesAverages(self):
         for i in range(1,100):
-            series = numpy.random.randint(5, size=(100,1000))
+            series = numpy.random.randint(5, size=(10,100))
             ai = activeinfo(series, k=5, local=True)
-            self.assertEqual((100,995), ai.shape)
+            self.assertEqual((10,95), ai.shape)
             self.assertAlmostEqual(activeinfo(series, k=5), numpy.mean(ai))
 
 if __name__ == "__main__":
