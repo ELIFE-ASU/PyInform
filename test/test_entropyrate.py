@@ -20,7 +20,7 @@ class EntropyRateHistoryTooLong(unittest.TestCase):
         with self.assertRaises(ValueError):
             entropyrate(series,13,4)
 
-class TimeSeriesTooShort(unittest.TestCase):
+class EntropyRateTimeSeriesTooShort(unittest.TestCase):
 
     def testTimeSeriesTooShort(self):
         series = [1,0,1,0]
