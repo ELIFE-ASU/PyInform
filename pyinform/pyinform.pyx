@@ -137,6 +137,9 @@ cdef class Dist:
 cdef extern from "inform/active_info.h":
     double inform_active_info(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
 
+cdef extern from "inform/entropy_rate.h":
+    double inform_entropy_rate(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
+
 cdef extern from "inform/transfer_entropy.h":
     double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
 
@@ -260,7 +263,7 @@ def entropyrate1d(arr, uint64_t k, uint64_t b):
         b = max(2,max(arr)+1)
 
     cdef uint64_t [:] ys = arr
-    er = inform_entropy_rate(&ys[0], <uint64_t>len(arr), b, k)
+    er = inform_entropy_rate(&ys[0], 1, <uint64_t>len(arr), b, k)
 
     if isnan(er):
         raise ValueError("invalid entropy rate computed (NaN)")
@@ -281,7 +284,7 @@ def entropyrate2d(arr, uint64_t k, uint64_t b):
         b = max(2,numpy.amax(arr)+1)
 
     cdef uint64_t [:] ys = arr.ravel()
-    er = inform_entropy_rate_ensemble(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+    er = inform_entropy_rate(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
 
     if isnan(er):
         raise ValueError("invalid entropy rate computed (NaN)")
