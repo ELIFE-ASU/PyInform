@@ -283,8 +283,9 @@ def transferentropy(ys, xs, uint64_t k, uint64_t b = 0, local = False):
 
 cdef extern from "inform/entropy_rate.h":
     double inform_entropy_rate(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
+    double inform_local_entropy_rate(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k, double *er)
 
-def entropyrate1d(arr, uint64_t k, uint64_t b):
+def entropyrate1d(arr, uint64_t k, uint64_t b, local):
     from math import isnan
 
     if len(arr) < k+1 or len(arr) == 0:
@@ -297,14 +298,22 @@ def entropyrate1d(arr, uint64_t k, uint64_t b):
         b = max(2,max(arr)+1)
 
     cdef uint64_t [:] ys = arr
-    er = inform_entropy_rate(&ys[0], 1, <uint64_t>len(arr), b, k)
+    cdef double [:] e
 
-    if isnan(er):
-        raise ValueError("invalid entropy rate computed (NaN)")
+    if local:
+        er = numpy.empty(len(arr)-k, dtype=numpy.float64)
+        e = er
+        err = inform_local_entropy_rate(&ys[0], 1, <uint64_t>len(arr), b, k, &e[0])
+        if err != 0:
+            raise ValueError("invalid local entropy rate computed")
+        return er
+    else:
+        er = inform_entropy_rate(&ys[0], 1, <uint64_t>len(arr), b, k)
+        if isnan(er):
+            raise ValueError("invalid entropy rate computed (NaN)")
+        return er
 
-    return er
-
-def entropyrate2d(arr, uint64_t k, uint64_t b):
+def entropyrate2d(arr, uint64_t k, uint64_t b, local):
     from math import isnan
 
     shape = arr.shape
@@ -318,20 +327,28 @@ def entropyrate2d(arr, uint64_t k, uint64_t b):
         b = max(2,numpy.amax(arr)+1)
 
     cdef uint64_t [:] ys = arr.ravel()
-    er = inform_entropy_rate(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+    cdef double [:] e
 
-    if isnan(er):
-        raise ValueError("invalid entropy rate computed (NaN)")
+    if local:
+        er = numpy.empty((shape[0], shape[1]-k), dtype=numpy.float64)
+        e = er.ravel()
+        err = inform_local_entropy_rate(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k, &e[0])
+        if err != 0:
+            raise ValueError("invalid local entropy rate computed")
+        return er
+    else:
+        er = inform_entropy_rate(&ys[0], <uint64_t>shape[0], <uint64_t>shape[1], b, k)
+        if isnan(er):
+            raise ValueError("invalid entropy rate computed (NaN)")
+        return er
 
-    return er
-
-def entropyrate(xs, uint64_t k, uint64_t b = 0):
+def entropyrate(xs, uint64_t k, uint64_t b = 0, local = False):
     array = numpy.asarray(xs, dtype=numpy.uint64)
     if array.ndim == 0:
         raise ValueError("entropy rate is ill-defined on empty arrays")
     elif array.ndim == 1:
-        return entropyrate1d(array, k, b)
+        return entropyrate1d(array, k, b, local)
     elif array.ndim == 2:
-        return entropyrate2d(array, k, b)
+        return entropyrate2d(array, k, b, local)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
