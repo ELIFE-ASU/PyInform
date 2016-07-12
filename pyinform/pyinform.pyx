@@ -137,12 +137,6 @@ cdef class Dist:
 cdef extern from "inform/active_info.h":
     double inform_active_info(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
 
-cdef extern from "inform/entropy_rate.h":
-    double inform_entropy_rate(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
-
-cdef extern from "inform/transfer_entropy.h":
-    double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
-
 def activeinfo1d(arr, uint64_t k, uint64_t b):
     from math import isnan
 
@@ -194,6 +188,9 @@ def activeinfo(xs, uint64_t k, uint64_t b = 0):
         return activeinfo2d(array, k, b)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
+
+cdef extern from "inform/transfer_entropy.h":
+    double inform_transfer_entropy(const uint64_t* seriesy, const uint64_t* seriesx, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def transferentropy1d(ys, xs, uint64_t k, uint64_t b):
     from math import isnan
@@ -249,6 +246,9 @@ def transferentropy(ys, xs, uint64_t k, uint64_t b = 0):
         return transferentropy2d(ysarr, xsarr, k, b)
     else:
         raise ValueError("arrays of dimension greater than 2 are not yet supported")
+
+cdef extern from "inform/entropy_rate.h":
+    double inform_entropy_rate(const uint64_t* series, size_t n, size_t m, uint64_t base, uint64_t k)
 
 def entropyrate1d(arr, uint64_t k, uint64_t b):
     from math import isnan
