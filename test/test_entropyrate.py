@@ -74,6 +74,21 @@ class TestEntropyRateEnsemble(unittest.TestCase):
             [0,0,0,0,1,1,0,0,0],
             [1,1,0,0,0,1,1,2,2]], 2, 4), places=6)
 
+class TestLocalEntropyRate(unittest.TestCase):
+
+    def testSingleSeriesAverages(self):
+        for i in range(1,100):
+            series = numpy.random.randint(5, size=1000)
+            er = entropyrate(series, k=5, local=True)
+            self.assertEqual(995, len(er))
+            self.assertAlmostEqual(entropyrate(series, k=5), numpy.mean(er))
+
+    def testEnsembleSeriesAverages(self):
+        for i in range(1,100):
+            series = numpy.random.randint(5, size=(10,100))
+            er = entropyrate(series, k=5, local=True)
+            self.assertEqual((10,95), er.shape)
+            self.assertAlmostEqual(entropyrate(series, k=5), numpy.mean(er))
 
 if __name__ == "__main__":
     unittest.main()
