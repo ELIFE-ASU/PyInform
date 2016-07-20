@@ -14,5 +14,15 @@ class TestError(unittest.TestCase):
     def test_error_string_unrecognized(self):
         self.assertEqual("unrecognized error", err.error_string(1000))
 
+    def test_is_success(self):
+        self.assertTrue(err.is_success(0))
+        self.assertFalse(err.is_success(1))
+        self.assertFalse(err.is_success(1000))
+
+    def test_is_failure(self):
+        self.assertFalse(err.is_failure(0))
+        self.assertTrue(err.is_failure(1))
+        self.assertTrue(err.is_failure(1000))
+
 if __name__ == "__main__":
     unittest.main()
