@@ -42,3 +42,19 @@ def is_failure(e):
         return is_failure(c_int(e))
     else:
         return _is_failure(byref(e))
+
+class InformError(Exception):
+    """
+    InformError signifies an error occurred in a call to inform.
+    """
+    def __init__(self, e=-1, func=None):
+        msg = error_string(e)
+
+        if func is None:
+            msg = "an inform error occurred - \"{}\"".format(msg)
+        else:
+            msg = "an inform error occurred in `{}` - \"{}\"".format(func, msg)
+
+        super(InformError, self).__init__(msg)
+
+        self.error_code = e if isinstance(e, c_int) else c_int(e)
