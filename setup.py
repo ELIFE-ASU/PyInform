@@ -1,9 +1,5 @@
 from distutils.cmd import Command
 from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Build import cythonize
-
-import numpy
 
 with open('README.md') as f:
     readme = f.read()
@@ -25,23 +21,17 @@ class TestCommand(Command):
         from sysconfig import get_python_version
         from distutils.util import get_platform
 
-        path = "build/lib.{0}-{1}".format(get_platform(), get_python_version())
-        os.environ['PYTHONPATH'] = path
         raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest', 'discover']))
-
-extensions = cythonize([Extension("pyinform", ["pyinform/pyinform.pyx"],
-    libraries=["inform"],
-    include_dirs=[numpy.get_include()])])
 
 setup(
     name='pyinform',
-    version='0.0.1',
+    version='0.0.2',
     description='A wrapper for the Inform library',
     long_description=readme,
     url='https://github.com/elife-asu/pyinform',
     license=license,
     requires=['numpy'],
-    ext_modules=extensions,
+    py_modules=['pyinform'],
     cmdclass={
         'test': TestCommand
     }
