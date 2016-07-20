@@ -11,7 +11,11 @@ _active_info = _inform.inform_active_info
 _active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _active_info.restype = c_double
 
-def active_info(series, k, b=0):
+_local_active_info = _inform.inform_local_active_info
+_local_active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_active_info.restype = POINTER(c_double)
+
+def active_info(series, k, b=0, local=False):
     """
     Compute the active information of a timeseries
     """
@@ -32,6 +36,16 @@ def active_info(series, k, b=0):
         n, m = xs.shape
 
     e = ErrorCode(0)
-    ai = _active_info(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+
+    if local is True:
+        q = max(0, m - k)
+        ai = np.empty((n,q), dtype=np.float64)
+        out = ai.ctypes.data_as(POINTER(c_double))
+        _local_active_info(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
+    else:
+        ai = _active_info(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+
     error_guard(e)
+
     return ai
+
