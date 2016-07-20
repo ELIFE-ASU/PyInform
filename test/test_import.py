@@ -1,3 +1,6 @@
+# Copyright 2016 ELIFE. All rights reserved.
+# Use of this source code is governed by a MIT
+# license that can be found in the LICENSE file.
 import unittest
 
 class TestImport(unittest.TestCase):
@@ -6,7 +9,6 @@ class TestImport(unittest.TestCase):
             import pyinform
         except ImportError:
             self.fail("cannot import pyinform package")
-
 
 if __name__ == "__main__":
     unittest.main()

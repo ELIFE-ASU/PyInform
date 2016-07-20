@@ -1,3 +1,6 @@
+# Copyright 2016 ELIFE. All rights reserved.
+# Use of this source code is governed by a MIT
+# license that can be found in the LICENSE file.
 from distutils.cmd import Command
 from distutils.core import setup
 
@@ -23,16 +26,20 @@ class TestCommand(Command):
 
         raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest', 'discover']))
 
+inform_version = "0.0.3"
+inform_files = ["inform-{}/*/*".format(inform_version)]
+
 setup(
     name='pyinform',
     version='0.0.2',
     description='A wrapper for the Inform library',
     long_description=readme,
+    maintainer='Douglas G. Moore',
+    maintainer_email='douglas.g.moore@asu.edu',
     url='https://github.com/elife-asu/pyinform',
     license=license,
     requires=['numpy'],
-    py_modules=['pyinform'],
-    cmdclass={
-        'test': TestCommand
-    }
+    packages=['pyinform'],
+    package_data = { 'pyinform' : inform_files },
+    cmdclass= { 'test': TestCommand }
 )
