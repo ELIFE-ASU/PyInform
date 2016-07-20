@@ -1,8 +1,10 @@
 # Copyright 2016 ELIFE. All rights reserved.
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
+import sys
 import unittest
 import pyinform.error as err
+
 from ctypes import *
 
 class TestError(unittest.TestCase):
@@ -49,6 +51,20 @@ class TestError(unittest.TestCase):
         e = err.InformError(code, func)
         self.assertEqual(code, e.error_code.value)
         self.assertEqual(msg, str(e))
+
+    def test_error_guard_success(self):
+        err.error_guard(0)
+        err.error_guard(0, "test_error_guard_success")
+
+    def test_error_guard_failure(self):
+        with self.assertRaises(err.InformError):
+            err.error_guard(1000)
+
+        try:
+            err.error_guard(1000)
+        except err.InformError:
+            e = sys.exc_info()[1]
+            self.assertEqual(1000, e.error_code.value)
 
 if __name__ == "__main__":
     unittest.main()

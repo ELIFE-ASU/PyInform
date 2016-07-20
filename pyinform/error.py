@@ -58,3 +58,10 @@ class InformError(Exception):
         super(InformError, self).__init__(msg)
 
         self.error_code = e if isinstance(e, c_int) else c_int(e)
+
+def error_guard(e, func=None):
+    """
+    Raise an appropriately formated error if `e` is a failure
+    """
+    if is_failure(e):
+        raise InformError(e,func)
