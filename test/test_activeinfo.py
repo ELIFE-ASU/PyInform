@@ -22,10 +22,6 @@ class TestActiveInfo(unittest.TestCase):
         with self.assertRaises(InformError):
             active_info([1,2], k=0)
 
-    def test_active_info_zero_history(self):
-        with self.assertRaises(InformError):
-            active_info([1,2], k=0)
-
     def test_active_info_long_history(self):
         with self.assertRaises(InformError):
             active_info([1,2], k=2)
@@ -120,10 +116,6 @@ class TestLocalActiveInfo(unittest.TestCase):
     def test_active_info_short_series(self):
         with self.assertRaises(InformError):
             active_info([1], k=1, local=True)
-
-    def test_active_info_zero_history(self):
-        with self.assertRaises(InformError):
-            active_info([1,2], k=0, local=True)
 
     def test_active_info_zero_history(self):
         with self.assertRaises(InformError):

@@ -22,10 +22,6 @@ class TestEntropyRate(unittest.TestCase):
         with self.assertRaises(InformError):
             entropy_rate([1,2], k=0)
 
-    def test_entropy_rate_zero_history(self):
-        with self.assertRaises(InformError):
-            entropy_rate([1,2], k=0)
-
     def test_entropy_rate_long_history(self):
         with self.assertRaises(InformError):
             entropy_rate([1,2], k=2)
@@ -120,10 +116,6 @@ class TestLocalEntropyRate(unittest.TestCase):
     def test_entropy_rate_short_series(self):
         with self.assertRaises(InformError):
             entropy_rate([1], k=1, local=True)
-
-    def test_entropy_rate_zero_history(self):
-        with self.assertRaises(InformError):
-            entropy_rate([1,2], k=0, local=True)
 
     def test_entropy_rate_zero_history(self):
         with self.assertRaises(InformError):

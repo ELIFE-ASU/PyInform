@@ -22,10 +22,6 @@ class TestBlockEntropy(unittest.TestCase):
         with self.assertRaises(InformError):
             block_entropy([1,2], k=0)
 
-    def test_block_entropy_zero_history(self):
-        with self.assertRaises(InformError):
-            block_entropy([1,2], k=0)
-
     def test_block_entropy_long_history(self):
         with self.assertRaises(InformError):
             block_entropy([1,2], k=2)
@@ -120,10 +116,6 @@ class TestLocalBlockEntropy(unittest.TestCase):
     def test_block_entropy_short_series(self):
         with self.assertRaises(InformError):
             block_entropy([1], k=1, local=True)
-
-    def test_block_entropy_zero_history(self):
-        with self.assertRaises(InformError):
-            block_entropy([1,2], k=0, local=True)
 
     def test_block_entropy_zero_history(self):
         with self.assertRaises(InformError):
