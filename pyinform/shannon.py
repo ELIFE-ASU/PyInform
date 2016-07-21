@@ -21,9 +21,18 @@ def mutual_info(joint, marginal_x, marginal_y, b=2.0):
 
 def conditional_entropy(joint, marginal, b=2.0):
     """
-    Compute the base-`b` conditional entropy given joint and marginal distributions.
+    Compute the base-`b` conditional entropy given joint and marginal
+    distributions.
     """
     return _conditional_entropy(joint._dist, marginal._dist, c_double(b))
+
+def conditional_mutual_info(joint, marginal_xz, marginal_yz, marginal_z, b=2.0):
+    """
+    Compute the base-`b` conditional mutual information given joint and
+    marginal distributions.
+    """
+    return _conditional_mutual_info(joint._dist, marginal_xz._dist,
+        marginal_yz._dist, marginal_z._dist, c_double(b))
 
 _entropy = _inform.inform_shannon
 _entropy.argtypes = [c_void_p, c_double]
@@ -36,3 +45,7 @@ _mutual_info.restype = c_double
 _conditional_entropy = _inform.inform_shannon_ce
 _conditional_entropy.argtypes = [c_void_p, c_void_p, c_double]
 _conditional_entropy.restype = c_double
+
+_conditional_mutual_info = _inform.inform_shannon_cmi
+_conditional_mutual_info.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_double]
+_conditional_mutual_info.restype = c_double
