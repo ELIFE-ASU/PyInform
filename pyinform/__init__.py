@@ -10,6 +10,7 @@ def get_libpath():
     import os
     import re
     from os.path import dirname, abspath, realpath, join
+    from platform import system
 
     libre = re.compile(r"^inform-(\d+)\.(\d+)\.(\d+)$")
 
@@ -30,6 +31,9 @@ def get_libpath():
 
     if libdir is None:
         raise ImportError("cannot find libinform")
+
+    if system() is 'Windows':
+        return "{}/lib/inform.dll".format(libdir)
     else:
         return "{}/lib/libinform.so.{}.{}.{}".format(libdir,major,minor,revision)
 
