@@ -67,5 +67,43 @@ class TestShannon(unittest.TestCase):
         self.assertAlmostEqual( 0.960230, entropy(d, b=3), places=6)
         self.assertAlmostEqual( 0.760964, entropy(d, b=4), places=6)
 
+    def test_mutual_info_invalid_dist(self):
+        invalid = Dist(5)
+        a = Dist([1,2,3,4])
+        b = Dist([1,1,1,1])
+
+        self.assertTrue(isnan(mutual_info(invalid, a, b)))
+        self.assertTrue(isnan(mutual_info(a, invalid, b)))
+        self.assertTrue(isnan(mutual_info(a, b, invalid)))
+
+    def test_mutual_info_independent(self):
+        x = Dist([5,2,3,5,1,4,6,2,1,4,2,4])
+        y = Dist([2,4,5,2,7,3,9,8,8,7,2,3])
+        joint = Dist(len(x)*len(y))
+        for i in range(len(x)):
+            for j in range(len(y)):
+                joint[i*len(y) + j] = x[i] * y[j]
+        self.assertTrue(isnan(mutual_info(joint, x, y, b=-1.0)))
+        self.assertTrue(isnan(mutual_info(joint, x, y, b=-0.5)))
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=0.0), places=6)
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=0.5), places=6)
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=1.5), places=6)
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=2), places=6)
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=3), places=6)
+        self.assertAlmostEqual(0.000000, mutual_info(joint, x, y, b=4), places=6)
+
+    def test_mutual_info_dependent(self):
+        joint = Dist([10,70,15,5])
+        x = Dist([80,20])
+        y = Dist([25,75])
+        self.assertTrue(isnan(mutual_info(joint, x, y, b=-1.0)))
+        self.assertTrue(isnan(mutual_info(joint, x, y, b=-0.5)))
+        self.assertAlmostEqual( 0.000000, mutual_info(joint, x, y, b=0.0), places=6)
+        self.assertAlmostEqual(-0.214171, mutual_info(joint, x, y, b=0.5), places=6)
+        self.assertAlmostEqual( 0.366128, mutual_info(joint, x, y, b=1.5), places=6)
+        self.assertAlmostEqual( 0.214171, mutual_info(joint, x, y, b=2), places=6)
+        self.assertAlmostEqual( 0.135127, mutual_info(joint, x, y, b=3), places=6)
+        self.assertAlmostEqual( 0.107085, mutual_info(joint, x, y, b=4), places=6)
+
 if __name__ == "__main__":
     unittest.main()
