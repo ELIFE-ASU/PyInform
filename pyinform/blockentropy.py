@@ -7,14 +7,6 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-_block_entropy = _inform.inform_block_entropy
-_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
-_block_entropy.restype = c_double
-
-_local_block_entropy = _inform.inform_local_block_entropy
-_local_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
-_local_block_entropy.restype = POINTER(c_double)
-
 def block_entropy(series, k, b=0, local=False):
     """
     Compute the block entropy of a timeseries
@@ -49,3 +41,10 @@ def block_entropy(series, k, b=0, local=False):
 
     return ai
 
+_block_entropy = _inform.inform_block_entropy
+_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_block_entropy.restype = c_double
+
+_local_block_entropy = _inform.inform_local_block_entropy
+_local_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_block_entropy.restype = POINTER(c_double)

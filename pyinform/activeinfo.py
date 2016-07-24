@@ -7,14 +7,6 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-_active_info = _inform.inform_active_info
-_active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
-_active_info.restype = c_double
-
-_local_active_info = _inform.inform_local_active_info
-_local_active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
-_local_active_info.restype = POINTER(c_double)
-
 def active_info(series, k, b=0, local=False):
     """
     Compute the active information of a timeseries
@@ -49,3 +41,10 @@ def active_info(series, k, b=0, local=False):
 
     return ai
 
+_active_info = _inform.inform_active_info
+_active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_active_info.restype = c_double
+
+_local_active_info = _inform.inform_local_active_info
+_local_active_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_active_info.restype = POINTER(c_double)

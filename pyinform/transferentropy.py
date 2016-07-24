@@ -7,14 +7,6 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-_transfer_entropy = _inform.inform_transfer_entropy
-_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
-_transfer_entropy.restype = c_double
-
-_local_transfer_entropy = _inform.inform_local_transfer_entropy
-_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
-_local_transfer_entropy.restype = POINTER(c_double)
-
 def transfer_entropy(source, target, k, b=0, local=False):
     """
     Compute the transfer entropy from one timeseries to another
@@ -53,3 +45,10 @@ def transfer_entropy(source, target, k, b=0, local=False):
 
     return ai
 
+_transfer_entropy = _inform.inform_transfer_entropy
+_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_transfer_entropy.restype = c_double
+
+_local_transfer_entropy = _inform.inform_local_transfer_entropy
+_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_transfer_entropy.restype = POINTER(c_double)

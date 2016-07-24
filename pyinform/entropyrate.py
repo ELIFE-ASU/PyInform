@@ -7,14 +7,6 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-_entropy_rate = _inform.inform_entropy_rate
-_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
-_entropy_rate.restype = c_double
-
-_local_entropy_rate = _inform.inform_local_entropy_rate
-_local_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
-_local_entropy_rate.restype = POINTER(c_double)
-
 def entropy_rate(series, k, b=0, local=False):
     """
     Compute the entropy rate of a timeseries
@@ -49,3 +41,10 @@ def entropy_rate(series, k, b=0, local=False):
 
     return er
 
+_entropy_rate = _inform.inform_entropy_rate
+_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_entropy_rate.restype = c_double
+
+_local_entropy_rate = _inform.inform_local_entropy_rate
+_local_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_entropy_rate.restype = POINTER(c_double)

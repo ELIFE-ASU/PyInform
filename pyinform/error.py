@@ -4,18 +4,6 @@
 from ctypes import byref, c_bool, c_char_p, c_int, POINTER
 from pyinform import _inform
 
-_strerror = _inform.inform_strerror
-_strerror.argtypes = [POINTER(c_int)]
-_strerror.restype = c_char_p
-
-_is_success = _inform.inform_succeeded
-_is_success.argtypes = [POINTER(c_int)]
-_is_success.restype = c_bool
-
-_is_failure = _inform.inform_failed
-_is_failure.argtypes = [POINTER(c_int)]
-_is_failure.restype = c_bool
-
 ErrorCode = c_int
 
 def error_string(e):
@@ -67,3 +55,15 @@ def error_guard(e, func=None):
     """
     if is_failure(e):
         raise InformError(e,func)
+
+_strerror = _inform.inform_strerror
+_strerror.argtypes = [POINTER(c_int)]
+_strerror.restype = c_char_p
+
+_is_success = _inform.inform_succeeded
+_is_success.argtypes = [POINTER(c_int)]
+_is_success.restype = c_bool
+
+_is_failure = _inform.inform_failed
+_is_failure.argtypes = [POINTER(c_int)]
+_is_failure.restype = c_bool
