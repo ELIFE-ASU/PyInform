@@ -11,10 +11,10 @@ with open('LICENSE') as f:
     license = f.read()
 
 inform_version = "0.0.3"
-if system() == 'Linux':
-    inform_files = ["inform-{}/lib/linux_x86-64/libinform.so.{}".format(inform_version, inform_version)]
-elif system() == 'Windows':
-    inform_files = ["inform-{}/lib/win_amd64/inform.dll}".format(inform_version)]
+if system() is 'Linux':
+    inform_files = ["inform-{}/lib/libinform.so.{}".format(inform_version, inform_version)]
+elif system() is 'Windows':
+    inform_files = ["inform-{}/lib/inform.dll".format(inform_version)]
 else:
     raise RuntimeError("unsupported platform")
 
