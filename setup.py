@@ -30,4 +30,5 @@ setup(
     requires=['numpy'],
     packages=['pyinform'],
     package_data = { 'pyinform' : inform_files },
+    test_suite = "test",
 )
