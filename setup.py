@@ -10,7 +10,7 @@ with open('README.rst') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-inform_version = "0.0.3"
+inform_version = "0.0.4"
 inform_files = [
     "inform-{}/lib/libinform.so.{}".format(inform_version, inform_version),
 	"inform-{}/lib/inform.dll".format(inform_version)
