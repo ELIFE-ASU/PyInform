@@ -33,8 +33,8 @@ def get_libpath():
         raise ImportError("cannot find libinform")
 
     if system() is 'Windows':
-        return "{}/lib/inform.dll".format(libdir)
+        return "{}/lib/win_amd64/inform.dll".format(libdir)
     else:
-        return "{}/lib/libinform.so.{}.{}.{}".format(libdir,major,minor,revision)
+        return "{}/lib/linux_x86-64/libinform.so.{}.{}.{}".format(libdir,major,minor,revision)
 
 _inform = CDLL(get_libpath())

@@ -1,8 +1,8 @@
 # Copyright 2016 ELIFE. All rights reserved.
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
-from distutils.cmd import Command
-from distutils.core import setup
+from setuptools import setup
+from platform import system
 
 with open('README.md') as f:
     readme = f.read()
@@ -10,24 +10,13 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-class TestCommand(Command):
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        import os, sys, subprocess
-        from sysconfig import get_python_version
-        from distutils.util import get_platform
-
-        raise SystemExit(subprocess.call([sys.executable, '-m', 'unittest', 'discover']))
-
 inform_version = "0.0.3"
-inform_files = ["inform-{}/*/*".format(inform_version)]
+if system() == 'Linux':
+    inform_files = ["inform-{}/lib/linux_x86-64/libinform.so.{}".format(inform_version, inform_version)]
+elif system() == 'Windows':
+    inform_files = ["inform-{}/lib/win_amd64/inform.dll}".format(inform_version)]
+else:
+    raise RuntimeError("unsupported platform")
 
 setup(
     name='pyinform',
@@ -41,5 +30,4 @@ setup(
     requires=['numpy'],
     packages=['pyinform'],
     package_data = { 'pyinform' : inform_files },
-    cmdclass= { 'test': TestCommand }
 )
