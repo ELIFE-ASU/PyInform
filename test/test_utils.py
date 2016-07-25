@@ -165,5 +165,59 @@ class TestCoalesce(unittest.TestCase):
         self.assertEqual(4, b)
         self.assertTrue((expect == coal).all())
 
+class TestEncoding(unittest.TestCase):
+    def test_encode_empty(self):
+        with self.assertRaises(ValueError):
+            encode([], b=2)
+
+    def test_encode_bad_base(self):
+        with self.assertRaises(InformError):
+            encode([0,0,1], b=-1)
+        
+        with self.assertRaises(InformError):
+            encode([0,0,1], b=1)
+
+    def test_encode_too_large(self):
+        with self.assertRaises(InformError):
+            encode(np.zeros(32), b=2)
+        
+        with self.assertRaises(InformError):
+            encode(np.zeros(16), b=4)
+
+    def test_encode(self):
+        self.assertEqual(0, encode([0], b=2))
+        self.assertEqual(1, encode([1], b=2))
+        with self.assertRaises(InformError):
+            encode([2], b=2)
+
+        self.assertEqual(0, encode([0], b=3))
+        self.assertEqual(1, encode([1], b=3))
+        self.assertEqual(2, encode([2], b=3))
+        with self.assertRaises(InformError):
+            encode([3], b=3)
+
+        self.assertEqual(0, encode([0,0], b=2))
+        self.assertEqual(1, encode([0,1], b=2))
+        self.assertEqual(2, encode([1,0], b=2))
+        self.assertEqual(3, encode([1,1], b=2))
+        with self.assertRaises(InformError):
+            encode([0,2], b=2)
+        with self.assertRaises(InformError):
+            encode([2,0], b=2)
+
+        self.assertEqual(0, encode([0,0], b=3))
+        self.assertEqual(1, encode([0,1], b=3))
+        self.assertEqual(2, encode([0,2], b=3))
+        self.assertEqual(3, encode([1,0], b=3))
+        self.assertEqual(4, encode([1,1], b=3))
+        self.assertEqual(5, encode([1,2], b=3))
+        self.assertEqual(6, encode([2,0], b=3))
+        self.assertEqual(7, encode([2,1], b=3))
+        self.assertEqual(8, encode([2,2], b=3))
+        with self.assertRaises(InformError):
+            encode([0,3], b=3)
+        with self.assertRaises(InformError):
+            encode([3,0], b=3)
+
 if __name__ == "__main__":
     unittest.main()
