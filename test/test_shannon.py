@@ -162,28 +162,28 @@ class TestShannon(unittest.TestCase):
         p = Dist([1,0,0])
         q = Dist([1,1,1])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual(log(3, b), relative_entropy(p, q, b))
+            self.assertAlmostEqual(log(3., b), relative_entropy(p, q, b))
 
         p = Dist([1,1,0])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual(log(3/2, b), relative_entropy(p, q, b))
+            self.assertAlmostEqual(log(3./2., b), relative_entropy(p, q, b))
 
         p = Dist([2,2,1])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual((4*log(6/5, b) + log(3/5, b))/5, relative_entropy(p, q, b))
+            self.assertAlmostEqual((4.*log(6./5., b) + log(3./5., b))/5., relative_entropy(p, q, b))
 
         q = Dist([1,2,2])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual(log(2, b)/5, relative_entropy(p, q, b))
+            self.assertAlmostEqual(log(2., b)/5., relative_entropy(p, q, b))
 
         p = Dist([1,0,0])
         q = Dist([4,1,0])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual(log(5/4, b), relative_entropy(p, q, b))
+            self.assertAlmostEqual(log(5./4., b), relative_entropy(p, q, b))
 
         q = Dist([1,4,0])
         for b in np.arange(2.0, 4.0, 0.5):
-            self.assertAlmostEqual(log(5, b), relative_entropy(p, q, b))
+            self.assertAlmostEqual(log(5., b), relative_entropy(p, q, b))
 
 if __name__ == "__main__":
     unittest.main()

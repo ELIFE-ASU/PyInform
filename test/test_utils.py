@@ -66,19 +66,19 @@ class TestBinning(unittest.TestCase):
 
     def test_two_bins(self):
         binned, _, step = bin_series([1,2,3,4,5,6], b=2)
-        self.assertAlmostEqual(5/2, step)
+        self.assertAlmostEqual(5./2., step)
         for i, x in enumerate([0,0,0,1,1,1]):
             self.assertEqual(x, binned[i])
 
     def test_three_bins(self):
         binned, _, step = bin_series([1,2,3,4,5,6], b=3)
-        self.assertAlmostEqual(5/3, step)
+        self.assertAlmostEqual(5./3., step)
         for i, x in enumerate([0,0,1,1,2,2]):
             self.assertEqual(x, binned[i])
 
     def test_six_bins(self):
         binned, _, step = bin_series([1,2,3,4,5,6], b=6)
-        self.assertAlmostEqual(5/6, step)
+        self.assertAlmostEqual(5./6., step)
         for i, x in enumerate([0,1,2,3,4,5]):
             self.assertEqual(x, binned[i])
 
@@ -89,13 +89,13 @@ class TestBinning(unittest.TestCase):
             self.assertEqual(x, binned[i])
 
     def test_size_fivehalves(self):
-        binned, b, _ = bin_series([1,2,3,4,5,6], step=5/2)
+        binned, b, _ = bin_series([1,2,3,4,5,6], step=5./2.)
         self.assertEqual(3, b)
         for i, x in enumerate([0,0,0,1,1,2]):
             self.assertEqual(x, binned[i])
 
     def test_size_one(self):
-        binned, b, _ = bin_series([1,2,3,4,5,6], step=1)
+        binned, b, _ = bin_series([1,2,3,4,5,6], step=1.)
         self.assertEqual(6, b)
         for i, x in enumerate([0,1,2,3,4,5]):
             self.assertEqual(x, binned[i])
