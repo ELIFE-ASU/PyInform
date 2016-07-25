@@ -13,12 +13,12 @@ with open('LICENSE') as f:
 inform_version = "0.0.4"
 inform_files = [
     "inform-{}/lib/libinform.so.{}".format(inform_version, inform_version),
-	"inform-{}/lib/inform.dll".format(inform_version)
+    "inform-{}/lib/inform.dll".format(inform_version)
 ]
 
 setup(
     name='pyinform',
-    version='0.0.2',
+    version=inform_version,
     description='A wrapper for the Inform library',
     long_description=readme,
     maintainer='Douglas G. Moore',
