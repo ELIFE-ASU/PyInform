@@ -15,7 +15,7 @@ Once `NumPy <http://www.numpy.org>`_ been installed, you can test and install wi
     $ python setup.py test
     $ python setup.py install --user
 
-or using :code:`pip` on your local copy:::
+or using :code:`pip` on your local copy: ::
 
     $ python setup.py test
     $ pip install --user .
