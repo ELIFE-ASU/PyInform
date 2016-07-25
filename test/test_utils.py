@@ -29,12 +29,21 @@ class TestBinning(unittest.TestCase):
         with self.assertRaises(ValueError):
             bin_series([1,2,3,4], b=2, step=2)
 
+        with self.assertRaises(ValueError):
+            bin_series([1,2,3,4], b=2, bounds=[])
+
+        with self.assertRaises(ValueError):
+            bin_series([1,2,3,4], step=2, bounds=[])
+
     def test_empty(self):
         with self.assertRaises(InformError):
             bin_series([], b=2)
 
         with self.assertRaises(InformError):
             bin_series([], step=2)
+
+        with self.assertRaises(InformError):
+            bin_series([], bounds=[0.5])
 
     def test_invalid_binning(self):
         with self.assertRaises(InformError):
@@ -51,6 +60,9 @@ class TestBinning(unittest.TestCase):
 
         with self.assertRaises(InformError):
             bin_series([1,2,3,4,5,6], step=0)
+
+        with self.assertRaises(InformError):
+            bin_series([1,2,3,4,5,6], bounds=[])
 
     def test_two_bins(self):
         binned, _, step = bin_series([1,2,3,4,5,6], b=2)
@@ -94,11 +106,38 @@ class TestBinning(unittest.TestCase):
         for i, x in enumerate([0,2,4,6,8,10]):
             self.assertEqual(x, binned[i])
 
+    def test_one_bound(self):
+        binned, b, _ = bin_series([1,2,3,4,5,6], bounds=[3])
+        self.assertEqual(2, b)
+        for i, x in enumerate([0,0,1,1,1,1]):
+            self.assertEqual(x, binned[i])
+
+    def test_two_bounds(self):
+        binned, b, _ = bin_series([1,2,3,4,5,6], bounds=[2.5, 5.5])
+        self.assertEqual(3, b)
+        for i, x in enumerate([0,0,1,1,1,2]):
+            self.assertEqual(x, binned[i])
+
+    def test_bounds_none(self):
+        binned, b, _ = bin_series([1,2,3,4,5,6], bounds=[6.1])
+        self.assertEqual(1, b)
+        for i, x in enumerate([0,0,0,0,0,0]):
+            self.assertEqual(x, binned[i])
+
+    def test_bounds_all(self):
+        binned, b, _ = bin_series([1,2,3,4,5,6], bounds=[0.0])
+        self.assertEqual(2, b)
+        for i, x in enumerate([1,1,1,1,1,1]):
+            self.assertEqual(x, binned[i])
+
     def test_bin_2D(self):
         binned, _, _ = bin_series([[1,2,3,4,5,6], [6,5,4,3,2,1]], b=3)
         self.assertTrue((np.asarray([[0,0,1,1,2,2],[2,2,1,1,0,0]]) == binned).all())
 
         binned, _, _ = bin_series([[1,2,3,4,5,6], [6,5,4,3,2,1]], step=2.0)
+        self.assertTrue((np.asarray([[0,0,1,1,2,2],[2,2,1,1,0,0]]) == binned).all())
+
+        binned, _, _ = bin_series([[1,2,3,4,5,6], [6,5,4,3,2,1]], bounds=[2.5, 4.5])
         self.assertTrue((np.asarray([[0,0,1,1,2,2],[2,2,1,1,0,0]]) == binned).all())
 
 if __name__ == "__main__":

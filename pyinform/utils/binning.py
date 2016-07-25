@@ -22,14 +22,18 @@ def range(series):
     
     return rng, min.value, max.value
 
-def bin_series(series, b=None, step=None):
+def bin_series(series, b=None, step=None, bounds=None):
     """
     Bin a continuously-valued timeseries into `b` uniform bins
     """
-    if b is None and step is None:
-        raise ValueError("must provide either number of bins or step size")
+    if b is None and step is None and bounds is None:
+        raise ValueError("must provide either number of bins, step size, or bin boundaries")
     elif b is not None and step is not None:
-        raise ValueError("must provide either number of bins or step size")
+        raise ValueError("cannot provide both number of bins and step size")
+    elif b is not None and bounds is not None:
+        raise ValueError("cannot provide both number of bins and bin boundaries")
+    elif step is not None and bounds is not None:
+        raise ValueError("cannot provide both step size and bin boundaries")
     
     xs = np.asarray(series, dtype=np.float64)
     shape = xs.shape
@@ -44,12 +48,18 @@ def bin_series(series, b=None, step=None):
     elif step is not None:
         spec = step
         b = _inform_bin_step(data, c_ulong(xs.size), c_double(step), out, byref(e))
+    elif bounds is not None:
+        boundaries = np.asarray(bounds, dtype=np.float64)
+        if boundaries.ndim != 1:
+            raise ValueError("boundaries array must be one-dimensional")
+        bnds = boundaries.ctypes.data_as(POINTER(c_double))
+        spec = bounds
+        b = _inform_bin_bounds(data, c_ulong(xs.size), bnds, c_ulong(boundaries.size), out, byref(e))
     error_guard(e)
 
     binned = np.reshape(binned, shape)
 
     return binned, b, spec
-
 
 _inform_range = _inform.inform_range
 _inform_range.argtypes = [POINTER(c_double), c_ulong, POINTER(c_double), POINTER(c_double), POINTER(c_int)]
@@ -62,3 +72,7 @@ _inform_bin.restype = c_double
 _inform_bin_step = _inform.inform_bin_step
 _inform_bin_step.argtypes = [POINTER(c_double), c_ulong, c_double, POINTER(c_int), POINTER(c_int)]
 _inform_bin_step.restype = c_int
+
+_inform_bin_bounds = _inform.inform_bin_bounds
+_inform_bin_bounds.argtypes = [POINTER(c_double), c_ulong, POINTER(c_double), c_ulong, POINTER(c_int), POINTER(c_int)]
+_inform_bin_bounds.restype = c_int
