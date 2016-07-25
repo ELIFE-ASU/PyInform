@@ -219,5 +219,41 @@ class TestEncoding(unittest.TestCase):
         with self.assertRaises(InformError):
             encode([3,0], b=3)
 
+    def test_decode_negative(self):
+        with self.assertRaises(InformError):
+            decode(-1, b=2, n=2)
+
+    def test_decode_bad_Base(self):
+        with self.assertRaises(InformError):
+            decode(3, b=0, n=2)
+
+        with self.assertRaises(InformError):
+            decode(3, b=1, n=2)
+
+    def test_decode(self):
+        self.assertTrue(([0,1,0] == decode(2, b=2, n=3)).all())
+        self.assertTrue(([1,0,1] == decode(5, b=2, n=3)).all())
+        with self.assertRaises(InformError):
+            decode(8, b=2, n=3)
+
+        self.assertTrue(([0,2,2] == decode(8, b=3, n=3)).all())
+        self.assertTrue(([1,1,0] == decode(12, b=3, n=3)).all())
+        with self.assertRaises(InformError):
+            decode(30, b=3, n=3)
+    
+    def test_decode_no_size(self):
+        self.assertTrue(([1,0] == decode(2, b=2)).all())
+        self.assertTrue(([1,0,1] == decode(5, b=2)).all())
+        self.assertTrue(([1,0,0,0] == decode(8, b=2)).all())
+
+        self.assertTrue(([2,2] == decode(8, b=3)).all())
+        self.assertTrue(([1,1,0] == decode(12, b=3)).all())
+        self.assertTrue(([1,0,1,0] == decode(30, b=3)).all())
+
+    def test_decode_encode(self):
+        for i in range(81):
+            state = decode(i, b=3, n=4)
+            self.assertEqual(i, encode(state, b=3))
+
 if __name__ == "__main__":
     unittest.main()
