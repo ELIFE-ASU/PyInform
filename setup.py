@@ -26,7 +26,7 @@ setup(
     url='https://github.com/elife-asu/pyinform',
     license=license,
     requires=['numpy'],
-    packages=['pyinform'],
+    packages=['pyinform', 'pyinform.utils'],
     package_data = { 'pyinform' : inform_files },
     test_suite = "test",
     platforms = ["Windows", "Linux"],
