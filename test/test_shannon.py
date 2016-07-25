@@ -5,7 +5,7 @@ import sys
 import unittest
 
 from ctypes import *
-from math import isnan
+from math import isnan, log
 from pyinform.shannon import *
 
 class TestShannon(unittest.TestCase):
@@ -121,6 +121,69 @@ class TestShannon(unittest.TestCase):
         self.assertAlmostEqual( 0.507757, conditional_entropy(joint, y, b=2), places=6)
         self.assertAlmostEqual( 0.320359, conditional_entropy(joint, y, b=3), places=6)
         self.assertAlmostEqual( 0.253879, conditional_entropy(joint, y, b=4), places=6)
+
+    def test_relative_entropy_invalid(self):
+        p = Dist(5)
+        q = Dist(5)
+
+        self.assertTrue(isnan(relative_entropy(p,q)))
+
+        p.tick(0)
+        self.assertTrue(isnan(relative_entropy(p,q)))
+        self.assertTrue(isnan(relative_entropy(q,p)))
+
+    def test_relative_entropy_sizes(self):
+        p = Dist(5)
+        p.tick(0)
+        q = Dist(4)
+        p.tick(1)
+
+        self.assertTrue(isnan(relative_entropy(p,q)))
+        self.assertTrue(isnan(relative_entropy(q,p)))
+
+    def test_relative_entropy_undefined(self):
+        p = Dist([1,1,1,1,1])
+        q = Dist([1,1,1,2,0])
+        self.assertTrue(isnan(relative_entropy(p,q)))
+        self.assertFalse(isnan(relative_entropy(q,p)))
+
+    def test_relative_entropy_same_dist(self):
+        p = Dist(np.random.randint(0, 100, 20))
+        self.assertTrue(isnan(relative_entropy(p, p, -1.0)))
+        self.assertTrue(isnan(relative_entropy(p, p, -0.5)))
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 0.0), 1e-6)
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 0.5), 1e-6)
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 1.5), 1e-6)
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 2.0), 1e-6)
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 3.0), 1e-6)
+        self.assertAlmostEqual(0.000000, relative_entropy(p, p, 4.0), 1e-6)
+
+    def test_relative_entropy(self):
+        p = Dist([1,0,0])
+        q = Dist([1,1,1])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual(log(3, b), relative_entropy(p, q, b))
+
+        p = Dist([1,1,0])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual(log(3/2, b), relative_entropy(p, q, b))
+
+        p = Dist([2,2,1])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual((4*log(6/5, b) + log(3/5, b))/5, relative_entropy(p, q, b))
+
+        q = Dist([1,2,2])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual(log(2, b)/5, relative_entropy(p, q, b))
+
+        p = Dist([1,0,0])
+        q = Dist([4,1,0])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual(log(5/4, b), relative_entropy(p, q, b))
+
+        q = Dist([1,4,0])
+        for b in np.arange(2.0, 4.0, 0.5):
+            self.assertAlmostEqual(log(5, b), relative_entropy(p, q, b))
 
 if __name__ == "__main__":
     unittest.main()

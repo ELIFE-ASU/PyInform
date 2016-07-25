@@ -34,6 +34,13 @@ def conditional_mutual_info(joint, marginal_xz, marginal_yz, marginal_z, b=2.0):
     return _conditional_mutual_info(joint._dist, marginal_xz._dist,
         marginal_yz._dist, marginal_z._dist, c_double(b))
 
+def relative_entropy(p, q, b=2.0):
+    """
+    Compute the base-`b` relative entropy between distributions `p` and `q`
+    of equal support.
+    """
+    return _relative_entropy(p._dist, q._dist, c_double(b))
+
 _entropy = _inform.inform_shannon
 _entropy.argtypes = [c_void_p, c_double]
 _entropy.restype = c_double
@@ -49,3 +56,7 @@ _conditional_entropy.restype = c_double
 _conditional_mutual_info = _inform.inform_shannon_cmi
 _conditional_mutual_info.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_double]
 _conditional_mutual_info.restype = c_double
+
+_relative_entropy = _inform.inform_shannon_re
+_relative_entropy.argtypes = [c_void_p, c_void_p, c_double]
+_relative_entropy.restype = c_double
