@@ -7,7 +7,7 @@ from ctypes import byref, c_double, c_int, c_ulong, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-def range(series):
+def series_range(series):
     """
     Compute the range of a continuously-valued timeseries.
     """
