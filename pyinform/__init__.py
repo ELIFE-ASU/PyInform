@@ -26,7 +26,6 @@ def get_libpath():
                 if (major, minor, revision) < (a,b,c):
                     major, minor, revision = a, b, c
                     libdir = join(root, match.group())
-                    break
         break
 
     if libdir is None:
