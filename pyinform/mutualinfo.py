@@ -16,7 +16,7 @@ def mutual_info(xs, ys, bx=0, by=0, b=2.0, local=False):
     if us.ndim != 1 or vs.ndim != 1:
         raise ValueError("dimension greater than 1")
 
-    if len(us) != len(ys):
+    if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
     if bx == 0:
@@ -27,7 +27,7 @@ def mutual_info(xs, ys, bx=0, by=0, b=2.0, local=False):
 
     xdata = us.ctypes.data_as(POINTER(c_int))
     ydata = vs.ctypes.data_as(POINTER(c_int))
-    n = len(us)
+    n = us.size
 
     e = ErrorCode(0)
 

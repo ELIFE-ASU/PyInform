@@ -20,10 +20,10 @@ class Dist:
             xs = np.ascontiguousarray(n, dtype=np.uint32)
             if xs.ndim != 1:
                 raise ValueError("support is multi-dimenstional")
-            elif len(xs) == 0:
+            elif xs.size == 0:
                 raise ValueError("support is empty")
             data = xs.ctypes.data_as(POINTER(c_uint))
-            self._dist = _dist_create(data, len(xs))
+            self._dist = _dist_create(data, xs.size)
         else:
             if n <= 0:
                 raise ValueError("support is zero")
