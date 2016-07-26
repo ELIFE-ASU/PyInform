@@ -14,14 +14,12 @@ def coalesce_series(series):
     xs = np.ascontiguousarray(series, dtype=np.int32)
     data = xs.ctypes.data_as(POINTER(c_int))
 
-    cs = np.empty(xs.size, dtype=np.int32)
+    cs = np.empty(xs.shape, dtype=np.int32)
     coal = cs.ctypes.data_as(POINTER(c_int))
 
     e = ErrorCode(0)
     b = _inform_coalesce(data, c_ulong(xs.size), coal, byref(e))
     error_guard(e)
-
-    cs = np.reshape(cs, xs.shape)
 
     return cs, b
 

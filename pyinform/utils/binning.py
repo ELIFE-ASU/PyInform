@@ -38,7 +38,7 @@ def bin_series(series, b=None, step=None, bounds=None):
     xs = np.ascontiguousarray(series, dtype=np.float64)
     data = xs.ctypes.data_as(POINTER(c_double))
 
-    binned = np.empty(xs.size, dtype=np.int32)
+    binned = np.empty(xs.shape, dtype=np.int32)
     out = binned.ctypes.data_as(POINTER(c_int))
 
     e = ErrorCode(0)
@@ -49,14 +49,10 @@ def bin_series(series, b=None, step=None, bounds=None):
         b = _inform_bin_step(data, c_ulong(xs.size), c_double(step), out, byref(e))
     elif bounds is not None:
         boundaries = np.ascontiguousarray(bounds, dtype=np.float64)
-        if boundaries.ndim != 1:
-            raise ValueError("boundaries array must be one-dimensional")
         bnds = boundaries.ctypes.data_as(POINTER(c_double))
         spec = bounds
         b = _inform_bin_bounds(data, c_ulong(xs.size), bnds, c_ulong(boundaries.size), out, byref(e))
     error_guard(e)
-
-    binned = np.reshape(binned, xs.shape)
 
     return binned, b, spec
 
