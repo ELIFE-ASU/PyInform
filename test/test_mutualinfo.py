@@ -23,9 +23,6 @@ class TestMutualInfo(unittest.TestCase):
         with self.assertRaises(ValueError):
             mutual_info([1], [[1]])
 
-        with self.assertRaises(ValueError):
-            mutual_info([[1]], [[1]])
-
     def test_mutual_info_size(self):
         with self.assertRaises(ValueError):
             mutual_info([1,2,3], [1,2])
@@ -85,6 +82,17 @@ class TestMutualInfo(unittest.TestCase):
         self.assertAlmostEqual(0.954434,
                 mutual_info([1,0,0,1,0,0,1,0], [2,0,1,2,0,1,2,0]), places=6)
 
+    def test_mutual_info_2D(self):
+        xs = np.random.randint(0,5,20)
+        ys = np.random.randint(0,5,20)
+        expect = mutual_info(xs, ys, b=5)
+
+        us = np.copy(np.reshape(xs, (4,5)))
+        vs = np.copy(np.reshape(ys, (4,5)))
+        got = mutual_info(us, vs, b=5)
+
+        self.assertAlmostEqual(expect, got)
+
 class TestLocalMutualInfo(unittest.TestCase):
     def test_mutual_info_empty(self):
         with self.assertRaises(ValueError):
@@ -102,9 +110,6 @@ class TestLocalMutualInfo(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             mutual_info([1], [[1]], local=True)
-
-        with self.assertRaises(ValueError):
-            mutual_info([[1]], [[1]], local=True)
 
     def test_mutual_info_size(self):
         with self.assertRaises(ValueError):
@@ -164,6 +169,19 @@ class TestLocalMutualInfo(unittest.TestCase):
 
         self.assertAlmostEqual(0.954434,
                 mutual_info([1,0,0,1,0,0,1,0], [2,0,1,2,0,1,2,0], local=True).mean(), places=6)
+
+    def test_mutual_info_2D(self):
+        xs = np.random.randint(0,5,20)
+        ys = np.random.randint(0,5,20)
+        expect = mutual_info(xs, ys, b=5, local=True)
+        self.assertEqual(xs.shape, expect.shape)
+
+        us = np.copy(np.reshape(xs, (4,5)))
+        vs = np.copy(np.reshape(ys, (4,5)))
+        got = mutual_info(us, vs, b=5, local=True)
+        self.assertTrue(us.shape, got.shape)
+
+        self.assertTrue((expect == np.reshape(got,expect.shape)).all())
 
 if __name__ == "__main__":
     unittest.main()

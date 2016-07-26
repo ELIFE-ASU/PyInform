@@ -13,9 +13,6 @@ def mutual_info(xs, ys, bx=0, by=0, b=2.0, local=False):
     """
     us = np.ascontiguousarray(xs, dtype=np.int32)
     vs = np.ascontiguousarray(ys, dtype=np.int32)
-    if us.ndim != 1 or vs.ndim != 1:
-        raise ValueError("dimension greater than 1")
-
     if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
@@ -32,7 +29,7 @@ def mutual_info(xs, ys, bx=0, by=0, b=2.0, local=False):
     e = ErrorCode(0)
 
     if local is True:
-        mi = np.empty(n, dtype=np.float64)
+        mi = np.empty(us.shape, dtype=np.float64)
         out = mi.ctypes.data_as(POINTER(c_double))
         _local_mutual_info(xdata, ydata, c_ulong(n), c_int(bx), c_int(by), c_double(b), out, byref(e))
     else:
