@@ -11,8 +11,8 @@ def encode(state, b):
     """
     Encode a base-`b` array of integers into a single integer
     """
-    xs = np.asarray(state, dtype=np.int32)
-    data = xs.ravel().ctypes.data_as(POINTER(c_int))
+    xs = np.ascontiguousarray(state, dtype=np.int32)
+    data = xs.ctypes.data_as(POINTER(c_int))
 
     if xs.size == 0:
         raise ValueError("cannot encode an empty array")

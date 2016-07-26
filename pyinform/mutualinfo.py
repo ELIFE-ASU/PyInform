@@ -11,8 +11,8 @@ def mutual_info(xs, ys, bx=0, by=0, b=2.0, local=False):
     """
     Compute the mutual information between two timeseries
     """
-    us = np.asarray(xs, dtype=np.int32)
-    vs = np.asarray(ys, dtype=np.int32)
+    us = np.ascontiguousarray(xs, dtype=np.int32)
+    vs = np.ascontiguousarray(ys, dtype=np.int32)
     if us.ndim != 1 or vs.ndim != 1:
         raise ValueError("dimension greater than 1")
 

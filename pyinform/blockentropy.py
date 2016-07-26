@@ -11,7 +11,7 @@ def block_entropy(series, k, b=0, local=False):
     """
     Compute the block entropy of a timeseries
     """
-    xs = np.asarray(series, np.int32)
+    xs = np.ascontiguousarray(series, np.int32)
 
     if xs.ndim == 0:
         raise ValueError("empty timeseries")

@@ -11,7 +11,7 @@ def active_info(series, k, b=0, local=False):
     """
     Compute the active information of a timeseries
     """
-    xs = np.asarray(series, np.int32)
+    xs = np.ascontiguousarray(series, np.int32)
 
     if xs.ndim == 0:
         raise ValueError("empty timeseries")

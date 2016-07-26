@@ -11,8 +11,8 @@ def coalesce_series(series):
     """
     Coalesce a timeseries into as few contiguous states as possible
     """
-    xs = np.asarray(series, dtype=np.int32)
-    data = xs.ravel().ctypes.data_as(POINTER(c_int))
+    xs = np.ascontiguousarray(series, dtype=np.int32)
+    data = xs.ctypes.data_as(POINTER(c_int))
 
     cs = np.empty(xs.size, dtype=np.int32)
     coal = cs.ctypes.data_as(POINTER(c_int))

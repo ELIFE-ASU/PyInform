@@ -11,13 +11,13 @@ def series_range(series):
     """
     Compute the range of a continuously-valued timeseries.
     """
-    xs = np.asarray(series, dtype=np.float64)
+    xs = np.ascontiguousarray(series, dtype=np.float64)
     data = xs.ctypes.data_as(POINTER(c_double))
 
     min, max = c_double(), c_double()
     
     e = ErrorCode(0)
-    rng = _inform_range(data, c_ulong(len(xs)), byref(min), byref(max), byref(e))
+    rng = _inform_range(data, c_ulong(xs.size), byref(min), byref(max), byref(e))
     error_guard(e)
     
     return rng, min.value, max.value
@@ -35,9 +35,8 @@ def bin_series(series, b=None, step=None, bounds=None):
     elif step is not None and bounds is not None:
         raise ValueError("cannot provide both step size and bin boundaries")
     
-    xs = np.asarray(series, dtype=np.float64)
-    shape = xs.shape
-    data = xs.ravel().ctypes.data_as(POINTER(c_double))
+    xs = np.ascontiguousarray(series, dtype=np.float64)
+    data = xs.ctypes.data_as(POINTER(c_double))
 
     binned = np.empty(xs.size, dtype=np.int32)
     out = binned.ctypes.data_as(POINTER(c_int))
@@ -49,7 +48,7 @@ def bin_series(series, b=None, step=None, bounds=None):
         spec = step
         b = _inform_bin_step(data, c_ulong(xs.size), c_double(step), out, byref(e))
     elif bounds is not None:
-        boundaries = np.asarray(bounds, dtype=np.float64)
+        boundaries = np.ascontiguousarray(bounds, dtype=np.float64)
         if boundaries.ndim != 1:
             raise ValueError("boundaries array must be one-dimensional")
         bnds = boundaries.ctypes.data_as(POINTER(c_double))
@@ -57,7 +56,7 @@ def bin_series(series, b=None, step=None, bounds=None):
         b = _inform_bin_bounds(data, c_ulong(xs.size), bnds, c_ulong(boundaries.size), out, byref(e))
     error_guard(e)
 
-    binned = np.reshape(binned, shape)
+    binned = np.reshape(binned, xs.shape)
 
     return binned, b, spec
 

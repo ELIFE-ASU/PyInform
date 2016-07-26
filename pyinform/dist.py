@@ -17,7 +17,7 @@ class Dist:
         of its support.
         """
         if isinstance(n, list) or isinstance(n, np.ndarray):
-            xs = np.asarray(n, dtype=np.uint32)
+            xs = np.ascontiguousarray(n, dtype=np.uint32)
             if xs.ndim != 1:
                 raise ValueError("support is multi-dimenstional")
             elif len(xs) == 0:

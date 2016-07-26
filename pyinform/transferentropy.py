@@ -11,8 +11,8 @@ def transfer_entropy(source, target, k, b=0, local=False):
     """
     Compute the transfer entropy from one timeseries to another
     """
-    ys = np.asarray(source, np.int32)
-    xs = np.asarray(target, np.int32)
+    ys = np.ascontiguousarray(source, np.int32)
+    xs = np.ascontiguousarray(target, np.int32)
 
     if xs.shape != ys.shape:
         raise ValueError("source and target timeseries are different shapes")
