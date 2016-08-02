@@ -112,7 +112,6 @@ API Documentation
 -----------------
 
 .. autoclass:: pyinform.dist.Dist
-    :members:
 
     .. automethod:: pyinform.dist.Dist.__init__
 
@@ -121,3 +120,17 @@ API Documentation
     .. automethod:: pyinform.dist.Dist.__getitem__
 
     .. automethod:: pyinform.dist.Dist.__setitem__
+
+    .. automethod:: pyinform.dist.Dist.resize
+
+    .. automethod:: pyinform.dist.Dist.copy
+
+    .. automethod:: pyinform.dist.Dist.counts
+
+    .. automethod:: pyinform.dist.Dist.valid
+
+    .. automethod:: pyinform.dist.Dist.tick
+
+    .. automethod:: pyinform.dist.Dist.probability
+
+    .. automethod:: pyinform.dist.Dist.dump
