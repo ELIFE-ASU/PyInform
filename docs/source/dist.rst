@@ -13,7 +13,7 @@ Example 1: Construction
 ^^^^^^^^^^^^^^^^^^^^^^^
 You can construct a distribution with a specified number of unique observables.
 Using this construction method results in an *invalid* distribution, as no
-observations have been made thus far.
+observations have been made thus far. ::
 
     d = Dist(5)
     assert(not d.valid())
@@ -73,6 +73,40 @@ Sometimes it is nice to just dump the probabilities out to an array: ::
     d = Dist([3,0,1,2])
 
     assert((d.dump() == [3./6., 0./6., 1./6., 2./6.]).all())
+
+Example 4: Shannon Entropy "The Hard Way"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Once you have a distribution you can do lots of fun things with it. In
+this example, we will compute the shannon entropy of a timeseries of
+observed values. ::
+
+    from math import log2
+
+    obs = [1,0,1,2,2,1,2,3,2,2]
+    d = Dist(max(obs) + 1)
+    for event in obs:
+        d.tick(event)
+    
+    h = 0.
+    for p in d.dump():
+        h -= p * log2(p)
+
+    assert(h == (log2(10) - 3*log2(3)/10 - 5*log2(5)/10))
+
+Of course **PyInform** provides a function for this:
+:py:func:`pyinform.shannon.entropy`. ::
+
+    from pyinform.shannon import entropy
+
+    obs = [1,0,1,2,2,1,2,3,2,2]
+    d = Dist(max(obs) + 1)
+    for event in obs:
+        d.tick(event)
+    
+    h = entropy(dist)
+    assert(h == (log2(10) - 3*log2(3)/10 - 5*log2(5)/10))
+
 
 API Documentation
 -----------------
