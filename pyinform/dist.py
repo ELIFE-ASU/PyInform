@@ -7,14 +7,33 @@ from ctypes import c_bool, c_double, c_uint, c_ulong, c_void_p, POINTER
 from pyinform import _inform
 
 class Dist:
+    """
+    Dist is class designed to represent empirical probability distributions,
+    i.e. histograms, for cleanly logging observations of time series data.
+
+    The premise behind this class is that it allows **PyInform** to define
+    the standard entropy measures on distributions. This reduces functions
+    such as :py:func:`pyinform.activeinfo.active_info` to building
+    distributions and then applying standard entropy measures.
+    """
+
     def __init__(self, n):
         """
         Construct a distribution.
 
-        If `n` is a list or `numpy` array, then the histogram is populated
-        with the values in the array. Otherwise `n` is assumed to be a
-        number and an invalid distribution is created with `n` as the size
-        of its support.
+        If the parameter *n* is an integer, the distribution is constructed
+        with a zeroed support of size *n*. If *n* is a list or
+        ``numpy.ndarray``, the sequence is treated as the underlying support.
+
+        Examples: ::
+
+            d = Dist(5)
+            d = Dist([0,0,1,2])
+
+        :param n: the support for the distribution
+        :type n: int, list or ``numpy.ndarray``
+        :raises ValueError: if support is empty or multidimensional
+        :raises MemoryError: if memory allocation fails within the C call
         """
         if isinstance(n, list) or isinstance(n, np.ndarray):
             xs = np.ascontiguousarray(n, dtype=np.uint32)
@@ -32,7 +51,7 @@ class Dist:
         if not self._dist:
             raise MemoryError()
 
-    def __dealloc__(self,n):
+    def __dealloc__(self):
         """
         Deallocate the memory underlying the distribution.
         """
@@ -41,13 +60,47 @@ class Dist:
 
     def __len__(self):
         """
-        Return the size of the support of the distribution.
+        Determine the size of the support of the distribution.
+
+        Examples: ::
+
+            assert(len(Dist(5)) == 5)
+            assert(len(Dist[0,1,5]) == 3)
+
+        See also :py:meth:`.counts`.
+
+        :return: the size of the support
+        :rtype: int
         """
         return int(_dist_size(self._dist))
 
     def resize(self, n):
         """
         Resize the support of the distribution in place.
+
+        If the distribution...
+
+        - **strinks** - the last ``len(self) - n`` elements are lost, the rest are preserved
+        - **grows** - the last ``n - len(self)`` elements are zeroed
+        - **is unchanged** - well, that sorta says it all, doesn't it?
+
+        Examples: ::
+
+            d = Dist(5)
+            d.resize(3)
+            assert(len(d) == 3)
+            d.resize(8)
+            assert(len(d) == 8)
+
+            d = Dist([1,2,3,4])
+            d.resize(2)
+            assert(len(d) == 2) # [1,2]
+            d.resize(4)
+            assert(len(d) == 4) # [1,2,0,0]
+
+        :param int n: the desired size of the support
+        :raises ValueError: if the requested size is zero
+        :raises MemoryError: if memory allocation fails in the C call
         """
         if n <= 0:
             raise ValueError("support is zero")
@@ -58,6 +111,9 @@ class Dist:
     def copy(self):
         """
         Perform a deep copy of the distribution.
+
+        :returns: the copied distribution
+        :rtype: :py:class:`pyinform.dist.Dist`
         """
         d = Dist(len(self))
         _dist_copy(self._dist, d._dist)
@@ -66,6 +122,19 @@ class Dist:
     def counts(self):
         """
         Return the number of observations made thus far.
+
+        Examples: ::
+    
+            d = Dist(5)
+            assert(d.counts() == 0)
+
+            d = Dist([1,0,3,2])
+            assert(d.counts() == 6)
+
+        See also :py:meth:`.__len__`.
+
+        :return: the number of observations
+        :rtype: int
         """
         return _dist_counts(self._dist)
 
@@ -73,12 +142,44 @@ class Dist:
         """
         Determine if the distribution is a valid probability distribution, i.e.
         if the support is not empty and at least one observation has been made.
+
+        Examples: ::
+
+            d = Dist(5)
+            assert(not d.valid())
+
+            d = Dist([0,0,0,1])
+            assert(d.valid())
+
+        See also :py:meth:`.__len__` and :py:meth:`.counts`.
+    
+        :return: a boolean signifying that the distribution is valid
+        :rtype: bool
         """
         return _dist_is_valid(self._dist)
 
     def __getitem__(self, event):
         """
-        Return the number of observations made of `event`.
+        Get the number of observations made of *event*.
+
+        Examples: ::
+
+            d = Dist(5)
+            for i, n in enumerate(d):
+                assert(d[i] != 0)
+                assert(n == 0)
+
+            d = Dist([0,1,2,3])
+            for i, n in enumerate(d):
+                assert(d[i] == i)
+                assert(n == i)
+
+        See also :py:meth:`.__setitem__`, :py:meth:`.tick` and :py:meth:`.probability`.
+
+        :param int event: the observed event
+        :return: the number of observations of *event*
+        :rtype: int
+        :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if event < 0 or event >= len(self):
             raise IndexError()
@@ -86,7 +187,26 @@ class Dist:
 
     def __setitem__(self, event, value):
         """
-        Set the number of observations of `event`.
+        Set the number of observations of *event* to *value*.
+
+        If *value* is negative, then the observation count is set to zero.
+
+        Examples: ::
+
+            d = Dist(5)
+            for i, _ in enumerate(d):
+                d[i] = i*i
+
+            d = Dist([0,1,2,3])
+            for i, n in enumerate(d):
+                d[i] = 2 * n
+            assert(list(d) == [0,2,4,6])
+        
+        See also :py:meth:`.__getitem__` and :py:meth:`.tick`.
+        
+        :param int event: the observed event
+        :param int value: the number of observations
+        :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if event < 0 or event >= len(self):
             raise IndexError()
@@ -95,8 +215,27 @@ class Dist:
 
     def tick(self, event):
         """
-        Make a single observation of `event` and return the total number
-        of observations of said `event`.
+        Make a single observation of *event*, and return the total number
+        of observations of said *event*.
+
+        Examples: ::
+
+            d = Dist(5)
+            for i, _ in enumerate(d):
+                assert(d.tick(i) == 1)
+            assert(list(d) == [1,1,1,1,1])
+
+            d = Dist([0,1,2,3])
+            for i, _ in enumerate(d):
+                assert(d.tick(i) == i + 1)
+            assert(list(d) == [1,2,3,4])
+
+        See also :py:meth:`.__getitem__` and :py:meth:`.__setitem__`.
+        
+        :param int event: the observed event
+        :return: the total number of observations of *event*
+        :rtype: int
+        :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if event < 0 or event >= len(self):
             raise IndexError()
@@ -104,21 +243,47 @@ class Dist:
 
     def probability(self, event):
         """
-        Return the probability of `event`.
+        Compute the empiricial probability of an *event*.
+
+        Examples: ::
+
+            d = Dist([1,1,1,1])
+            for i, _ in enumerate(d):
+                assert(d.probability(i) == 1./4)
+
+        See also :py:meth:`.__getitem__` and :py:meth:`.dump`.
+        
+        :param int event: the observed event
+        :return: the empirical probability *event*
+        :rtype: float
+        :raises RuntimeError: if ``not self.valid()``
+        :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if not self.valid():
-            raise ValueError("invalid distribution")
+            raise RuntimeError("invalid distribution")
         elif event < 0 or event >= len(self):
             raise IndexError()
         return _dist_prob(self._dist, c_ulong(event))
 
     def dump(self):
         """
-        Return a numpy array containing the probabilities of each of the
-        possible events.
+        Compute the empirical probability of each observable event and return
+        the result as an array.
+
+        Examples: ::
+
+            d = Dist([1,2,2,1])
+            assert(list(d.dump()) == [1./6, 1./3, 1./3, 1./6])
+
+        See also :py:meth:`.probability`.
+
+        :return: the empirical probabilities of all o
+        :rtype: ``numpy.ndarray``
+        :raises RuntimeError: if ``not self.valid()`` or the dump fails in the C call
+        :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if not self.valid():
-            raise ValueError("invalid distribution")
+            raise RuntimeError("invalid distribution")
         n = len(self)
         probs = np.empty(n, dtype=np.float64)
         data = probs.ctypes.data_as(POINTER(c_double))
