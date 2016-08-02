@@ -1,10 +1,10 @@
 Empirical Distributions
 =======================
 
-The ``pyinform.dist.Dist`` class provides an *empirical* distribution, i.e. a
-histogram, representing the observed frequencies of some fixed-size set of
-events. This class is the basis for all of the fundamental information measures
-on discrete probability distributions.
+The :py:class:`pyinform.dist.Dist` class provides an *empirical* distribution,
+i.e. a histogram, representing the observed frequencies of some fixed-size set
+of events. This class is the basis for all of the fundamental information
+measures on discrete probability distributions.
 
 Examples
 --------
