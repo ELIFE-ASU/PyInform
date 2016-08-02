@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyInform'
-copyright = '2016, ELife ASU'
+copyright = '2016, ELIFE'
 author = 'ELife ASU'
 
 # The version info for the project you're documenting, acts as replacement for
