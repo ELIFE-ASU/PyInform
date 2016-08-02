@@ -10,10 +10,11 @@ with open('README.rst') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-inform_version = "0.0.4"
+inform_version = "0.0.5"
 inform_files = [
-    "inform-{}/lib/libinform.so.{}".format(inform_version, inform_version),
-    "inform-{}/lib/inform.dll".format(inform_version)
+    "inform-{}/lib/linux-x86_64/libinform.so.{}".format(inform_version, inform_version),
+    "inform-{}/lib/macosx-x86_64/libinform.{}.dylib".format(inform_version, inform_version),
+    "inform-{}/lib/win_amd64/inform.dll".format(inform_version),
 ]
 
 setup(
@@ -29,5 +30,5 @@ setup(
     packages=['pyinform', 'pyinform.utils'],
     package_data = { 'pyinform' : inform_files },
     test_suite = "test",
-    platforms = ["Windows", "Linux"],
+    platforms = ["Windows", "OS X", "Linux"],
 )
