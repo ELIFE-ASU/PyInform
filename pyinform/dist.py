@@ -256,11 +256,11 @@ class Dist:
         :param int event: the observed event
         :return: the empirical probability *event*
         :rtype: float
-        :raises RuntimeError: if ``not self.valid()``
+        :raises ValueError: if ``not self.valid()``
         :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if not self.valid():
-            raise RuntimeError("invalid distribution")
+            raise ValueError("invalid distribution")
         elif event < 0 or event >= len(self):
             raise IndexError()
         return _dist_prob(self._dist, c_ulong(event))
@@ -279,11 +279,12 @@ class Dist:
 
         :return: the empirical probabilities of all o
         :rtype: ``numpy.ndarray``
-        :raises RuntimeError: if ``not self.valid()`` or the dump fails in the C call
+        :raises ValueError: if ``not self.valid()``
+        :raises RuntimeError: if the dump fails in the C call
         :raises IndexError: if ``event < 0 or len(self) <= event``
         """
         if not self.valid():
-            raise RuntimeError("invalid distribution")
+            raise ValueError("invalid distribution")
         n = len(self)
         probs = np.empty(n, dtype=np.float64)
         data = probs.ctypes.data_as(POINTER(c_double))
