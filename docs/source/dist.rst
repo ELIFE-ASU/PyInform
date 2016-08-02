@@ -74,8 +74,8 @@ Sometimes it is nice to just dump the probabilities out to an array: ::
 
     assert((d.dump() == [3./6., 0./6., 1./6., 2./6.]).all())
 
-Example 4: Shannon Entropy "The Hard Way"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 4: Shannon Entropy
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once you have a distribution you can do lots of fun things with it. In
 this example, we will compute the shannon entropy of a timeseries of
