@@ -15,18 +15,24 @@ You can construct a distribution with a specified number of unique observables.
 This construction method results in an *invalid* distribution as no
 observations have been made thus far. ::
 
-    d = Dist(5)
-    assert(not d.valid())
-    assert(d.counts() == 0)
-    assert(len(d) == 5)
+    >>> d = Dist(5)
+    >>> d.valid()
+    False
+    >>> d.counts()
+    0
+    >>> len(d)
+    5
 
 Alternatively you can construct a distribution given a list (or NumPy array)
 of observation counts: ::
 
-    d = Dist([0,0,1,2,1,0,0])
-    assert(d.valid())
-    assert(d.counts == 4)
-    assert(len(d) == 7)
+    >>> d = Dist([0,0,1,2,1,0,0])
+    >>> d.valid()
+    True
+    >>> d.counts()
+    4
+    >>> len(d)
+    7
 
 Example 2: Making Observations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -35,24 +41,22 @@ Once a distribution has been constructed, we can begin making observations.
 There are two methods for doing so. The first uses the standard indexing
 operations, treating the distribution similarly to a list: ::
 
-    d = Dist(5)
-    for i in range(len(d)):
-        d[i] = i*i              # set the number of times i was observed
-        assert(d[i] == i*i)     # no really, it should be set now
+    >>> d = Dist(5)
+    >>> for i in range(len(d)):
+    ...     d[i] = i*i
+    >>> list(d)
+    [0, 1, 4, 9, 25]
 
 The second method is to make *incremental* changes to the distribution. This
 is useful when making observations of timeseries: ::
 
-    obs = [1,0,1,2,2,1,2,3,2,2]
-
-    d = Dist(max(obs) + 1)
-    for event in obs:
-        d.tick(event)       # increment the number of observations of `event`
-
-    assert(d[0] == 1)
-    assert(d[1] == 3)
-    assert(d[2] == 5)
-    assert(d[3] == 1)
+    >>> obs = [1,0,1,2,2,1,2,3,2,2]
+    >>> d = Dist(max(obs) + 1)
+    >>> for event in obs:
+    ...     assert(d[event] == d.tick(event) - 1)
+    ...
+    >>> list(d)
+    [1, 3, 5, 1]
 
 Example 3: Probabilities
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,18 +65,21 @@ Once some observations have been made, we can start asking for probabilities.
 As in the previous examples, there are multiple ways of doing this. The first
 is to just ask for the probability of a given event. ::
 
-    d = Dist([3,0,1,2])
-
-    assert(d.probability(0) == 3./6.)
-    assert(d.probability(1) == 0./6.)
-    assert(d.probability(2) == 1./6.)
-    assert(d.probability(3) == 2./6.)
+    >>> d = Dist([3,0,1,2])
+    >>> d.probability(0)
+    0.5
+    >>> d.probability(1)
+    0.0
+    >>> d.probability(2)
+    0.16666666666666666
+    >>> d.probability(3)
+    0.3333333333333333
 
 Sometimes it is nice to just dump the probabilities out to an array: ::
 
-    d = Dist([3,0,1,2])
-
-    assert((d.dump() == [3./6., 0./6., 1./6., 2./6.]).all())
+    >>> d = Dist([3,0,1,2])
+    >>> d.dump()
+    array([ 0.5       ,  0.        ,  0.16666667,  0.33333333])
 
 Example 4: Shannon Entropy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -82,6 +89,7 @@ this example, we will compute the shannon entropy of a timeseries of
 observed values. ::
 
     from math import log2
+    from pyinform.dist import Dist
 
     obs = [1,0,1,2,2,1,2,3,2,2]
     d = Dist(max(obs) + 1)
@@ -92,11 +100,12 @@ observed values. ::
     for p in d.dump():
         h -= p * log2(p)
 
-    assert(h == (log2(10) - 3*log2(3)/10 - 5*log2(5)/10))
+    print(h) # 1.68547529723
 
 Of course **PyInform** provides a function for this:
 :py:func:`pyinform.shannon.entropy`. ::
 
+    from pyinform.dist import Dist
     from pyinform.shannon import entropy
 
     obs = [1,0,1,2,2,1,2,3,2,2]
@@ -104,8 +113,7 @@ Of course **PyInform** provides a function for this:
     for event in obs:
         d.tick(event)
     
-    h = entropy(dist)
-    assert(h == (log2(10) - 3*log2(3)/10 - 5*log2(5)/10))
+    print(entropy(dist)) # 1.6854752972273344
 
 
 API Documentation

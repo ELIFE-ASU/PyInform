@@ -27,8 +27,8 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            d = Dist([0,0,1,2])
+            >>> d = Dist(5)
+            >>> d = Dist([0,0,1,2])
 
         :param n: the support for the distribution
         :type n: int, list or ``numpy.ndarray``
@@ -64,8 +64,10 @@ class Dist:
 
         Examples: ::
 
-            assert(len(Dist(5)) == 5)
-            assert(len(Dist[0,1,5]) == 3)
+            >>> len(Dist(5))
+            5
+            >>> len(Dist[0,1,5])
+            3
 
         See also :py:meth:`.counts`.
 
@@ -86,17 +88,21 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            d.resize(3)
-            assert(len(d) == 3)
-            d.resize(8)
-            assert(len(d) == 8)
+            >>> d = Dist(5)
+            >>> d.resize(3)
+            >>> len(d)
+            3
+            >>> d.resize(8)
+            >>> len(d)
+            8
 
-            d = Dist([1,2,3,4])
-            d.resize(2)
-            assert(len(d) == 2) # [1,2]
-            d.resize(4)
-            assert(len(d) == 4) # [1,2,0,0]
+            >>> d = Dist([1,2,3,4])
+            >>> d.resize(2)
+            >>> list(d)
+            [1, 2]
+            >>> d.resize(4)
+            >>> list(d)
+            [1, 2, 0, 0]
 
         :param int n: the desired size of the support
         :raises ValueError: if the requested size is zero
@@ -112,6 +118,23 @@ class Dist:
         """
         Perform a deep copy of the distribution.
 
+        Examples: ::
+
+            >>> d = Dist([1,2,3])
+            >>> e = d
+            >>> e[0] = 3
+            >>> list(e)
+            [3, 2, 3]
+            >>> list(d)
+            [3, 2, 3]
+
+            >>> f = d.copy()
+            >>> f[0] = 1
+            >>> list(f)
+            [1, 2, 3]
+            >>> list(d)
+            [3, 2, 3]
+
         :returns: the copied distribution
         :rtype: :py:class:`pyinform.dist.Dist`
         """
@@ -125,11 +148,13 @@ class Dist:
 
         Examples: ::
     
-            d = Dist(5)
-            assert(d.counts() == 0)
+            >>> d = Dist(5)
+            >>> d.counts()
+            0
 
-            d = Dist([1,0,3,2])
-            assert(d.counts() == 6)
+            >>> d = Dist([1,0,3,2])
+            >>> d.counts()
+            6
 
         See also :py:meth:`.__len__`.
 
@@ -145,11 +170,13 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            assert(not d.valid())
+            >>> d = Dist(5)
+            >>> d.valid()
+            False
 
-            d = Dist([0,0,0,1])
-            assert(d.valid())
+            >>> d = Dist([0,0,0,1])
+            >>> d.valid()
+            True
 
         See also :py:meth:`.__len__` and :py:meth:`.counts`.
     
@@ -164,15 +191,13 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            for i, n in enumerate(d):
-                assert(d[i] != 0)
-                assert(n == 0)
+            >>> d = Dist(2)
+            >>> (d[0], d[1])
+            (0, 0)
 
-            d = Dist([0,1,2,3])
-            for i, n in enumerate(d):
-                assert(d[i] == i)
-                assert(n == i)
+            >>> d = Dist([0,1])
+            >>> (d[0], d[1])
+            (0, 1)
 
         See also :py:meth:`.__setitem__`, :py:meth:`.tick` and :py:meth:`.probability`.
 
@@ -193,14 +218,20 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            for i, _ in enumerate(d):
-                d[i] = i*i
+            >>> d = Dist(2)
+            >>> for i, _ in enumerate(d):
+            ...     d[i] = i*i
+            ...
+            >>> list(d)
+            [0, 1]
 
-            d = Dist([0,1,2,3])
-            for i, n in enumerate(d):
-                d[i] = 2 * n
-            assert(list(d) == [0,2,4,6])
+            >>> d = Dist([0,1,2,3])
+            >>> for i, n in enumerate(d):
+            ...     d[i] = 2 * n
+            ...
+            >>> list(d)
+            [0, 2, 4, 6]
+
         
         See also :py:meth:`.__getitem__` and :py:meth:`.tick`.
         
@@ -220,15 +251,19 @@ class Dist:
 
         Examples: ::
 
-            d = Dist(5)
-            for i, _ in enumerate(d):
-                assert(d.tick(i) == 1)
-            assert(list(d) == [1,1,1,1,1])
+            >>> d = Dist(5)
+            >>> for i, _ in enumerate(d):
+            ...     assert(d.tick(i) == 1)
+            ...
+            >>> list(d)
+            [1, 1, 1, 1, 1]
 
-            d = Dist([0,1,2,3])
-            for i, _ in enumerate(d):
-                assert(d.tick(i) == i + 1)
-            assert(list(d) == [1,2,3,4])
+            >>> d = Dist([0,1,2,3])
+            >>> for i, _ in enumerate(d):
+            ...     assert(d.tick(i) == i + 1)
+            ...
+            >>> list(d)
+            [1, 2, 3, 4]
 
         See also :py:meth:`.__getitem__` and :py:meth:`.__setitem__`.
         
@@ -247,9 +282,10 @@ class Dist:
 
         Examples: ::
 
-            d = Dist([1,1,1,1])
-            for i, _ in enumerate(d):
-                assert(d.probability(i) == 1./4)
+            >>> d = Dist([1,1,1,1])
+            >>> for i, _ in enumerate(d):
+            ...     assert(d.probability(i) == 1./4)
+            ...
 
         See also :py:meth:`.__getitem__` and :py:meth:`.dump`.
         
@@ -272,8 +308,9 @@ class Dist:
 
         Examples: ::
 
-            d = Dist([1,2,2,1])
-            assert(list(d.dump()) == [1./6, 1./3, 1./3, 1./6])
+            >>> d = Dist([1,2,2,1])
+            >>> d.dump()
+            array([ 0.16666667,  0.33333333,  0.33333333,  0.16666667])
 
         See also :py:meth:`.probability`.
 
