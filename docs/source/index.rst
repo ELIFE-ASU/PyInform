@@ -26,7 +26,7 @@ provided by the :py:mod:`pyinform` module.
    :maxdepth: 2
 
    dist
-   
+   shannon
 
 Indices and tables
 ==================
