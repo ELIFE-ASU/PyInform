@@ -1,0 +1,17 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27-x64"
+    - PYTHON: "C:\\Python34-x64"
+    - PYTHON: "C:\\Python35-x64"
+
+install:
+  - cmd: "%PYTHON%\\python.exe -m pip install numpy"
+  - ps: Invoke-RestMethod https://github.com/ELIFE-ASU/Inform/releases/download/v0.0.5/inform-0.0.5_mixed.zip -OutFile inform-0.0.5_mixed.zip
+  - ps: 7z x inform-0.0.5_mixed.zip
+  - ps: Move-Item inform-0.0.5 pyinform/inform-0.0.5
+  - ps: Remove-Item inform-0.0.5_mixed.zip
+
+build: off
+
+test_script:
+  - "%PYTHON%\\python.exe setup.py test"
