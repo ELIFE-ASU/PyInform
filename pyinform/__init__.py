@@ -46,3 +46,14 @@ def get_libpath():
     return os.path.join(libdir, "lib", platform, library)
 
 _inform = CDLL(get_libpath())
+
+from .activeinfo import active_info
+from .blockentropy import block_entropy
+from .dist import Dist
+from .entropyrate import entropy_rate
+from .error import InformError
+from .mutualinfo import mutual_info
+from .transferentropy import transfer_entropy
+
+from . import shannon
+from . import utils
