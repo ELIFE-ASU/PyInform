@@ -28,6 +28,7 @@ provided by the :py:mod:`pyinform` module.
    dist
    shannon
    timeseries
+   utils
 
 Indices and tables
 ==================
