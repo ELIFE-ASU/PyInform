@@ -1,0 +1,19 @@
+language: python
+
+os:
+    - linux
+    - osx
+
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+
+install:
+  - wget https://github.com/ELIFE-ASU/Inform/releases/download/v0.0.5/inform-0.0.5_mixed.zip
+  - unzip inform-0.0.5_mixed.zip
+  - mv inform-0.0.5 pyinform/inform-0.0.5
+  - rm inform-0.0.5_mixed.zip
+
+script:
+  - nosetests
