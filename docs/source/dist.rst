@@ -12,7 +12,7 @@ Examples
 Example 1: Construction
 ^^^^^^^^^^^^^^^^^^^^^^^
 You can construct a distribution with a specified number of unique observables.
-Using this construction method results in an *invalid* distribution, as no
+This construction method results in an *invalid* distribution as no
 observations have been made thus far. ::
 
     d = Dist(5)
@@ -20,7 +20,7 @@ observations have been made thus far. ::
     assert(d.counts() == 0)
     assert(len(d) == 5)
 
-Alternatively, you can construct a distribution given an list (or NumPy array)
+Alternatively you can construct a distribution given a list (or NumPy array)
 of observation counts: ::
 
     d = Dist([0,0,1,2,1,0,0])
@@ -37,7 +37,7 @@ operations, treating the distribution similarly to a list: ::
 
     d = Dist(5)
     for i in range(len(d)):
-        d[i] = i*i              # set the i-th event count
+        d[i] = i*i              # set the number of times i was observed
         assert(d[i] == i*i)     # no really, it should be set now
 
 The second method is to make *incremental* changes to the distribution. This
@@ -66,7 +66,7 @@ is to just ask for the probability of a given event. ::
     assert(d.probability(0) == 3./6.)
     assert(d.probability(1) == 0./6.)
     assert(d.probability(2) == 1./6.)
-    assert(d.probability(2) == 2./6.)
+    assert(d.probability(3) == 2./6.)
 
 Sometimes it is nice to just dump the probabilities out to an array: ::
 
