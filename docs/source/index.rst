@@ -25,6 +25,7 @@ provided by the :py:mod:`pyinform` module.
 .. toctree::
    :maxdepth: 2
 
+   starting
    dist
    shannon
    timeseries
