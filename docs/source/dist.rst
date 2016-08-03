@@ -111,26 +111,28 @@ Of course **PyInform** provides a function for this:
 API Documentation
 -----------------
 
-.. autoclass:: pyinform.dist.Dist
+.. automodule:: pyinform.dist
 
-    .. automethod:: pyinform.dist.Dist.__init__
+    .. autoclass:: pyinform.dist.Dist
 
-    .. automethod:: pyinform.dist.Dist.__len__
+        .. automethod:: pyinform.dist.Dist.__init__
 
-    .. automethod:: pyinform.dist.Dist.__getitem__
+        .. automethod:: pyinform.dist.Dist.__len__
 
-    .. automethod:: pyinform.dist.Dist.__setitem__
+        .. automethod:: pyinform.dist.Dist.__getitem__
 
-    .. automethod:: pyinform.dist.Dist.resize
+        .. automethod:: pyinform.dist.Dist.__setitem__
 
-    .. automethod:: pyinform.dist.Dist.copy
+        .. automethod:: pyinform.dist.Dist.resize
 
-    .. automethod:: pyinform.dist.Dist.counts
+        .. automethod:: pyinform.dist.Dist.copy
 
-    .. automethod:: pyinform.dist.Dist.valid
+        .. automethod:: pyinform.dist.Dist.counts
 
-    .. automethod:: pyinform.dist.Dist.tick
+        .. automethod:: pyinform.dist.Dist.valid
 
-    .. automethod:: pyinform.dist.Dist.probability
+        .. automethod:: pyinform.dist.Dist.tick
 
-    .. automethod:: pyinform.dist.Dist.dump
+        .. automethod:: pyinform.dist.Dist.probability
+
+        .. automethod:: pyinform.dist.Dist.dump
