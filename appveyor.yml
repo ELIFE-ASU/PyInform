@@ -1,3 +1,5 @@
+version: 0.0.5.{build}
+
 environment:
   matrix:
     - PYTHON: "C:\\Python27-x64"
