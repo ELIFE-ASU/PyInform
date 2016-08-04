@@ -15,6 +15,13 @@ Block Entropy
 
     .. autofunction:: pyinform.blockentropy.block_entropy
 
+Conditional Entropy
+-------------------
+
+.. automodule:: pyinform.conditionalentropy
+
+    .. autofunction:: pyinform.conditionalentropy.entropy_rate
+
 Entropy Rate
 ------------
 
@@ -28,6 +35,13 @@ Mutual Information
 .. automodule:: pyinform.mutualinfo
 
     .. autofunction:: pyinform.mutualinfo.mutual_info
+
+Relative Entropy
+----------------
+
+.. automodule:: pyinform.relativeentropy
+
+    .. autofunction:: pyinform.relativeentropy.relative_entropy
 
 Transfer Entropy
 ----------------
