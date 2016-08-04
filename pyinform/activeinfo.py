@@ -20,7 +20,7 @@ def active_info(series, k, b=0, local=False):
 
     .. math::
 
-        A_x(k) &= \sum_{x^k_i,\, x_{i+1}} p(x^k_i, x_{i+1}) \\log_b \\frac{p(x^k_i, x_{i+1})}{p(x^k_i)p(x_{i+1})}.
+        A_x(k) = \sum_{x^k_i,\, x_{i+1}} p(x^k_i, x_{i+1}) \\log_b \\frac{p(x^k_i, x_{i+1})}{p(x^k_i)p(x_{i+1})}.
     
     Examples: ::
 
