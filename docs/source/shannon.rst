@@ -1,3 +1,5 @@
+.. _shannon:
+
 Shannon Information Measures
 ============================
 

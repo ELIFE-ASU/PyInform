@@ -1,3 +1,5 @@
+.. _dist:
+
 Empirical Distributions
 =======================
 
