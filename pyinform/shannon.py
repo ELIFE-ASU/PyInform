@@ -157,8 +157,8 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
     :return: the conditional mutual information
     :rtype: float
 
-    .. [Wyner1978] Wyner, A. D. (1978). "`A definition of conditional mutual information for arbitrary ensembles`__". Information and Control 38 (1): 51–59. doi:10.1016/s0019-9958(78)90026-8.
-    .. [Dobrushin1959] Dobrushin, R. L. (1959). "General formulation of Shannon's main theorem in information theory". Ushepi Mat. Nauk. 14: 3–104.
+    .. [Wyner1978] Wyner, A. D. (1978). "`A definition of conditional mutual information for arbitrary ensembles`__". Information and Control 38 (1): 51-59. doi:10.1015/s0019-9958(78)90026-8.
+    .. [Dobrushin1959] Dobrushin, R. L. (1959). "General formulation of Shannon's main theorem in information theory". Ushepi Mat. Nauk. 14: 3-104.
 
     .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_entropy
     .. __: http://www.sciencedirect.com/science/article/pii/S0019995878900268
@@ -209,7 +209,7 @@ def relative_entropy(p, q, b=2.0):
     :return: the relative entropy
     :rtype: float
 
-    .. [Kullback1951]  Kullback, S.; Leibler, R.A. (1951). "`On information and sufficiency`__". Annals of Mathematical Statistics. 22 (1): 79–86. doi:10.1214/aoms/1177729694. MR 39968.
+    .. [Kullback1951] Kullback, S.; Leibler, R.A. (1951). "`On information and sufficiency`__". Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.
     .. __: http://projecteuclid.org/DPubS?service=UI&version=1.0&verb=Display&handle=euclid.aoms/1177729694
     """
     return _relative_entropy(p._dist, q._dist, c_double(b))
