@@ -20,7 +20,7 @@ Conditional Entropy
 
 .. automodule:: pyinform.conditionalentropy
 
-    .. autofunction:: pyinform.conditionalentropy.entropy_rate
+    .. autofunction:: pyinform.conditionalentropy.conditional_entropy
 
 Entropy Rate
 ------------
