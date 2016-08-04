@@ -9,7 +9,33 @@ from pyinform.error import ErrorCode, error_guard
 
 def block_entropy(series, k, b=0, local=False):
     """
-    Compute the block entropy of a timeseries
+    Compute the (local) active information of a timeseries with block size *k*.
+
+    .. math::
+
+        H_k(X) = -\sum_{x^{(k)}} p(x^{(k)}) \\log_b p(x^{(k)})
+
+    Examples: ::
+
+        >>> block_entropy([0,0,1,1,1,1,0,0,0], k=1)
+        0.9910760598382222
+        >>> block_entropy([0,0,1,1,1,1,0,0,0], k=1, local=True)
+        array([[ 0.84799691,  0.84799691,  1.169925  ,  1.169925  ,  1.169925  ,
+                1.169925  ,  0.84799691,  0.84799691,  0.84799691]])
+
+        >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2)
+        1.811278124459133
+        >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, local=True)
+        array([[ 1.4150375,  3.       ,  1.4150375,  1.4150375,  1.4150375,
+                3.       ,  1.4150375,  1.4150375]])
+
+    :param series: the time series
+    :type series: sequence or `numpy.ndarray`
+    :param int k: the block size
+    :param int b: the base of the logarithm
+    :param bool local: compute the local block entropy
+    :returns: the average or local block entropy
+    :rtype: float or `numpy.ndarray`
     """
     xs = np.ascontiguousarray(series, np.int32)
 
