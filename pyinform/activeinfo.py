@@ -46,7 +46,7 @@ The typical usage is to provide the time series as a sequence (or
 
 You can always override the base, but be careful: ::
 
-    >>> active_info([0,0,1,1,2,2], k=2)                                                                     
+    >>> active_info([0,0,1,1,2,2], k=2)
     0.6309297535714575
     >>> active_info([0,0,1,1,2,2], k=2, b=3)
     0.6309297535714575
@@ -56,7 +56,7 @@ You can always override the base, but be careful: ::
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
       File "pyinform/activeinfo.py", line 126, in active_info
-        
+    
       File "pyinform/error.py", line 57, in error_guard
         raise InformError(e,func)
     pyinform.error.InformError: an inform error occurred - "unexpected state in timeseries"
@@ -66,7 +66,7 @@ Multiple Initial Conditions
 
 What about multiple initial conditions? We've got that covered! ::
 
-    >>> active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2)                                           
+    >>> active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2)
     0.35987902873686073
     >>> active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2, local=True)
     array([[ 0.80735492, -0.36257008,  0.63742992,  0.63742992, -0.77760758,
@@ -77,7 +77,6 @@ What about multiple initial conditions? We've got that covered! ::
 As mentioned in :ref:`subtle-details`, averaging the AI for over the initial
 conditions does not give the same result as constructing the distributions using
 all of the initial conditions together. ::
-
 
     >>> import numpy as np
     >>> series = np.asarray([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]])
@@ -94,13 +93,6 @@ Or if you are feeling verbose: ::
     array([ 0.30595849,  0.86312057])
     >>> ai.mean()
     0.58453953071733644
-
-References
-----------
-
-.. [Lizier2012] J.T. Lizier, M. Prokopenko and A.Y. Zomaya, "`Local measures of information storage in complex distributed computation`__" Information Sciences, vol. 208, pp. 39-54, 2012.
-
-.. __: http://dx.doi.org/10.1016/j.ins.2012.04.016
 """
 
 import numpy as np
@@ -112,12 +104,12 @@ from pyinform.error import ErrorCode, error_guard
 
 def active_info(series, k, b=0, local=False):
     """
-    Compute the averge or local active information of a timeseries with history
+    Compute the average or local active information of a timeseries with history
     length *k*.
     
     If the base *b* is not specified (or is 0), then it is inferred from the
-    time series (with 2) as a minimum. *b* must be at least the base of the time
-    series and is used a the base of the logarithm.
+    time series with 2 as a minimum. *b* must be at least the base of the time
+    series and is used as the base of the logarithm.
 
     :param series: the time series
     :type series: sequence or ``numpy.ndarray``

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
 """
-`Conditional entropy`_ ([Cover1991]_) is a measure of the amount of information
+`Conditional entropy`_ is a measure of the amount of information
 required to describe a random variable :math:`Y` given knowledge of another
 random variable :math:`X`. When applied to time series, two time series are used
 to construct the empirical distributions and then
@@ -10,7 +10,18 @@ to construct the empirical distributions and then
 
 .. math::
 
-    H_b(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_b \\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.
+    H_b(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_b \\frac{p(x_i, y_i)}{p(x_i)}.
+    
+This can be viewed as the time-average of the local conditional entropy
+
+.. math::
+
+    h_{b,i}(Y|X) = -\\log_b \\frac{p(x_i, y_i)}{p(x_i)}.
+
+
+See [Cover1991]_ for more information.
+
+.. _Conditional entropy: https://en.wikipedia.org/wiki/Conditional_entropy
 
 Examples
 --------
@@ -28,19 +39,11 @@ Examples
             0.19264508,  0.19264508,  0.19264508,  0.19264508,  0.19264508,
             0.19264508,  0.19264508,  0.19264508,  0.19264508,  0.19264508,
             0.19264508,  0.4150375 ,  0.4150375 ,  0.4150375 ,  2.        ])
-    >>> conditional_entropy(ys, xs, local=True)                                                                    
+    >>> conditional_entropy(ys, xs, local=True)
     array([ 1.32192809,  1.32192809,  0.09953567,  0.09953567,  0.09953567,
             0.09953567,  0.09953567,  0.09953567,  0.09953567,  0.09953567,
             0.09953567,  0.09953567,  0.09953567,  0.09953567,  0.09953567,
             0.09953567,  0.73696559,  0.73696559,  0.73696559,  3.9068906 ])
-
-References
-----------
-
-.. [Cover1991] Cover, T. M.; Thomas, J. A. (1991). Elements of information theory (1st ed.). New York: Wiley. ISBN 0-471-06259-6.
-
-.. _Conditional entropy: https://en.wikipedia.org/wiki/Conditional_entropy
-
 """
 import numpy as np
 
@@ -69,7 +72,7 @@ def conditional_entropy(xs, ys, bx=0, by=0, b=2.0, local=False):
     :param bool local: compute the local conditional entropy
     :return: the local or average conditional entropy
     :rtype: float or ``numpy.ndarray``
-    :raises ValueError: if the time series have diffenent shapes
+    :raises ValueError: if the time series have different shapes
     :raises InformError: if an error occurs within the ``inform`` C call
     """
     us = np.ascontiguousarray(xs, dtype=np.int32)

@@ -174,7 +174,7 @@ def relative_entropy(p, q, b=2.0):
     `Relative entropy`, also known as the Kullback-Leibler divergence, was
     introduced by Kullback and Leiber in 1951 ([Kullback1951]_). Given a random
     variable :math:`X`, two probability distributions :math:`p_X` and
-    :math:`q_X`, relative entropy measure the information gained in switching
+    :math:`q_X`, relative entropy measures the information gained in switching
     from the prior :math:`q_X` to the posterior :math:`p_X`:
 
     .. math::

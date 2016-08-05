@@ -1,3 +1,5 @@
+.. _timeseries:
+
 Time Series Measures
 ====================
 
@@ -119,6 +121,9 @@ Conditional Entropy
 -------------------
 .. automodule:: pyinform.conditionalentropy
 
+    API Documentation
+    -----------------
+
     .. autofunction:: pyinform.conditionalentropy.conditional_entropy
 
 .. _entropy-rate:
@@ -126,6 +131,9 @@ Conditional Entropy
 Entropy Rate
 ------------
 .. automodule:: pyinform.entropyrate
+
+    API Documentation
+    -----------------
 
     .. autofunction:: pyinform.entropyrate.entropy_rate
 
@@ -135,6 +143,9 @@ Mutual Information
 ------------------
 .. automodule:: pyinform.mutualinfo
 
+    API Documentation
+    -----------------
+
     .. autofunction:: pyinform.mutualinfo.mutual_info
 
 .. _relative-entropy:
@@ -142,6 +153,9 @@ Mutual Information
 Relative Entropy
 ----------------
 .. automodule:: pyinform.relativeentropy
+
+    API Documentation
+    -----------------
 
     .. autofunction:: pyinform.relativeentropy.relative_entropy
 
@@ -151,4 +165,30 @@ Transfer Entropy
 ----------------
 .. automodule:: pyinform.transferentropy
 
+    API Documentation
+    -----------------
+
     .. autofunction:: pyinform.transferentropy.transfer_entropy
+
+References
+----------
+
+.. [Cover1991] T.M. Cover amd J.A. Thomas (1991). "Elements of information theory" (1st ed.). New York: Wiley. ISBN 0-471-06259-6.
+
+.. [Kraiser2002] A. Kaiser, T. Schreiber, "`Information transfer in continuous processes`__", Physica D: Nonlinear Phenomena, Volume 166, Issues 1–2, 1 June 2002, Pages 43-62, ISSN 0167-2789
+.. __: http://dx.doi.org/10.1016/S0167-2789(02)00432-3
+
+.. [Kullback1951] Kullback, S.; Leibler, R.A. (1951). "`On information and sufficiency`__". Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.
+.. __: http://projecteuclid.org/DPubS?service=UI&version=1.0&verb=Display&handle=euclid.aoms/1177729694
+
+.. [Lizier2008] J.T. Lizier M. Prokopenko and A. Zomaya, "`Local information transfer as a spatiotemporal filter for complex systems`__", Phys. Rev. E 77, 026110, 2008.
+.. __: http://dx.doi.org/10.1103/PhysRevE.77.026110
+
+.. [Lizier2012] J.T. Lizier, M. Prokopenko and A.Y. Zomaya, "`Local measures of information storage in complex distributed computation`__" Information Sciences, vol. 208, pp. 39-54, 2012.
+.. __: http://dx.doi.org/10.1016/j.ins.2012.04.016
+
+.. [Schreiber2000] T. Schreiber, "`Measuring information transfer`__", Phys.Rev.Lett. 85 (2) pp.461-464, 2000.
+.. __: http://dx.doi.org/10.1103/PhysRevLett.85.461
+
+.. [Shannon1948] Shannon, Claude E. (July-October 1948). "`A Mathematical Theory of Communication`__". Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.
+.. __: https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x

@@ -62,13 +62,6 @@ Or you can compute the block entropy on each initial condition and average: ::
 
     >>> np.apply_along_axis(block_entropy, 1, series, 2).mean()
     1.6862781244591329
-
-References
-----------
-
-.. [Shannon1948] Shannon, Claude E. (July-October 1948). "`A Mathematical Theory of Communication`__". Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.
-
-.. __: https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x
 """
 import numpy as np
 
