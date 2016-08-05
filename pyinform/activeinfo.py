@@ -28,29 +28,6 @@ Strictly speaking, the local and average active information are defined as
 
 but we do not provide limiting functionality in this library (yet!).
 
-
-.. _subtle-details:
-
-Subtle Details
---------------
-
-The implementation provided herein takes a couple of liberties.
-
-First of all, the base *b* is expected to be an integer at least equal to the
-number of unique states in the time series. For example, given a time series
-:math:`\\{0,2,1,0,0\\}`, the base must be at least 3. This forces the resulting
-active information into :math:`[0,1]`. The exception to the "as least" rule is
-``b=0``. When this is the case, the base is inferred from the time series with
-a minimum value of 2. These "features" are subject to change in subsequent
-releases.
-
-Second, the implementation can handle time series that are at most 2-D. In such
-a case, each row of the time series is taken as an *initial condition*. The
-distributions are then constructed from each row *independently* of the others.
-**This is not the same as computing the AI for each initial condition and
-averaging the results**. Subsequent releases may provide a mechanism for
-specifying a how the user prefers the initial conditions to be handled.
-
 Examples
 --------
 
@@ -107,6 +84,17 @@ all of the initial conditions together. ::
     >>> np.apply_along_axis(active_info, 1, series, 2).mean()
     0.58453953071733644
 
+Or if you are feeling verbose: ::
+
+    >>> ai = np.empty(len(series))
+    >>> for i, xs in enumerate(series):
+    ...     ai[i] = active_info(xs, k=2)
+    ... 
+    >>> ai
+    array([ 0.30595849,  0.86312057])
+    >>> ai.mean()
+    0.58453953071733644
+
 References
 ----------
 
@@ -127,8 +115,9 @@ def active_info(series, k, b=0, local=False):
     Compute the averge or local active information of a timeseries with history
     length *k*.
     
-    If the base *b* is not specified or is 0, then it is inferred from the time
-    series (with 2) as a minimum.
+    If the base *b* is not specified (or is 0), then it is inferred from the
+    time series (with 2) as a minimum. *b* must be at least the base of the time
+    series and is used a the base of the logarithm.
 
     :param series: the time series
     :type series: sequence or ``numpy.ndarray``
