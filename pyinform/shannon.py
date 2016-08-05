@@ -26,6 +26,8 @@ def entropy(p, b=2.0):
         2.0
         >>> entropy(d,4)
         1.0
+        
+    See [Shannon1948a]_ for more details.
 
     :param p: the distribution
     :type p: :py:class:`pyinform.dist.Dist`
@@ -56,6 +58,8 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
 
     To some degree one can think of mutual information as a measure of the
     (linear and non-linear) coorelations between random variables.
+    
+    See [Cover1991a]_ for more details.
 
     Example: ::
 
@@ -64,7 +68,6 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
         >>> y = Dist([25,75])
         >>> mutual_info(xy, x, y)
         0.214170945007629
-
 
     :param p_xy: the joint distribution
     :type p_xy: :py:class:`pyinform.dist.Dist`
@@ -95,6 +98,8 @@ def conditional_entropy(p_xy, p_y, b=2.0):
     
         H(X|Y) &= -\\sum_{x,y} p_{X,Y}(x,y) \\log_b \\frac{p_{X,Y}(x,y)}{p_Y(y)}\\\\
                &= H(X,Y) - H(Y).
+    
+    See [Cover1991a]_ for more details.
 
     Example: ::
 
@@ -135,6 +140,9 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
         I(X;Y|Z) &= -\\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \\log_b \\frac{p_{X,Y|Z}(x,y|z)}{p_{X|Z}(x|z)p_{Y|Z}(y|z)}\\\\
                  &= -\\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \\log_b \\frac{p_{X,Y,Z}(x,y,z)p_{Z}(z)}{p_{X,Z}(x,z)p_{Y,Z}(y,z)}\\\\
                  &= H(X,Z) + H(Y,Z) - H(Z) - H(X,Y,Z)
+    
+    
+    .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_entropy
 
     Examples:
 
@@ -156,12 +164,6 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
     :param float b: the logarithmic base
     :return: the conditional mutual information
     :rtype: float
-
-    .. [Wyner1978] Wyner, A. D. (1978). "`A definition of conditional mutual information for arbitrary ensembles`__". Information and Control 38 (1): 51-59. doi:10.1015/s0019-9958(78)90026-8.
-    .. [Dobrushin1959] Dobrushin, R. L. (1959). "General formulation of Shannon's main theorem in information theory". Ushepi Mat. Nauk. 14: 3-104.
-
-    .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_entropy
-    .. __: http://www.sciencedirect.com/science/article/pii/S0019995878900268
     """
     return _conditional_mutual_info(p_xyz._dist, p_xz._dist, p_yz._dist,
         p_z._dist, c_double(b))
@@ -172,7 +174,7 @@ def relative_entropy(p, q, b=2.0):
     (*q*) distributions.
 
     `Relative entropy`, also known as the Kullback-Leibler divergence, was
-    introduced by Kullback and Leiber in 1951 ([Kullback1951]_). Given a random
+    introduced by Kullback and Leiber in 1951 ([Kullback1951a]_). Given a random
     variable :math:`X`, two probability distributions :math:`p_X` and
     :math:`q_X`, relative entropy measures the information gained in switching
     from the prior :math:`q_X` to the posterior :math:`p_X`:
@@ -208,9 +210,6 @@ def relative_entropy(p, q, b=2.0):
     :param float b: the logarithmic base
     :return: the relative entropy
     :rtype: float
-
-    .. [Kullback1951] Kullback, S.; Leibler, R.A. (1951). "`On information and sufficiency`__". Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.
-    .. __: http://projecteuclid.org/DPubS?service=UI&version=1.0&verb=Display&handle=euclid.aoms/1177729694
     """
     return _relative_entropy(p._dist, q._dist, c_double(b))
 

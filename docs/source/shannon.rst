@@ -97,3 +97,19 @@ API Documentation
     .. autofunction:: pyinform.shannon.conditional_mutual_info
 
     .. autofunction:: pyinform.shannon.relative_entropy
+
+References
+----------
+
+.. [Cover1991a] T.M. Cover amd J.A. Thomas (1991). "Elements of information theory" (1st ed.). New York: Wiley. ISBN 0-471-06259-6.
+
+.. [Dobrushin1959] Dobrushin, R. L. (1959). "General formulation of Shannon's main theorem in information theory". Ushepi Mat. Nauk. 14: 3-104.
+
+.. [Kullback1951a] Kullback, S.; Leibler, R.A. (1951). "`On information and sufficiency`__". Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.
+.. __: http://projecteuclid.org/DPubS?service=UI&version=1.0&verb=Display&handle=euclid.aoms/1177729694
+
+.. [Shannon1948a] Shannon, Claude E. (July-October 1948). "`A Mathematical Theory of Communication`__". Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.
+.. __: https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x
+
+.. [Wyner1978] Wyner, A. D. (1978). "`A definition of conditional mutual information for arbitrary ensembles`__". Information and Control 38 (1): 51-59. doi:10.1015/s0019-9958(78)90026-8.
+.. __: http://www.sciencedirect.com/science/article/pii/S0019995878900268
