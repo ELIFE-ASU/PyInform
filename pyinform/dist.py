@@ -25,7 +25,9 @@ class Dist:
         with a zeroed support of size *n*. If *n* is a list or
         ``numpy.ndarray``, the sequence is treated as the underlying support.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(5)
             >>> d = Dist([0,0,1,2])
@@ -62,7 +64,9 @@ class Dist:
         """
         Determine the size of the support of the distribution.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> len(Dist(5))
             5
@@ -86,7 +90,9 @@ class Dist:
         - **grows** - the last ``n - len(self)`` elements are zeroed
         - **is unchanged** - well, that sorta says it all, doesn't it?
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(5)
             >>> d.resize(3)
@@ -95,6 +101,8 @@ class Dist:
             >>> d.resize(8)
             >>> len(d)
             8
+
+        ::
 
             >>> d = Dist([1,2,3,4])
             >>> d.resize(2)
@@ -118,7 +126,9 @@ class Dist:
         """
         Perform a deep copy of the distribution.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist([1,2,3])
             >>> e = d
@@ -127,6 +137,8 @@ class Dist:
             [3, 2, 3]
             >>> list(d)
             [3, 2, 3]
+
+        ::
 
             >>> f = d.copy()
             >>> f[0] = 1
@@ -146,11 +158,15 @@ class Dist:
         """
         Return the number of observations made thus far.
 
-        Examples: ::
-    
+        .. rubric:: Examples:
+        
+        ::
+
             >>> d = Dist(5)
             >>> d.counts()
             0
+
+        ::
 
             >>> d = Dist([1,0,3,2])
             >>> d.counts()
@@ -168,11 +184,15 @@ class Dist:
         Determine if the distribution is a valid probability distribution, i.e.
         if the support is not empty and at least one observation has been made.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(5)
             >>> d.valid()
             False
+
+        ::
 
             >>> d = Dist([0,0,0,1])
             >>> d.valid()
@@ -189,11 +209,15 @@ class Dist:
         """
         Get the number of observations made of *event*.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(2)
             >>> (d[0], d[1])
             (0, 0)
+
+        ::
 
             >>> d = Dist([0,1])
             >>> (d[0], d[1])
@@ -216,7 +240,9 @@ class Dist:
 
         If *value* is negative, then the observation count is set to zero.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(2)
             >>> for i, _ in enumerate(d):
@@ -224,6 +250,8 @@ class Dist:
             ...
             >>> list(d)
             [0, 1]
+
+        ::
 
             >>> d = Dist([0,1,2,3])
             >>> for i, n in enumerate(d):
@@ -249,7 +277,9 @@ class Dist:
         Make a single observation of *event*, and return the total number
         of observations of said *event*.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist(5)
             >>> for i, _ in enumerate(d):
@@ -257,6 +287,8 @@ class Dist:
             ...
             >>> list(d)
             [1, 1, 1, 1, 1]
+
+        ::
 
             >>> d = Dist([0,1,2,3])
             >>> for i, _ in enumerate(d):
@@ -280,7 +312,9 @@ class Dist:
         """
         Compute the empiricial probability of an *event*.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist([1,1,1,1])
             >>> for i, _ in enumerate(d):
@@ -306,7 +340,9 @@ class Dist:
         Compute the empirical probability of each observable event and return
         the result as an array.
 
-        Examples: ::
+        .. rubric:: Examples:
+        
+        ::
 
             >>> d = Dist([1,2,2,1])
             >>> d.dump()

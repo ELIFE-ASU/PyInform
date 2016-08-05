@@ -38,7 +38,9 @@ Examples
         0.27807190511263774
         >>> relative_entropy(ys, xs)
         0.3219280948873624
-        
+
+::
+
         >>> xs = [0,0,0,0]
         >>> ys = [0,1,1,0]
         >>> relative_entropy(xs, ys)

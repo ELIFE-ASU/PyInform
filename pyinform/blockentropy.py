@@ -30,6 +30,8 @@ The typical usage is to provide the time series as a sequence (or
     array([[ 0.84799691,  0.84799691,  1.169925  ,  1.169925  ,  1.169925  ,
             1.169925  ,  0.84799691,  0.84799691,  0.84799691]])
 
+::
+
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2)
     1.811278124459133
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, local=True)
