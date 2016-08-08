@@ -86,7 +86,7 @@ class Dist:
 
         If the distribution...
 
-        - **strinks** - the last ``len(self) - n`` elements are lost, the rest are preserved
+        - **shrinks** - the last ``len(self) - n`` elements are lost, the rest are preserved
         - **grows** - the last ``n - len(self)`` elements are zeroed
         - **is unchanged** - well, that sorta says it all, doesn't it?
 

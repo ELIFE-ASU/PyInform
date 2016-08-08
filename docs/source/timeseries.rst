@@ -34,8 +34,8 @@ probability of observing :math:`(x^{(k)}_i, x_{i+1})`.
 Subtle Details
 --------------
 
-The library take several liberties in the way in which the time series measures
-are implemented.
+The library takes several liberties in the way in which the time series
+measures are implemented.
 
 The Base: States and Logarithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -52,14 +52,14 @@ produce, and the base of the logarithm represents a rescaling of those values.
 The following measures use one of two conventions. The measures of information
 dynamics (e.g. :ref:`active-information`, :ref:`entropy-rate` and
 :ref:`transfer-entropy`) take as an argument the **base of the state** and use
-that as the logarithm of the logarithm. The result is that the time-averaged
-values of those measures are in the unit range. An exception to this rule is
-the block entropy. It two uses this convention, but its value will not be in the
-unit range unless the block size :math:`k` is 1 or the specified base is
-:math:`2^k` (or you could just divide by :math:`k`). The second convention is to
-take both the base of the time series and the base of the logarithm. This is
-about as unambiguous as it gets. This approach is used for the measures that do
-not make explicit use of a history length (or block size), e.g.
+that as the base of the logarithm. The result is that the time-averaged values
+of those measures are in the unit range. An exception to this rule is the block
+entropy. It two uses this convention, but its value will not be in the unit
+range unless the block size :math:`k` is 1 or the specified base is :math:`2^k`
+(or you could just divide by :math:`k`). The second convention is to take both
+the base of the time series and the base of the logarithm. This is about as
+unambiguous as it gets. This approach is used for the measures that do not make
+explicit use of a history length (or block size), e.g.
 :ref:`mutual-information`, :ref:`conditional-entropy`, etc...
 
 Coming releases may revise the handling of the bases, but until then each
