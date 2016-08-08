@@ -60,6 +60,41 @@ is useful when making observations of timeseries: ::
     >>> list(d)
     [1, 3, 5, 1]
 
+It is important to remember that :py:class:`~.dist.Dist` keeps track of your
+events as you provide them. For example: ::
+
+    >>> obs = [1, 1, 3, 5, 1, 3, 7, 9]
+    >>> d = Dist(max(obs) + 1)
+    >>> for event in obs:
+    ...     assert(d[event] == d.tick(event) - 1)
+    ...
+    >>> list(d)
+    [0, 3, 0, 2, 0, 1, 0, 1, 0, 1]
+    >>> d[3]
+    2
+    >>> d[7]
+    1
+
+If you are know there are "gaps" in your time serie, e.g. no even numbers,
+then you can use the utility function
+:py:func:`~.utils.coalesce.coalesce_series` to get rid of these gaps: ::
+
+    >>> from pyinform import utils
+    >>> obs = [1, 1, 3, 5, 1, 3, 7, 9]
+    >>> coal, b = utils.coalesce_series(obs)
+    (array([0, 0, 1, 2, 0, 1, 3, 4], dtype=int32), 5)
+    >>> d = Dist(b)
+    >>> for event in coal:
+    ...     assert(d[event] == d.tick(event) - 1)
+    ...
+    >>> list(d)
+    [3, 2, 1, 1, 1]
+    >>> d[1]
+    2
+    >>> d[3]
+    7
+
+
 Example 3: Probabilities
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
