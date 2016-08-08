@@ -75,9 +75,9 @@ events as you provide them. For example: ::
     >>> d[7]
     1
 
-If you are know there are "gaps" in your time serie, e.g. no even numbers,
-then you can use the utility function
-:py:func:`~.utils.coalesce.coalesce_series` to get rid of these gaps: ::
+If you know there are "gaps" in your time series, e.g. no even numbers, then you
+can use the utility function :py:func:`~.utils.coalesce.coalesce_series` to get
+rid of them: ::
 
     >>> from pyinform import utils
     >>> obs = [1, 1, 3, 5, 1, 3, 7, 9]
@@ -94,6 +94,8 @@ then you can use the utility function
     >>> d[3]
     7
 
+This can significantly improve memory usage in situations where the range of
+possible states is large, but is sparsely sampled in the time series.
 
 Example 3: Probabilities
 ^^^^^^^^^^^^^^^^^^^^^^^^
