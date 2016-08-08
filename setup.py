@@ -12,9 +12,11 @@ with open('LICENSE') as f:
 
 inform_version = "0.0.5"
 inform_files = [
+    "README.rst",
+    "LICENSE",
     "inform-{}/lib/linux-x86_64/libinform.so.{}".format(inform_version, inform_version),
     "inform-{}/lib/macosx-x86_64/libinform.{}.dylib".format(inform_version, inform_version),
-    "inform-{}/lib/win_amd64/inform.dll".format(inform_version),
+    "inform-{}/lib/win-amd64/inform.dll".format(inform_version),
 ]
 
 setup(
