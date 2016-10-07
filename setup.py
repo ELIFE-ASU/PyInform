@@ -21,7 +21,7 @@ inform_files = [
 
 setup(
     name='pyinform',
-    version=inform_version,
+    version='0.0.6',
     description='A wrapper for the Inform library',
     long_description=readme,
     maintainer='Douglas G. Moore',
