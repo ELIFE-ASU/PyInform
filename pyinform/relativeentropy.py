@@ -3,12 +3,12 @@
 # license that can be found in the LICENSE file.
 """
 `Relative entropy`_, also known as the Kullback-Leibler divergence, measures the
-amount of information gained in switching from a pior :math:`q_X` to a posterior
-distribution :math:`p_X` *over the same support*. That is :math:`q_X` and
-:math:`P` represent hypotheses of the distribution of some random variable
+amount of information gained in switching from a prior :math:`q_X` to a
+posterior distribution :math:`p_X` *over the same support*. That is :math:`q_X`
+and :math:`P` represent hypotheses of the distribution of some random variable
 :math:`X.` Time series data sampled from the posterior and prior can be used to
-estiamte those distributions, and the relative entropy can the be computed via a
-call to :py:func:`~.shannon.relative_entropy`. The result is
+estiamte those distributions, and the relative entropy can the be computed via
+a call to :py:func:`~.shannon.relative_entropy`. The result is
 
 .. math::
 
