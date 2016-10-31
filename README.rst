@@ -59,7 +59,7 @@ or via :code:`make.bat` on Windows::
 
     $ cd docs
     $ make.bat html
-    $ make.bat latexpdf
+    $ make.bat latexpd
 
 Of course, to build the PDF documentation you will need have LaTeX installed.
 
@@ -75,5 +75,7 @@ So far the python wrapper has been tested under :code:`python2.7`, :code:`python
 * Mac OS X 10.11 (El Capitan)
 * Windows 10
 
-## Support
-This project is supported in part by a grant provided by the Templeton World Charity Foundation as part of the [Power Of Information Initiative](http://www.templetonworldcharity.org/what-we-fund/themes-of-interest/power-of-information).
+-------------
+Grant Support
+-------------
+This project is supported in part by a grant provided by the Templeton World Charity Foundation as part of the `Power Of Information Initiative <http://www.templetonworldcharity.org/what-we-fund/themes-of-interest/power-of-information>`_.
