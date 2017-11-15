@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyinform.activeinfo &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyinform.activeinfo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyinform.activeinfo</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a MIT</span>
+<span class="c1"># license that can be found in the LICENSE file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Active information (AI) was introduced in [Lizier2012]_ to quantify information</span>
+<span class="sd">storage in distributed computation. Active information is defined in terms of</span>
+<span class="sd">a temporally local variant</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    a_{X,i}(k,b) = \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.</span>
+<span class="sd">    </span>
+<span class="sd">where the probabilities are constructed empirically from the *entire* time</span>
+<span class="sd">series. From the local variant, the temporally global active information as</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    A_X(k,b) = \\langle a_{X,i}(k,b) \\rangle_{i}</span>
+<span class="sd">             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.</span>
+
+<span class="sd">Strictly speaking, the local and average active information are defined as</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    a_{X,i}(b) = \\lim_{k \\rightarrow \infty} a_{X,i}(k,b)</span>
+<span class="sd">    \\quad \\textrm{and} \\quad</span>
+<span class="sd">    A_X(b) = \\lim_{k \\rightarrow \infty} A_X(k,b),</span>
+
+<span class="sd">but we do not provide limiting functionality in this library (yet!).</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+
+<span class="sd">A Single Initial Condition</span>
+<span class="sd">^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+<span class="sd">The typical usage is to provide the time series as a sequence (or</span>
+<span class="sd">``numpy.ndarray``) and the history length as an integer and let the</span>
+<span class="sd">:py:func:`active_info` sort out the rest: ::</span>
+
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,1,1,0,0,0], k=2)</span>
+<span class="sd">    0.3059584928680419</span>
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,1,1,0,0,0], k=2, local=True)</span>
+<span class="sd">    array([[-0.19264508,  0.80735492,  0.22239242,  0.22239242, -0.36257008,</span>
+<span class="sd">             1.22239242,  0.22239242]])</span>
+
+<span class="sd">You can always override the base, but be careful: ::</span>
+
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,2,2], k=2)</span>
+<span class="sd">    0.6309297535714575</span>
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,2,2], k=2, b=3)</span>
+<span class="sd">    0.6309297535714575</span>
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,2,2], k=2, b=4)</span>
+<span class="sd">    0.5</span>
+<span class="sd">    &gt;&gt;&gt; active_info([0,0,1,1,2,2], k=2, b=2)</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span>
+<span class="sd">      File &quot;pyinform/activeinfo.py&quot;, line 126, in active_info</span>
+<span class="sd">    </span>
+<span class="sd">      File &quot;pyinform/error.py&quot;, line 57, in error_guard</span>
+<span class="sd">        raise InformError(e,func)</span>
+<span class="sd">    pyinform.error.InformError: an inform error occurred - &quot;unexpected state in timeseries&quot;</span>
+
+<span class="sd">Multiple Initial Conditions</span>
+<span class="sd">^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+<span class="sd">What about multiple initial conditions? We&#39;ve got that covered! ::</span>
+
+<span class="sd">    &gt;&gt;&gt; active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2)</span>
+<span class="sd">    0.35987902873686073</span>
+<span class="sd">    &gt;&gt;&gt; active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2, local=True)</span>
+<span class="sd">    array([[ 0.80735492, -0.36257008,  0.63742992,  0.63742992, -0.77760758,</span>
+<span class="sd">             0.80735492, -1.19264508],</span>
+<span class="sd">           [ 0.80735492,  0.80735492,  0.22239242,  0.80735492,  0.80735492,</span>
+<span class="sd">             0.22239242,  0.80735492]])</span>
+<span class="sd">             </span>
+<span class="sd">As mentioned in :ref:`subtle-details`, averaging the AI for over the initial</span>
+<span class="sd">conditions does not give the same result as constructing the distributions using</span>
+<span class="sd">all of the initial conditions together. ::</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; series = np.asarray([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]])</span>
+<span class="sd">    &gt;&gt;&gt; np.apply_along_axis(active_info, 1, series, 2).mean()</span>
+<span class="sd">    0.58453953071733644</span>
+
+<span class="sd">Or if you are feeling verbose: ::</span>
+
+<span class="sd">    &gt;&gt;&gt; ai = np.empty(len(series))</span>
+<span class="sd">    &gt;&gt;&gt; for i, xs in enumerate(series):</span>
+<span class="sd">    ...     ai[i] = active_info(xs, k=2)</span>
+<span class="sd">    ... </span>
+<span class="sd">    &gt;&gt;&gt; ai</span>
+<span class="sd">    array([ 0.30595849,  0.86312057])</span>
+<span class="sd">    &gt;&gt;&gt; ai.mean()</span>
+<span class="sd">    0.58453953071733644</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span>
+<span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
+<span class="kn">from</span> <span class="nn">pyinform.error</span> <span class="k">import</span> <span class="n">ErrorCode</span><span class="p">,</span> <span class="n">error_guard</span>
+
+
+<div class="viewcode-block" id="active_info"><a class="viewcode-back" href="../../timeseries.html#pyinform.activeinfo.active_info">[docs]</a><span class="k">def</span> <span class="nf">active_info</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the average or local active information of a timeseries with history</span>
+<span class="sd">    length *k*.</span>
+<span class="sd">    </span>
+<span class="sd">    If the base *b* is not specified (or is 0), then it is inferred from the</span>
+<span class="sd">    time series with 2 as a minimum. *b* must be at least the base of the time</span>
+<span class="sd">    series and is used as the base of the logarithm.</span>
+
+<span class="sd">    :param series: the time series</span>
+<span class="sd">    :type series: sequence or ``numpy.ndarray``</span>
+<span class="sd">    :param int k: the history length</span>
+<span class="sd">    :param int b: the base of the time series and logarithm</span>
+<span class="sd">    :param bool local: compute the local active information</span>
+<span class="sd">    :returns: the average or local active information</span>
+<span class="sd">    :rtype: float or ``numpy.ndarray``</span>
+<span class="sd">    :raises ValueError: if the time series has no initial conditions</span>
+<span class="sd">    :raises ValueError: if the time series is greater than 2-D</span>
+<span class="sd">    :raises InformError: if an error occurs within the ``inform`` C call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;empty timeseries&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dimension greater than 2&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">e</span> <span class="o">=</span> <span class="n">ErrorCode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">local</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">ai</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">q</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
+        <span class="n">_local_active_info</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ai</span> <span class="o">=</span> <span class="n">_active_info</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ai</span></div>
+
+<span class="n">_active_info</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_active_info</span>
+<span class="n">_active_info</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_active_info</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
+
+<span class="n">_local_active_info</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_local_active_info</span>
+<span class="n">_local_active_info</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_local_active_info</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Empirical Distributions &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="index.html"/>
+        <link rel="next" title="Shannon Information Measures" href="shannon.html"/>
+        <link rel="prev" title="Getting Started" href="starting.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="starting.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Empirical Distributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-1-construction">Example 1: Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-2-making-observations">Example 2: Making Observations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-3-probabilities">Example 3: Probabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-4-shannon-entropy">Example 4: Shannon Entropy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.dist">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Empirical Distributions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dist.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="empirical-distributions">
+<span id="dist"></span><h1>Empirical Distributions<a class="headerlink" href="#empirical-distributions" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a> class provides an <em>empirical</em> distribution,
+i.e. a histogram, representing the observed frequencies of some fixed-size set
+of events. This class is the basis for all of the fundamental information
+measures on discrete probability distributions.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-1-construction">
+<h3>Example 1: Construction<a class="headerlink" href="#example-1-construction" title="Permalink to this headline">¶</a></h3>
+<p>You can construct a distribution with a specified number of unique observables.
+This construction method results in an <em>invalid</em> distribution as no
+observations have been made thus far.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">valid</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">counts</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>Alternatively you can construct a distribution given a list (or NumPy array)
+of observation counts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">valid</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">counts</span><span class="p">()</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-2-making-observations">
+<h3>Example 2: Making Observations<a class="headerlink" href="#example-2-making-observations" title="Permalink to this headline">¶</a></h3>
+<p>Once a distribution has been constructed, we can begin making observations.
+There are two methods for doing so. The first uses the standard indexing
+operations, treating the distribution similarly to a list:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[0, 1, 4, 9, 25]</span>
+</pre></div>
+</div>
+<p>The second method is to make <em>incremental</em> changes to the distribution. This
+is useful when making observations of timeseries:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">event</span><span class="p">]</span> <span class="o">==</span> <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[1, 3, 5, 1]</span>
+</pre></div>
+</div>
+<p>It is important to remember that <a class="reference internal" href="#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">Dist</span></code></a> keeps track of your
+events as you provide them. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">event</span><span class="p">]</span> <span class="o">==</span> <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[0, 3, 0, 2, 0, 1, 0, 1, 0, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>If you know there are “gaps” in your time series, e.g. no even numbers, then you
+can use the utility function <a class="reference internal" href="utils.html#pyinform.utils.coalesce.coalesce_series" title="pyinform.utils.coalesce.coalesce_series"><code class="xref py py-func docutils literal"><span class="pre">coalesce_series()</span></code></a> to get
+rid of them:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coal</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">coalesce_series</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+<span class="go">(array([0, 0, 1, 2, 0, 1, 3, 4], dtype=int32), 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">coal</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">event</span><span class="p">]</span> <span class="o">==</span> <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[3, 2, 1, 1, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<p>This can significantly improve memory usage in situations where the range of
+possible states is large, but is sparsely sampled in the time series.</p>
+</div>
+<div class="section" id="example-3-probabilities">
+<h3>Example 3: Probabilities<a class="headerlink" href="#example-3-probabilities" title="Permalink to this headline">¶</a></h3>
+<p>Once some observations have been made, we can start asking for probabilities.
+As in the previous examples, there are multiple ways of doing this. The first
+is to just ask for the probability of a given event.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.16666666666666666</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">0.3333333333333333</span>
+</pre></div>
+</div>
+<p>Sometimes it is nice to just dump the probabilities out to an array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+<span class="go">array([ 0.5       ,  0.        ,  0.16666667,  0.33333333])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-4-shannon-entropy">
+<h3>Example 4: Shannon Entropy<a class="headerlink" href="#example-4-shannon-entropy" title="Permalink to this headline">¶</a></h3>
+<p>Once you have a distribution you can do lots of fun things with it. In
+this example, we will compute the shannon entropy of a timeseries of
+observed values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log2</span>
+<span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
+
+<span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">dump</span><span class="p">():</span>
+    <span class="n">h</span> <span class="o">-=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">log2</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="c1"># 1.68547529723</span>
+</pre></div>
+</div>
+<p>Of course <strong>PyInform</strong> provides a function for this:
+<a class="reference internal" href="shannon.html#pyinform.shannon.entropy" title="pyinform.shannon.entropy"><code class="xref py py-func docutils literal"><span class="pre">pyinform.shannon.entropy()</span></code></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
+<span class="kn">from</span> <span class="nn">pyinform.shannon</span> <span class="k">import</span> <span class="n">entropy</span>
+
+<span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">dist</span><span class="p">))</span> <span class="c1"># 1.6854752972273344</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-pyinform.dist">
+<span id="api-documentation"></span><h2>API Documentation<a class="headerlink" href="#module-pyinform.dist" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyinform.dist.Dist">
+<em class="property">class </em><code class="descclassname">pyinform.dist.</code><code class="descname">Dist</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dist is class designed to represent empirical probability distributions,
+i.e. histograms, for cleanly logging observations of time series data.</p>
+<p>The premise behind this class is that it allows <strong>PyInform</strong> to define
+the standard entropy measures on distributions. This reduces functions
+such as <a class="reference internal" href="timeseries.html#pyinform.activeinfo.active_info" title="pyinform.activeinfo.active_info"><code class="xref py py-func docutils literal"><span class="pre">pyinform.activeinfo.active_info()</span></code></a> to building
+distributions and then applying standard entropy measures.</p>
+<dl class="method">
+<dt id="pyinform.dist.Dist.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a distribution.</p>
+<p>If the parameter <em>n</em> is an integer, the distribution is constructed
+with a zeroed support of size <em>n</em>. If <em>n</em> is a list or
+<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, the sequence is treated as the underlying support.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (int, list or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the support for the distribution</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if support is empty or multidimensional</li>
+<li><strong>MemoryError</strong> – if memory allocation fails within the C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.__len__">
+<code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the size of the support of the distribution.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.counts" title="pyinform.dist.Dist.counts"><code class="xref py py-meth docutils literal"><span class="pre">counts()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the size of the support</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of observations made of <em>event</em>.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">(0, 0)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">(0, 1)</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__setitem__" title="pyinform.dist.Dist.__setitem__"><code class="xref py py-meth docutils literal"><span class="pre">__setitem__()</span></code></a>, <a class="reference internal" href="#pyinform.dist.Dist.tick" title="pyinform.dist.Dist.tick"><code class="xref py py-meth docutils literal"><span class="pre">tick()</span></code></a> and <a class="reference internal" href="#pyinform.dist.Dist.probability" title="pyinform.dist.Dist.probability"><code class="xref py py-meth docutils literal"><span class="pre">probability()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>event</strong> (<em>int</em>) – the observed event</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the number of observations of <em>event</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> – if <code class="docutils literal"><span class="pre">event</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">len(self)</span> <span class="pre">&lt;=</span> <span class="pre">event</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.__setitem__">
+<code class="descname">__setitem__</code><span class="sig-paren">(</span><em>event</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the number of observations of <em>event</em> to <em>value</em>.</p>
+<p>If <em>value</em> is negative, then the observation count is set to zero.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[0, 1]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[0, 2, 4, 6]</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__getitem__" title="pyinform.dist.Dist.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> and <a class="reference internal" href="#pyinform.dist.Dist.tick" title="pyinform.dist.Dist.tick"><code class="xref py py-meth docutils literal"><span class="pre">tick()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>event</strong> (<em>int</em>) – the observed event</li>
+<li><strong>value</strong> (<em>int</em>) – the number of observations</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>IndexError</strong> – if <code class="docutils literal"><span class="pre">event</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">len(self)</span> <span class="pre">&lt;=</span> <span class="pre">event</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.resize">
+<code class="descname">resize</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.resize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize the support of the distribution in place.</p>
+<p>If the distribution…</p>
+<ul class="simple">
+<li><strong>shrinks</strong> - the last <code class="docutils literal"><span class="pre">len(self)</span> <span class="pre">-</span> <span class="pre">n</span></code> elements are lost, the rest are preserved</li>
+<li><strong>grows</strong> - the last <code class="docutils literal"><span class="pre">n</span> <span class="pre">-</span> <span class="pre">len(self)</span></code> elements are zeroed</li>
+<li><strong>is unchanged</strong> - well, that sorta says it all, doesn’t it?</li>
+</ul>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">8</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[1, 2, 0, 0]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (<em>int</em>) – the desired size of the support</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the requested size is zero</li>
+<li><strong>MemoryError</strong> – if memory allocation fails in the C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a deep copy of the distribution.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="go">[3, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[3, 2, 3]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[3, 2, 3]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the copied distribution</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.counts">
+<code class="descname">counts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of observations made thus far.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">counts</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">counts</span><span class="p">()</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__len__" title="pyinform.dist.Dist.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of observations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.valid">
+<code class="descname">valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the distribution is a valid probability distribution, i.e.
+if the support is not empty and at least one observation has been made.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">valid</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">valid</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__len__" title="pyinform.dist.Dist.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a> and <a class="reference internal" href="#pyinform.dist.Dist.counts" title="pyinform.dist.Dist.counts"><code class="xref py py-meth docutils literal"><span class="pre">counts()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a boolean signifying that the distribution is valid</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.tick">
+<code class="descname">tick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a single observation of <em>event</em>, and return the total number
+of observations of said <em>event</em>.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[1, 1, 1, 1, 1]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">[1, 2, 3, 4]</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__getitem__" title="pyinform.dist.Dist.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> and <a class="reference internal" href="#pyinform.dist.Dist.__setitem__" title="pyinform.dist.Dist.__setitem__"><code class="xref py py-meth docutils literal"><span class="pre">__setitem__()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>event</strong> (<em>int</em>) – the observed event</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the total number of observations of <em>event</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> – if <code class="docutils literal"><span class="pre">event</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">len(self)</span> <span class="pre">&lt;=</span> <span class="pre">event</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.probability">
+<code class="descname">probability</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the empiricial probability of an <em>event</em>.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.__getitem__" title="pyinform.dist.Dist.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> and <a class="reference internal" href="#pyinform.dist.Dist.dump" title="pyinform.dist.Dist.dump"><code class="xref py py-meth docutils literal"><span class="pre">dump()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>event</strong> (<em>int</em>) – the observed event</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the empirical probability <em>event</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if <code class="docutils literal"><span class="pre">not</span> <span class="pre">self.valid()</span></code></li>
+<li><strong>IndexError</strong> – if <code class="docutils literal"><span class="pre">event</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">len(self)</span> <span class="pre">&lt;=</span> <span class="pre">event</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyinform.dist.Dist.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/dist.html#Dist.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.dist.Dist.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the empirical probability of each observable event and return
+the result as an array.</p>
+<p class="rubric">Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+<span class="go">array([ 0.16666667,  0.33333333,  0.33333333,  0.16666667])</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.dist.Dist.probability" title="pyinform.dist.Dist.probability"><code class="xref py py-meth docutils literal"><span class="pre">probability()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the empirical probabilities of all o</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if <code class="docutils literal"><span class="pre">not</span> <span class="pre">self.valid()</span></code></li>
+<li><strong>RuntimeError</strong> – if the dump fails in the C call</li>
+<li><strong>IndexError</strong> – if <code class="docutils literal"><span class="pre">event</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">len(self)</span> <span class="pre">&lt;=</span> <span class="pre">event</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shannon.html" class="btn btn-neutral float-right" title="Shannon Information Measures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="starting.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

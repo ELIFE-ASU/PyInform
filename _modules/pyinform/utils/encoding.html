@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyinform.utils.encoding &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyinform.utils.encoding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyinform.utils.encoding</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a MIT</span>
+<span class="c1"># license that can be found in the LICENSE file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">State encoding is a necessity when complex time series are being analyzed. For</span>
+<span class="sd">example, :math:`k`-history must be encoded as an integer in order to &quot;observe&quot;</span>
+<span class="sd">it using a :py:class:`~.dist.Dist`. What if you are interested in correlating</span>
+<span class="sd">the aggragate state of one group of nodes with that of another? You&#39;d need to</span>
+<span class="sd">encode the groups&#39; states as integers. This module</span>
+<span class="sd">(:py:mod:`pyinform.utils.encoding`)provides such functionality.</span>
+
+<span class="sd">.. attention::</span>
+
+<span class="sd">    As a practical matter, these utility functions should only be used as a</span>
+<span class="sd">    stop-gap while a solution for your problem is implemented in the core</span>
+<span class="sd">    `Inform &lt;https://github.com/elife-asu/inform&gt;`_ library. &quot;Why?&quot; you ask?</span>
+<span class="sd">    Well, these functions are about as efficient as they can be for one-off</span>
+<span class="sd">    state encodings, but most of the time you are interested in encoding</span>
+<span class="sd">    sequences of states. This can be done much more efficiently if you encode</span>
+<span class="sd">    the entire sequence at once. You need domain-specific information to make</span>
+<span class="sd">    that happen.</span>
+<span class="sd">    </span>
+<span class="sd">    This being said, these functions aren&#39;t bad just be aware that they may turn</span>
+<span class="sd">    into a bottleneck in whatever you are implementing.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span>
+<span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
+<span class="kn">from</span> <span class="nn">pyinform.error</span> <span class="k">import</span> <span class="n">ErrorCode</span><span class="p">,</span> <span class="n">error_guard</span>
+
+<div class="viewcode-block" id="encode"><a class="viewcode-back" href="../../../utils.html#pyinform.utils.encoding.encode">[docs]</a><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encode a base-*b* array of integers into a single integer.</span>
+<span class="sd">    </span>
+<span class="sd">    This function uses a `big-endian`__ encoding scheme. That is, the most</span>
+<span class="sd">    significant bits of the encoded integer are determined by the left-most</span>
+<span class="sd">    end of the unencoded state.</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; from pyinform.utils import *</span>
+<span class="sd">        &gt;&gt;&gt; encode([0,0,1], b=2)</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; encode([0,1,0], b=3)</span>
+<span class="sd">        3</span>
+<span class="sd">        &gt;&gt;&gt; encode([1,0,0], b=4)</span>
+<span class="sd">        16</span>
+<span class="sd">        &gt;&gt;&gt; encode([1,0,4], b=5)</span>
+<span class="sd">        29</span>
+<span class="sd">        </span>
+<span class="sd">    If *b* is not provided (or is None), the base is inferred from the state</span>
+<span class="sd">    with a minimum value of 2.</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; from pyinform.utils import *</span>
+<span class="sd">        &gt;&gt;&gt; encode([0,0,2])</span>
+<span class="sd">        2</span>
+<span class="sd">        &gt;&gt;&gt; encode([0,2,0])</span>
+<span class="sd">        6</span>
+<span class="sd">        &gt;&gt;&gt; encode([1,2,1])</span>
+<span class="sd">        16</span>
+<span class="sd">        </span>
+<span class="sd">    See also :py:func:`.decode`.</span>
+<span class="sd">    </span>
+<span class="sd">    .. __: https://en.wikipedia.org/wiki/Endianness#Examples</span>
+<span class="sd">        </span>
+<span class="sd">    :param sequence state: the state to encode</span>
+<span class="sd">    :param int b: the base in which to encode</span>
+<span class="sd">    :return: the encoded state</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :raises ValueError: if the state is empty</span>
+<span class="sd">    :raises InformError: if an error occurs in the ``inform`` C call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot encode an empty array&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">e</span> <span class="o">=</span> <span class="n">ErrorCode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="n">_inform_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">encoding</span></div>
+
+<div class="viewcode-block" id="decode"><a class="viewcode-back" href="../../../utils.html#pyinform.utils.encoding.decode">[docs]</a><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decode an integer into a base-*b* array with *n* digits.</span>
+<span class="sd">    </span>
+<span class="sd">    The provided encoded state is decoded using the `big-endian`__ encoding</span>
+<span class="sd">    scheme.</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; decode(2, b=2, n=2)</span>
+<span class="sd">        array([1, 0], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(6, b=2, n=3)</span>
+<span class="sd">        array([1, 1, 0], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(6, b=3, n=2)</span>
+<span class="sd">        array([2, 0], dtype=int32)</span>
+<span class="sd">        </span>
+<span class="sd">    Note that the base *b* must be provided, but the number of digits *n* is</span>
+<span class="sd">    optional. If it is provided then the decoded state will have exactly that</span>
+<span class="sd">    many elements.</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; decode(2, b=2, n=4)</span>
+<span class="sd">        array([0, 0, 1, 0], dtype=int32)</span>
+<span class="sd">    </span>
+<span class="sd">    However, if *n* is too small to contain a full representation of the state,</span>
+<span class="sd">    an error will be raised.</span>
+
+<span class="sd">        &gt;&gt;&gt; decode(6, b=2, n=2)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">          File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span>
+<span class="sd">          File &quot;/home/ubuntu/workspace/pyinform/utils/encoding.py&quot;, line 126, in decode</span>
+<span class="sd">            error_guard(e)</span>
+<span class="sd">          File &quot;/home/ubuntu/workspace/pyinform/error.py&quot;, line 57, in error_guard</span>
+<span class="sd">            raise InformError(e,func)</span>
+<span class="sd">        pyinform.error.InformError: an inform error occurred - &quot;encoding/decoding failed&quot;</span>
+<span class="sd">        </span>
+<span class="sd">    If *n* is not provided, the length of the decoded state is as small as</span>
+<span class="sd">    possible:</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; decode(1, b=2)</span>
+<span class="sd">        array([1], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(1, b=3)</span>
+<span class="sd">        array([1], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(3, b=2)</span>
+<span class="sd">        array([1, 1], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(3, b=3)</span>
+<span class="sd">        array([1, 0], dtype=int32)</span>
+<span class="sd">        &gt;&gt;&gt; decode(3, b=4)</span>
+<span class="sd">        array([3], dtype=int32)</span>
+<span class="sd">        </span>
+<span class="sd">    Of course :py:func:`.encode` and :py:func:`.decode` play well together.</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; for i in range(100):</span>
+<span class="sd">        ...     assert(encode(decode(i, b=2)) == i)</span>
+<span class="sd">        ...</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        </span>
+<span class="sd">    See also :py:func:`.encode`.</span>
+<span class="sd">    </span>
+<span class="sd">    .. __: https://en.wikipedia.org/wiki/Endianness#Examples</span>
+
+<span class="sd">    :param int encoding: the encoded state</span>
+<span class="sd">    :param int b: the desired base</span>
+<span class="sd">    :param int n: the desired number of digits</span>
+<span class="sd">    :return: the decoded state</span>
+<span class="sd">    :rtype: ``numpy.ndarray``</span>
+<span class="sd">    :raises InformError: if *n* is too small to contain the decoding</span>
+<span class="sd">    :raises InformError: if an error occurs within the ``inform`` C call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
+    
+    <span class="n">e</span> <span class="o">=</span> <span class="n">ErrorCode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">_inform_decode</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">state</span></div>
+
+<span class="n">_inform_encode</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_encode</span>
+<span class="n">_inform_encode</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_encode</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
+
+<span class="n">_inform_decode</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_decode</span>
+<span class="n">_inform_decode</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_int</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_decode</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

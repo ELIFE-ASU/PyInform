@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyinform.mutualinfo &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyinform.mutualinfo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyinform.mutualinfo</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a MIT</span>
+<span class="c1"># license that can be found in the LICENSE file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">`Mutual information`_ (MI) is a measure of the amount of mutual dependence</span>
+<span class="sd">between two random variables. When applied to time series, two time series are</span>
+<span class="sd">used to construct the empirical distributions and then</span>
+<span class="sd">:py:func:`~.shannon.mutual_info` can be applied. Locally MI is defined as</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    i_{b,i}(X,Y) = -\\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.</span>
+<span class="sd">    </span>
+<span class="sd">The mutual information is then just the time average of :math:`i_{b,i}(X,Y)`.</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    I_b(X,Y) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_b \\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.</span>
+<span class="sd">    </span>
+
+<span class="sd">See [Cover1991]_ for more details.</span>
+
+<span class="sd">.. _Mutual information: https://en.wikipedia.org/wiki/Mutual_information</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+
+<span class="sd">::</span>
+
+<span class="sd">    &gt;&gt;&gt; xs = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1]</span>
+<span class="sd">    &gt;&gt;&gt; ys = [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1]</span>
+<span class="sd">    &gt;&gt;&gt; mutual_info(xs, ys)</span>
+<span class="sd">    0.214170945007629</span>
+<span class="sd">    &gt;&gt;&gt; mutual_info(xs, ys, local=True)</span>
+<span class="sd">    array([-1.        , -1.        ,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="sd">            0.22239242,  0.22239242,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="sd">            0.22239242,  0.22239242,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="sd">            0.22239242,  1.5849625 ,  1.5849625 ,  1.5849625 , -1.5849625 ])</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span>
+<span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
+<span class="kn">from</span> <span class="nn">pyinform.error</span> <span class="k">import</span> <span class="n">ErrorCode</span><span class="p">,</span> <span class="n">error_guard</span>
+
+<div class="viewcode-block" id="mutual_info"><a class="viewcode-back" href="../../timeseries.html#pyinform.mutualinfo.mutual_info">[docs]</a><span class="k">def</span> <span class="nf">mutual_info</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the (local) mutual information between two time series.</span>
+<span class="sd">    </span>
+<span class="sd">    The bases *bx* and *by* are inferred from their respective time series if</span>
+<span class="sd">    they are not provided (or are 0). The minimum value in both cases is 2.</span>
+<span class="sd">    </span>
+<span class="sd">    This function explicitly takes the logarithmic base *b* as an argument.</span>
+<span class="sd">    </span>
+<span class="sd">    :param xs: a time series</span>
+<span class="sd">    :type xs: a sequence or ``numpy.ndarray``</span>
+<span class="sd">    :param ys: a time series</span>
+<span class="sd">    :type ys: a sequence or ``numpy.ndarray``</span>
+<span class="sd">    :param int bx: the base of the first time series</span>
+<span class="sd">    :param int by: the base of the second time series</span>
+<span class="sd">    :param double b: the logarithmic base</span>
+<span class="sd">    :param bool local: compute the local mutual information</span>
+<span class="sd">    :return: the local or average mutual information</span>
+<span class="sd">    :rtype: float or ``numpy.ndarray``</span>
+<span class="sd">    :raises ValueError: if the time series have different shapes</span>
+<span class="sd">    :raises InformError: if an error occurs within the ``inform`` C call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">vs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">us</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">vs</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;timeseries lengths do not match&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">us</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">by</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">by</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">xdata</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">ydata</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">e</span> <span class="o">=</span> <span class="n">ErrorCode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">local</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">us</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">mi</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
+        <span class="n">_local_mutual_info</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">bx</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">by</span><span class="p">),</span> <span class="n">c_double</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_info</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">bx</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">by</span><span class="p">),</span> <span class="n">c_double</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mi</span></div>
+
+<span class="n">_mutual_info</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_mutual_info</span>
+<span class="n">_mutual_info</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_mutual_info</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
+
+<span class="n">_local_mutual_info</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_local_mutual_info</span>
+<span class="n">_local_mutual_info</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_local_mutual_info</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

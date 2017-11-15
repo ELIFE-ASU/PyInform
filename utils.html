@@ -1,0 +1,583 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utilities &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="index.html"/>
+        <link rel="prev" title="Time Series Measures" href="timeseries.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.utils.binning">State Binning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.utils.coalesce">State Coalescing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.utils.encoding">State Encoding</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyinform.utils">
+<span id="utilities"></span><h1>Utilities<a class="headerlink" href="#module-pyinform.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-pyinform.utils.binning">
+<span id="state-binning"></span><h2>State Binning<a class="headerlink" href="#module-pyinform.utils.binning" title="Permalink to this headline">¶</a></h2>
+<p>All of the currently implemented time series measures are only defined on
+discretely-valued time series. However, in practice continuously-valued time
+series are ubiquitous. There are two approaches to accomodating continuous
+values.</p>
+<p>The simplest is to <em>bin</em> the time series, forcing the values into discrete
+states. This method has its downsides, namely that the binning is often a bit
+unphysical and it can introduce bias. What’s more, without some kind of guiding
+principle it can be difficult to decide exactly which binning approach.</p>
+<p>The second approach attempts to infer condinuous probability distributions from
+continuous data. This is potentially more robust, but more technically
+difficult. Unfortunately, PyInform does not yet have an implementation of
+information measures on continous distributions.</p>
+<p>This module (<a class="reference internal" href="#module-pyinform.utils.binning" title="pyinform.utils.binning"><code class="xref py py-mod docutils literal"><span class="pre">pyinform.utils.binning</span></code></a>) provides a basic binning facility
+via the <a class="reference internal" href="#pyinform.utils.binning.bin_series" title="pyinform.utils.binning.bin_series"><code class="xref py py-func docutils literal"><span class="pre">bin_series()</span></code></a> function.</p>
+<dl class="function">
+<dt id="pyinform.utils.binning.series_range">
+<code class="descclassname">pyinform.utils.binning.</code><code class="descname">series_range</code><span class="sig-paren">(</span><em>series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/utils/binning.html#series_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.utils.binning.series_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the range of a continuously-valued time series.</p>
+<p>Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">series_range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="go">(5, 0, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">series_range</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">8.5</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.3</span><span class="p">])</span>
+<span class="go">(14.8, -6.3, 8.5)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>series</strong> (<em>sequence</em>) – the time series</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the range and the minimum/maximum values</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">3-tuple (float, float, float)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyinform.utils.binning.bin_series">
+<code class="descclassname">pyinform.utils.binning.</code><code class="descname">bin_series</code><span class="sig-paren">(</span><em>series</em>, <em>b=None</em>, <em>step=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/utils/binning.html#bin_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.utils.binning.bin_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bin a continously-valued times series.</p>
+<p>The binning can be performed in any one of three ways.</p>
+<p class="rubric">1. Specified Number of Bins</p>
+<p>The first is binning the time series into <em>b</em> uniform bins (with <em>b</em> an
+integer).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span>
+<span class="go">array([ 6.62004974,  7.24471972,  0.76670198,  2.66306833,  4.32200795,</span>
+<span class="go">        8.84902227,  6.83491844,  7.05008074,  3.79287646,  6.50844032,</span>
+<span class="go">        8.68804879,  6.79543773,  0.3222078 ,  7.39576325,  7.54150189,</span>
+<span class="go">        1.06422897,  1.91958431,  2.34760945,  3.90139184,  3.08885353])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">(array([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 2, 4.263407236635026)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">(array([2, 2, 0, 0, 1, 2, 2, 2, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 1, 0], dtype=int32), 3, 2.8422714910900173)</span>
+</pre></div>
+</div>
+<p>With this approach the binned sequence (as an <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>), the number
+of bins, and the size of each bin are returned.</p>
+<p>This binning method is useful if, for example, the user wants to bin several
+time series to the same base.</p>
+<p class="rubric">2. Fixed Size Bins</p>
+<p>The second type of binning produces bins of a specific size <em>step</em>.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="go">(array([1, 1, 0, 0, 0, 2, 1, 1, 0, 1, 2, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 3, 4.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="go">(array([3, 3, 0, 1, 1, 4, 3, 3, 1, 3, 4, 3, 0, 3, 3, 0, 0, 1, 1, 1], dtype=int32), 5, 2.0)</span>
+</pre></div>
+</div>
+<p>As in the previous case the binned sequence, the number of bins, and the
+size of each bin are returned.</p>
+<p>This approach is appropriate when the system at hand has a particular
+sensitivity or precision, e.g. if the system is sensitive down to 5.0mV
+changes in potential.</p>
+<p class="rubric">3. Thresholds</p>
+<p>The third type of binning is breaks the real number line into segments with
+specified boundaries or thresholds, and the time series is binned according
+to this partitioning. The bounds are expected to be provided in ascending
+order.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">])</span>
+<span class="go">(array([1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 2, 1, 0, 1, 2, 0, 0, 1, 1, 1], dtype=int32), 3, [2.0, 7.5])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">bin_series</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">])</span>
+<span class="go">(array([1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1], dtype=int32), 2, [2.0])</span>
+</pre></div>
+</div>
+<p>Unlike the previous two types of binning, this approach returns the specific
+bounds rather than the bin sizes. The other two returns, the binned
+sequence and the number of bins, are returned as before.</p>
+<p>This approach is useful in situations where the system has natural
+thesholds, e.g. the polarized/hyperpolarized states of a neuron.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series</strong> (<em>sequence</em>) – the continuously-valued time series</li>
+<li><strong>b</strong> (<em>int</em>) – the desired number of uniform bins</li>
+<li><strong>step</strong> (<em>float</em>) – the desired size of each uniform bin</li>
+<li><strong>bounds</strong> (<em>sequence</em>) – the (finite) bounds of each bin</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the binned sequence, the number of bins and either the bin sizes or bin bounds</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">either (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, int, float) or (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, int, sequence)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if no keyword argument is provided</li>
+<li><strong>ValueError</strong> – if more than one keyword argument is provided</li>
+<li><strong>InformError</strong> – if an error occurs in the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyinform.utils.coalesce">
+<span id="state-coalescing"></span><h2>State Coalescing<a class="headerlink" href="#module-pyinform.utils.coalesce" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyinform.utils.coalesce.coalesce_series">
+<code class="descclassname">pyinform.utils.coalesce.</code><code class="descname">coalesce_series</code><span class="sig-paren">(</span><em>series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/utils/coalesce.html#coalesce_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.utils.coalesce.coalesce_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coalesce a timeseries into as few contiguous states as possible.</p>
+<p>The magic of information measures is that the actual values of a time series
+are irrelavent. For example, <span class="math">\(\{0,1,0,1,1\}\)</span> has the same entropy as
+<span class="math">\(\{2,9,2,9,9\}\)</span> (possibly up to a rescaling). This give us the freedom
+to shift around the values of a time series as long as we do not change the
+relative number of states.</p>
+<p>This function thus provides a way of “compressing” a time series into as
+small a base as possible. For example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">coalesce_series</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
+<span class="go">(array([0, 1, 0, 1, 1], dtype=int32), 2)</span>
+</pre></div>
+</div>
+<p>Why is this useful? Many of the measures use the base of the time series to
+determine how much memory to allocate; the larger the base, the higher the
+memory usage. It also affects the overall performance as the combinatorics
+climb exponentially with the base.</p>
+<p>The two standard usage cases for this function are to reduce the base of a
+time series</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">coalesce_series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">(array([0, 1, 0, 1, 0, 1], dtype=int32), 2)</span>
+</pre></div>
+</div>
+<p>or ensure that the states are non-negative</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">coalesce_series</span><span class="p">([</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="go">(array([0, 2, 4, 1, 3], dtype=int32), 5)</span>
+</pre></div>
+</div>
+<p>Notice that the encoding that is used ensures that the ordering of the
+states stays the same, e.g.
+<span class="math">\(\{-8 \rightarrow 0, -2 \rightarrow 1, 2 \rightarrow 2, 4 \rightarrow 3, 6 \rightarrow 4\}\)</span>.
+This isn’t strictly necessary, so we are going to call it a “feature”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>series</strong> (<em>sequence</em>) – the time series to coalesce</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the coalesced time series and its base</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">the 2-tuple (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, int)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>InformError</strong> – if an error occurs in the <code class="docutils literal"><span class="pre">inform</span></code> C call</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyinform.utils.encoding">
+<span id="state-encoding"></span><h2>State Encoding<a class="headerlink" href="#module-pyinform.utils.encoding" title="Permalink to this headline">¶</a></h2>
+<p>State encoding is a necessity when complex time series are being analyzed. For
+example, <span class="math">\(k\)</span>-history must be encoded as an integer in order to “observe”
+it using a <a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">Dist</span></code></a>. What if you are interested in correlating
+the aggragate state of one group of nodes with that of another? You’d need to
+encode the groups’ states as integers. This module
+(<a class="reference internal" href="#module-pyinform.utils.encoding" title="pyinform.utils.encoding"><code class="xref py py-mod docutils literal"><span class="pre">pyinform.utils.encoding</span></code></a>)provides such functionality.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p>As a practical matter, these utility functions should only be used as a
+stop-gap while a solution for your problem is implemented in the core
+<a class="reference external" href="https://github.com/elife-asu/inform">Inform</a> library. “Why?” you ask?
+Well, these functions are about as efficient as they can be for one-off
+state encodings, but most of the time you are interested in encoding
+sequences of states. This can be done much more efficiently if you encode
+the entire sequence at once. You need domain-specific information to make
+that happen.</p>
+<p class="last">This being said, these functions aren’t bad just be aware that they may turn
+into a bottleneck in whatever you are implementing.</p>
+</div>
+<dl class="function">
+<dt id="pyinform.utils.encoding.encode">
+<code class="descclassname">pyinform.utils.encoding.</code><code class="descname">encode</code><span class="sig-paren">(</span><em>state</em>, <em>b=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/utils/encoding.html#encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.utils.encoding.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a base-<em>b</em> array of integers into a single integer.</p>
+<p>This function uses a <a class="reference external" href="https://en.wikipedia.org/wiki/Endianness#Examples">big-endian</a> encoding scheme. That is, the most
+significant bits of the encoded integer are determined by the left-most
+end of the unencoded state.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinform.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">29</span>
+</pre></div>
+</div>
+<p>If <em>b</em> is not provided (or is None), the base is inferred from the state
+with a minimum value of 2.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinform.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encode</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">16</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.utils.encoding.decode" title="pyinform.utils.encoding.decode"><code class="xref py py-func docutils literal"><span class="pre">decode()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong> (<em>sequence</em>) – the state to encode</li>
+<li><strong>b</strong> (<em>int</em>) – the base in which to encode</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the encoded state</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the state is empty</li>
+<li><strong>InformError</strong> – if an error occurs in the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyinform.utils.encoding.decode">
+<code class="descclassname">pyinform.utils.encoding.</code><code class="descname">decode</code><span class="sig-paren">(</span><em>encoding</em>, <em>b</em>, <em>n=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/utils/encoding.html#decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.utils.encoding.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode an integer into a base-<em>b</em> array with <em>n</em> digits.</p>
+<p>The provided encoded state is decoded using the <a class="reference external" href="https://en.wikipedia.org/wiki/Endianness#Examples">big-endian</a> encoding
+scheme.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([1, 0], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">array([1, 1, 0], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([2, 0], dtype=int32)</span>
+</pre></div>
+</div>
+<p>Note that the base <em>b</em> must be provided, but the number of digits <em>n</em> is
+optional. If it is provided then the decoded state will have exactly that
+many elements.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">array([0, 0, 1, 0], dtype=int32)</span>
+</pre></div>
+</div>
+<p>However, if <em>n</em> is too small to contain a full representation of the state,
+an error will be raised.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/home/ubuntu/workspace/pyinform/utils/encoding.py&quot;</span>, line <span class="m">126</span>, in <span class="n">decode</span>
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/ubuntu/workspace/pyinform/error.py&quot;</span>, line <span class="m">57</span>, in <span class="n">error_guard</span>
+    <span class="k">raise</span> <span class="n">InformError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">func</span><span class="p">)</span>
+<span class="gr">pyinform.error.InformError</span>: <span class="n">an inform error occurred - &quot;encoding/decoding failed&quot;</span>
+</pre></div>
+</div>
+<p>If <em>n</em> is not provided, the length of the decoded state is as small as
+possible:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([1], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">array([1], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([1, 1], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">array([1, 0], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">array([3], dtype=int32)</span>
+</pre></div>
+</div>
+<p>Of course <a class="reference internal" href="#pyinform.utils.encoding.encode" title="pyinform.utils.encoding.encode"><code class="xref py py-func docutils literal"><span class="pre">encode()</span></code></a> and <a class="reference internal" href="#pyinform.utils.encoding.decode" title="pyinform.utils.encoding.decode"><code class="xref py py-func docutils literal"><span class="pre">decode()</span></code></a> play well together.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span><span class="p">(</span><span class="n">encode</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#pyinform.utils.encoding.encode" title="pyinform.utils.encoding.encode"><code class="xref py py-func docutils literal"><span class="pre">encode()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>encoding</strong> (<em>int</em>) – the encoded state</li>
+<li><strong>b</strong> (<em>int</em>) – the desired base</li>
+<li><strong>n</strong> (<em>int</em>) – the desired number of digits</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the decoded state</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>InformError</strong> – if <em>n</em> is too small to contain the decoding</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="timeseries.html" class="btn btn-neutral" title="Time Series Measures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

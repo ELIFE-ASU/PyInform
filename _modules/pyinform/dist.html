@@ -1,0 +1,646 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyinform.dist &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timeseries.html">Time Series Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyinform.dist</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyinform.dist</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a MIT</span>
+<span class="c1"># license that can be found in the LICENSE file.</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_bool</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">POINTER</span>
+<span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
+
+<div class="viewcode-block" id="Dist"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist">[docs]</a><span class="k">class</span> <span class="nc">Dist</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dist is class designed to represent empirical probability distributions,</span>
+<span class="sd">    i.e. histograms, for cleanly logging observations of time series data.</span>
+
+<span class="sd">    The premise behind this class is that it allows **PyInform** to define</span>
+<span class="sd">    the standard entropy measures on distributions. This reduces functions</span>
+<span class="sd">    such as :py:func:`pyinform.activeinfo.active_info` to building</span>
+<span class="sd">    distributions and then applying standard entropy measures.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dist.__init__"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a distribution.</span>
+
+<span class="sd">        If the parameter *n* is an integer, the distribution is constructed</span>
+<span class="sd">        with a zeroed support of size *n*. If *n* is a list or</span>
+<span class="sd">        ``numpy.ndarray``, the sequence is treated as the underlying support.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
+<span class="sd">            &gt;&gt;&gt; d = Dist([0,0,1,2])</span>
+
+<span class="sd">        :param n: the support for the distribution</span>
+<span class="sd">        :type n: int, list or ``numpy.ndarray``</span>
+<span class="sd">        :raises ValueError: if support is empty or multidimensional</span>
+<span class="sd">        :raises MemoryError: if memory allocation fails within the C call</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;support is multi-dimenstional&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;support is empty&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_uint</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span> <span class="o">=</span> <span class="n">_dist_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;support is zero&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span> <span class="o">=</span> <span class="n">_dist_alloc</span><span class="p">(</span><span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__dealloc__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deallocate the memory underlying the distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">:</span>
+            <span class="n">_dist_free</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Dist.__len__"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine the size of the support of the distribution.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; len(Dist(5))</span>
+<span class="sd">            5</span>
+<span class="sd">            &gt;&gt;&gt; len(Dist[0,1,5])</span>
+<span class="sd">            3</span>
+
+<span class="sd">        See also :py:meth:`.counts`.</span>
+
+<span class="sd">        :return: the size of the support</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">_dist_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Dist.resize"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.resize">[docs]</a>    <span class="k">def</span> <span class="nf">resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resize the support of the distribution in place.</span>
+
+<span class="sd">        If the distribution...</span>
+
+<span class="sd">        - **shrinks** - the last ``len(self) - n`` elements are lost, the rest are preserved</span>
+<span class="sd">        - **grows** - the last ``n - len(self)`` elements are zeroed</span>
+<span class="sd">        - **is unchanged** - well, that sorta says it all, doesn&#39;t it?</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
+<span class="sd">            &gt;&gt;&gt; d.resize(3)</span>
+<span class="sd">            &gt;&gt;&gt; len(d)</span>
+<span class="sd">            3</span>
+<span class="sd">            &gt;&gt;&gt; d.resize(8)</span>
+<span class="sd">            &gt;&gt;&gt; len(d)</span>
+<span class="sd">            8</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([1,2,3,4])</span>
+<span class="sd">            &gt;&gt;&gt; d.resize(2)</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [1, 2]</span>
+<span class="sd">            &gt;&gt;&gt; d.resize(4)</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [1, 2, 0, 0]</span>
+
+<span class="sd">        :param int n: the desired size of the support</span>
+<span class="sd">        :raises ValueError: if the requested size is zero</span>
+<span class="sd">        :raises MemoryError: if memory allocation fails in the C call</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;support is zero&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span> <span class="o">=</span> <span class="n">_dist_realloc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Dist.copy"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a deep copy of the distribution.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([1,2,3])</span>
+<span class="sd">            &gt;&gt;&gt; e = d</span>
+<span class="sd">            &gt;&gt;&gt; e[0] = 3</span>
+<span class="sd">            &gt;&gt;&gt; list(e)</span>
+<span class="sd">            [3, 2, 3]</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [3, 2, 3]</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; f = d.copy()</span>
+<span class="sd">            &gt;&gt;&gt; f[0] = 1</span>
+<span class="sd">            &gt;&gt;&gt; list(f)</span>
+<span class="sd">            [1, 2, 3]</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [3, 2, 3]</span>
+
+<span class="sd">        :returns: the copied distribution</span>
+<span class="sd">        :rtype: :py:class:`pyinform.dist.Dist`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">_dist_copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">_dist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+<div class="viewcode-block" id="Dist.counts"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.counts">[docs]</a>    <span class="k">def</span> <span class="nf">counts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of observations made thus far.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
+<span class="sd">            &gt;&gt;&gt; d.counts()</span>
+<span class="sd">            0</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([1,0,3,2])</span>
+<span class="sd">            &gt;&gt;&gt; d.counts()</span>
+<span class="sd">            6</span>
+
+<span class="sd">        See also :py:meth:`.__len__`.</span>
+
+<span class="sd">        :return: the number of observations</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_dist_counts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Dist.valid"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.valid">[docs]</a>    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the distribution is a valid probability distribution, i.e.</span>
+<span class="sd">        if the support is not empty and at least one observation has been made.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
+<span class="sd">            &gt;&gt;&gt; d.valid()</span>
+<span class="sd">            False</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([0,0,0,1])</span>
+<span class="sd">            &gt;&gt;&gt; d.valid()</span>
+<span class="sd">            True</span>
+
+<span class="sd">        See also :py:meth:`.__len__` and :py:meth:`.counts`.</span>
+<span class="sd">    </span>
+<span class="sd">        :return: a boolean signifying that the distribution is valid</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_dist_is_valid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Dist.__getitem__"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of observations made of *event*.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(2)</span>
+<span class="sd">            &gt;&gt;&gt; (d[0], d[1])</span>
+<span class="sd">            (0, 0)</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([0,1])</span>
+<span class="sd">            &gt;&gt;&gt; (d[0], d[1])</span>
+<span class="sd">            (0, 1)</span>
+
+<span class="sd">        See also :py:meth:`.__setitem__`, :py:meth:`.tick` and :py:meth:`.probability`.</span>
+
+<span class="sd">        :param int event: the observed event</span>
+<span class="sd">        :return: the number of observations of *event*</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">_dist_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">event</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Dist.__setitem__"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the number of observations of *event* to *value*.</span>
+
+<span class="sd">        If *value* is negative, then the observation count is set to zero.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(2)</span>
+<span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
+<span class="sd">            ...     d[i] = i*i</span>
+<span class="sd">            ...</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [0, 1]</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([0,1,2,3])</span>
+<span class="sd">            &gt;&gt;&gt; for i, n in enumerate(d):</span>
+<span class="sd">            ...     d[i] = 2 * n</span>
+<span class="sd">            ...</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [0, 2, 4, 6]</span>
+
+<span class="sd">        </span>
+<span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.tick`.</span>
+<span class="sd">        </span>
+<span class="sd">        :param int event: the observed event</span>
+<span class="sd">        :param int value: the number of observations</span>
+<span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_dist_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">event</span><span class="p">),</span> <span class="n">c_uint</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Dist.tick"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a single observation of *event*, and return the total number</span>
+<span class="sd">        of observations of said *event*.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
+<span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
+<span class="sd">            ...     assert(d.tick(i) == 1)</span>
+<span class="sd">            ...</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [1, 1, 1, 1, 1]</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([0,1,2,3])</span>
+<span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
+<span class="sd">            ...     assert(d.tick(i) == i + 1)</span>
+<span class="sd">            ...</span>
+<span class="sd">            &gt;&gt;&gt; list(d)</span>
+<span class="sd">            [1, 2, 3, 4]</span>
+
+<span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.__setitem__`.</span>
+<span class="sd">        </span>
+<span class="sd">        :param int event: the observed event</span>
+<span class="sd">        :return: the total number of observations of *event*</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">_dist_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">event</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Dist.probability"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.probability">[docs]</a>    <span class="k">def</span> <span class="nf">probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the empiricial probability of an *event*.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([1,1,1,1])</span>
+<span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
+<span class="sd">            ...     assert(d.probability(i) == 1./4)</span>
+<span class="sd">            ...</span>
+
+<span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.dump`.</span>
+<span class="sd">        </span>
+<span class="sd">        :param int event: the observed event</span>
+<span class="sd">        :return: the empirical probability *event*</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        :raises ValueError: if ``not self.valid()``</span>
+<span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid distribution&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">_dist_prob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">event</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Dist.dump"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the empirical probability of each observable event and return</span>
+<span class="sd">        the result as an array.</span>
+
+<span class="sd">        .. rubric:: Examples:</span>
+<span class="sd">        </span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; d = Dist([1,2,2,1])</span>
+<span class="sd">            &gt;&gt;&gt; d.dump()</span>
+<span class="sd">            array([ 0.16666667,  0.33333333,  0.33333333,  0.16666667])</span>
+
+<span class="sd">        See also :py:meth:`.probability`.</span>
+
+<span class="sd">        :return: the empirical probabilities of all o</span>
+<span class="sd">        :rtype: ``numpy.ndarray``</span>
+<span class="sd">        :raises ValueError: if ``not self.valid()``</span>
+<span class="sd">        :raises RuntimeError: if the dump fails in the C call</span>
+<span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid distribution&quot;</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">_dist_dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dist</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;cannot dump the distribution&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">probs</span></div></div>
+
+<span class="n">_dist_alloc</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_alloc</span>
+<span class="n">_dist_alloc</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_alloc</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_void_p</span>
+
+<span class="n">_dist_realloc</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_realloc</span>
+<span class="n">_dist_realloc</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_realloc</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_void_p</span>
+
+<span class="n">_dist_copy</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_copy</span>
+<span class="n">_dist_copy</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">]</span>
+<span class="n">_dist_copy</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_void_p</span>
+
+<span class="n">_dist_create</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_create</span>
+<span class="n">_dist_create</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_uint</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_create</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_void_p</span>
+
+<span class="n">_dist_free</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_free</span>
+<span class="n">_dist_free</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">]</span>
+<span class="n">_dist_free</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">_dist_size</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_size</span>
+<span class="n">_dist_size</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">]</span>
+<span class="n">_dist_size</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_ulong</span>
+
+<span class="n">_dist_counts</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_counts</span>
+<span class="n">_dist_counts</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">]</span>
+<span class="n">_dist_counts</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_uint</span>
+
+<span class="n">_dist_is_valid</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_is_valid</span>
+<span class="n">_dist_is_valid</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">]</span>
+<span class="n">_dist_is_valid</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_bool</span>
+
+<span class="n">_dist_get</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_get</span>
+<span class="n">_dist_get</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_get</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_uint</span>
+
+<span class="n">_dist_set</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_set</span>
+<span class="n">_dist_set</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">]</span>
+<span class="n">_dist_set</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_uint</span>
+
+<span class="n">_dist_tick</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_tick</span>
+<span class="n">_dist_tick</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_tick</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_uint</span>
+
+<span class="n">_dist_prob</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_prob</span>
+<span class="n">_dist_prob</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_prob</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
+
+<span class="n">_dist_dump</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_dump</span>
+<span class="n">_dist_dump</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">]</span>
+<span class="n">_dist_dump</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_ulong</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

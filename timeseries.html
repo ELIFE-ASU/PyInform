@@ -1,0 +1,1123 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Time Series Measures &mdash; PyInform 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyInform 0.0.5 documentation" href="index.html"/>
+        <link rel="next" title="Utilities" href="utils.html"/>
+        <link rel="prev" title="Shannon Information Measures" href="shannon.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyInform
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="starting.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dist.html">Empirical Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shannon.html">Shannon Information Measures</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Time Series Measures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notation">Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subtle-details">Subtle Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-base-states-and-logarithms">The Base: States and Logarithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-initial-conditions">Multiple Initial Conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.activeinfo">Active Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-single-initial-condition">A Single Initial Condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Multiple Initial Conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.blockentropy">Block Entropy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">A Single Initial Condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Multiple Initial Conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.conditionalentropy">Conditional Entropy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.entropyrate">Entropy Rate</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id22">A Single Initial Condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id23">Multiple Initial Conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.mutualinfo">Mutual Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.relativeentropy">Relative Entropy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyinform.transferentropy">Transfer Entropy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id43">A Single Initial Condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id44">Multiple Initial Conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id45">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyInform</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Time Series Measures</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/timeseries.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="time-series-measures">
+<span id="timeseries"></span><h1>Time Series Measures<a class="headerlink" href="#time-series-measures" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="dist.html#dist"><span class="std std-ref">Empirical Distributions</span></a> and <a class="reference internal" href="shannon.html#shannon"><span class="std std-ref">Shannon Information Measures</span></a> come together to make information measures
+on time series almost trivial to implement. Every such measure amounts to
+constructing distributions and applying an information measure.</p>
+<div class="section" id="notation">
+<span id="id1"></span><h2>Notation<a class="headerlink" href="#notation" title="Permalink to this headline">¶</a></h2>
+<p>Throughout this section we will denote random variables as <span class="math">\(X, Y, \ldots\)</span>,
+and let <span class="math">\(x_i, y_i, \ldots\)</span> represent the <span class="math">\(i\)</span>-th time step of a time
+series drawn a random variable. Many of the measures consider
+<span class="math">\(k\)</span>-histories (a.k.a <span class="math">\(k\)</span>-blocks) of the time series, e.g.
+<span class="math">\(x^{(k)}_i = \{x_{i-k+1}, x_{i-k+2}, \ldots, x_i\}\)</span>.</p>
+<p>For the sake of conciseness, when denoting probability distributions, we will
+only make the random variable explicit in situations where the notation is
+ambiguous. Generally, we will write <span class="math">\(p(x_i)\)</span>, <span class="math">\(p(x^{(k)}_i)\)</span> and
+<span class="math">\(p(x^{(k)}_i, x_{i+1})\)</span> to denote the empirical probability of obseriving
+the <span class="math">\(x_i\)</span> state, the <span class="math">\(x^{(k)}_i\)</span> <span class="math">\(k\)</span>-history, and the joint
+probability of observing <span class="math">\((x^{(k)}_i, x_{i+1})\)</span>.</p>
+<p><strong>Please report any notational ambiguities as an</strong>
+<a class="reference external" href="https://github.com/ELIFE-ASU/PyInform/issues">issue</a>.</p>
+</div>
+<div class="section" id="subtle-details">
+<span id="id2"></span><h2>Subtle Details<a class="headerlink" href="#subtle-details" title="Permalink to this headline">¶</a></h2>
+<p>The library takes several liberties in the way in which the time series
+measures are implemented.</p>
+<div class="section" id="the-base-states-and-logarithms">
+<h3>The Base: States and Logarithms<a class="headerlink" href="#the-base-states-and-logarithms" title="Permalink to this headline">¶</a></h3>
+<p>The word “base” has two different meanings in the context of the information
+measures on time series. It could refer to the base of the time series itself,
+that is the number of unique states in the time series. For example, the
+time series <span class="math">\(\{0,2,1,0,0\}\)</span> has a base of 3. On the other handle
+it could refer to the base of the logarithm used in computing the information
+content of the emipirical distributions. The problem is that these two meanings
+clash. The base of the time series affects the range of values the measure can
+produce, and the base of the logarithm represents a rescaling of those values.</p>
+<p>The following measures use one of two conventions. The measures of information
+dynamics (e.g. <a class="reference internal" href="#active-information"><span class="std std-ref">Active Information</span></a>, <a class="reference internal" href="#entropy-rate"><span class="std std-ref">Entropy Rate</span></a> and
+<a class="reference internal" href="#transfer-entropy"><span class="std std-ref">Transfer Entropy</span></a>) take as an argument the <strong>base of the state</strong> and use
+that as the base of the logarithm. The result is that the time-averaged values
+of those measures are in the unit range. An exception to this rule is the block
+entropy. It two uses this convention, but its value will not be in the unit
+range unless the block size <span class="math">\(k\)</span> is 1 or the specified base is <span class="math">\(2^k\)</span>
+(or you could just divide by <span class="math">\(k\)</span>). The second convention is to take both
+the base of the time series and the base of the logarithm. This is about as
+unambiguous as it gets. This approach is used for the measures that do not make
+explicit use of a history length (or block size), e.g.
+<a class="reference internal" href="#mutual-information"><span class="std std-ref">Mutual Information</span></a>, <a class="reference internal" href="#conditional-entropy"><span class="std std-ref">Conditional Entropy</span></a>, etc…</p>
+<p>Coming releases may revise the handling of the bases, but until then each
+function’s documentation will specify how the base is used.</p>
+</div>
+<div class="section" id="multiple-initial-conditions">
+<h3>Multiple Initial Conditions<a class="headerlink" href="#multiple-initial-conditions" title="Permalink to this headline">¶</a></h3>
+<p>PyInform tries to provide handling of multiple initial conditions. The “proper”
+way to handle initial conditions is a bit contested. One completely reasonable
+approach is to apply the information measures to each initial condition’s time
+series independently and then average. One can think of this approach as
+conditioning the measure on the inital condition. The second approach is to
+independently use all of the initial conditions to construct the various
+probability distributions. You can think of this approach as rolling the
+uncertainty of the initial condition into the measure. <a class="footnote-reference" href="#averaging" id="id3">[1]</a></p>
+<p>The current implementation takes the second approach. The accpeted time series
+can be up to 2-D with each row representing the time series for a different
+initial condition. We chose to take the second approach because the “measure
+then average” method can still be done with the current implimentation. For
+an example of this, see the example section of <a class="reference internal" href="#active-information"><span class="std std-ref">Active Information</span></a>.</p>
+<p>Subsequent releases may provide a mechanism for specifying a how the user
+prefers the initial conditions to be handled, but at the moment the user has to
+make it happen manually.</p>
+<table class="docutils footnote" frame="void" id="averaging" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>There is actually at least three ways to handle multiple initial
+conditions, but the third method is related to the first described in the text
+by the addition of the entropy of the distribution over initial conditions. In
+this approach, the initial condition is considered as a random variable.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-pyinform.activeinfo">
+<span id="id4"></span><span id="active-information"></span><h2>Active Information<a class="headerlink" href="#module-pyinform.activeinfo" title="Permalink to this headline">¶</a></h2>
+<p>Active information (AI) was introduced in <a class="reference internal" href="#lizier2012" id="id5">[Lizier2012]</a> to quantify information
+storage in distributed computation. Active information is defined in terms of
+a temporally local variant</p>
+<div class="math">
+\[a_{X,i}(k,b) = \log_b \frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.\]</div>
+<p>where the probabilities are constructed empirically from the <em>entire</em> time
+series. From the local variant, the temporally global active information as</p>
+<div class="math">
+\[A_X(k,b) = \langle a_{X,i}(k,b) \rangle_{i}
+         = \sum_{x^{(k)}_i,\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \log_b \frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.\]</div>
+<p>Strictly speaking, the local and average active information are defined as</p>
+<div class="math">
+\[a_{X,i}(b) = \lim_{k \rightarrow \infty} a_{X,i}(k,b)
+\quad \textrm{and} \quad
+A_X(b) = \lim_{k \rightarrow \infty} A_X(k,b),\]</div>
+<p>but we do not provide limiting functionality in this library (yet!).</p>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="a-single-initial-condition">
+<h4>A Single Initial Condition<a class="headerlink" href="#a-single-initial-condition" title="Permalink to this headline">¶</a></h4>
+<p>The typical usage is to provide the time series as a sequence (or
+<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) and the history length as an integer and let the
+<a class="reference internal" href="#pyinform.activeinfo.active_info" title="pyinform.activeinfo.active_info"><code class="xref py py-func docutils literal"><span class="pre">active_info()</span></code></a> sort out the rest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.3059584928680419</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[-0.19264508,  0.80735492,  0.22239242,  0.22239242, -0.36257008,</span>
+<span class="go">         1.22239242,  0.22239242]])</span>
+</pre></div>
+</div>
+<p>You can always override the base, but be careful:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.6309297535714575</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">0.6309297535714575</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;pyinform/activeinfo.py&quot;</span>, line <span class="m">126</span>, in <span class="n">active_info</span>
+
+<span class="go">  File &quot;pyinform/error.py&quot;, line 57, in error_guard</span>
+<span class="go">    raise InformError(e,func)</span>
+<span class="go">pyinform.error.InformError: an inform error occurred - &quot;unexpected state in timeseries&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h4>Multiple Initial Conditions<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>What about multiple initial conditions? We’ve got that covered!</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.35987902873686073</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">active_info</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.80735492, -0.36257008,  0.63742992,  0.63742992, -0.77760758,</span>
+<span class="go">         0.80735492, -1.19264508],</span>
+<span class="go">       [ 0.80735492,  0.80735492,  0.22239242,  0.80735492,  0.80735492,</span>
+<span class="go">         0.22239242,  0.80735492]])</span>
+</pre></div>
+</div>
+<p>As mentioned in <a class="reference internal" href="#subtle-details"><span class="std std-ref">Subtle Details</span></a>, averaging the AI for over the initial
+conditions does not give the same result as constructing the distributions using
+all of the initial conditions together.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">active_info</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">0.58453953071733644</span>
+</pre></div>
+</div>
+<p>Or if you are feeling verbose:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ai</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">ai</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">active_info</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ai</span>
+<span class="go">array([ 0.30595849,  0.86312057])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ai</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">0.58453953071733644</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="api-documentation">
+<h3>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.activeinfo.active_info">
+<code class="descclassname">pyinform.activeinfo.</code><code class="descname">active_info</code><span class="sig-paren">(</span><em>series</em>, <em>k</em>, <em>b=0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/activeinfo.html#active_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.activeinfo.active_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average or local active information of a timeseries with history
+length <em>k</em>.</p>
+<p>If the base <em>b</em> is not specified (or is 0), then it is inferred from the
+time series with 2 as a minimum. <em>b</em> must be at least the base of the time
+series and is used as the base of the logarithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series</strong> (sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series</li>
+<li><strong>k</strong> (<em>int</em>) – the history length</li>
+<li><strong>b</strong> (<em>int</em>) – the base of the time series and logarithm</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local active information</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the average or local active information</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series has no initial conditions</li>
+<li><strong>ValueError</strong> – if the time series is greater than 2-D</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.blockentropy">
+<span id="id7"></span><span id="block-entropy"></span><h2>Block Entropy<a class="headerlink" href="#module-pyinform.blockentropy" title="Permalink to this headline">¶</a></h2>
+<p>Block entropy, also known as N-gram entropy <a class="reference internal" href="#shannon1948" id="id8">[Shannon1948]</a>, is the the standard
+Shannon entropy applied to the time series (or sequence) of <span class="math">\(k\)</span>-histories
+of a time series (or sequence):</p>
+<div class="math">
+\[H_b(X^{(k)}) = -\sum_{x^{(k)}_i} p(x^{(k)}_i) \log_b p(x^{(k)}_i)\]</div>
+<p>which of course reduces to the traditional Shannon entropy for <code class="docutils literal"><span class="pre">k</span> <span class="pre">==</span> <span class="pre">1</span></code>. Much
+as with <a class="reference internal" href="#active-information"><span class="std std-ref">Active Information</span></a>, the ideal usage is to take
+<span class="math">\(k \rightarrow \infty\)</span>.</p>
+<div class="section" id="id9">
+<h3>Examples<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h4>A Single Initial Condition<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p>The typical usage is to provide the time series as a sequence (or
+<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) and the block size as an integer and let the
+<a class="reference internal" href="#pyinform.blockentropy.block_entropy" title="pyinform.blockentropy.block_entropy"><code class="xref py py-func docutils literal"><span class="pre">block_entropy()</span></code></a> sort out the rest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.9910760598382222</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.84799691,  0.84799691,  1.169925  ,  1.169925  ,  1.169925  ,</span>
+<span class="go">        1.169925  ,  0.84799691,  0.84799691,  0.84799691]])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">1.811278124459133</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 1.4150375,  3.       ,  1.4150375,  1.4150375,  1.4150375,</span>
+<span class="go">        3.       ,  1.4150375,  1.4150375]])</span>
+</pre></div>
+</div>
+<p>You can override the base so that the entropy is in the unit interval:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">0.9056390622295665</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.70751875,  1.5       ,  0.70751875,  0.70751875,  0.70751875,</span>
+<span class="go">         1.5       ,  0.70751875,  0.70751875]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h4>Multiple Initial Conditions<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<p>Do we support multiple initial conditions? Of course we do!</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">1.936278124459133</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block_entropy</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 1.4150375,  2.4150375,  2.4150375,  2.4150375,  2.4150375,</span>
+<span class="go">         2.       ,  1.4150375,  1.4150375],</span>
+<span class="go">       [ 2.       ,  1.4150375,  2.4150375,  2.       ,  1.4150375,</span>
+<span class="go">         2.4150375,  2.       ,  1.4150375]])</span>
+</pre></div>
+</div>
+<p>Or you can compute the block entropy on each initial condition and average:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">block_entropy</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">1.6862781244591329</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id12">
+<h3>API Documentation<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.blockentropy.block_entropy">
+<code class="descclassname">pyinform.blockentropy.</code><code class="descname">block_entropy</code><span class="sig-paren">(</span><em>series</em>, <em>k</em>, <em>b=0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/blockentropy.html#block_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.blockentropy.block_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the (local) block entropy of a time series with block size <em>k</em>.</p>
+<p>If <em>b</em> is 0, then the base is inferred from the time series with a minimum
+value of 2. The base <em>b</em> must be at least the base of the time series and
+is used as the base of the logarithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series</strong> (sequence or <cite>numpy.ndarray</cite>) – the time series</li>
+<li><strong>k</strong> (<em>int</em>) – the block size</li>
+<li><strong>b</strong> (<em>int</em>) – the base of the logarithm</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local block entropy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the average or local block entropy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <cite>numpy.ndarray</cite></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series has no initial conditions</li>
+<li><strong>ValueError</strong> – if the time series is greater than 2-D</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.conditionalentropy">
+<span id="id13"></span><span id="conditional-entropy"></span><h2>Conditional Entropy<a class="headerlink" href="#module-pyinform.conditionalentropy" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Conditional_entropy">Conditional entropy</a> is a measure of the amount of information
+required to describe a random variable <span class="math">\(Y\)</span> given knowledge of another
+random variable <span class="math">\(X\)</span>. When applied to time series, two time series are used
+to construct the empirical distributions and then
+<a class="reference internal" href="shannon.html#pyinform.shannon.conditional_entropy" title="pyinform.shannon.conditional_entropy"><code class="xref py py-func docutils literal"><span class="pre">conditional_entropy()</span></code></a> can be applied to yield</p>
+<div class="math">
+\[H_b(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \log_b \frac{p(x_i, y_i)}{p(x_i)}.\]</div>
+<p>This can be viewed as the time-average of the local conditional entropy</p>
+<div class="math">
+\[h_{b,i}(Y|X) = -\log_b \frac{p(x_i, y_i)}{p(x_i)}.\]</div>
+<p>See <a class="reference internal" href="#cover1991" id="id14">[Cover1991]</a> for more information.</p>
+<div class="section" id="id16">
+<h3>Examples<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">)</span>      <span class="c1"># H(Y|X)</span>
+<span class="go">0.5971071794515037</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span><span class="n">xs</span><span class="p">)</span>      <span class="c1"># H(X|Y)</span>
+<span class="go">0.5077571498797332</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([ 3.        ,  3.        ,  0.19264508,  0.19264508,  0.19264508,</span>
+<span class="go">        0.19264508,  0.19264508,  0.19264508,  0.19264508,  0.19264508,</span>
+<span class="go">        0.19264508,  0.19264508,  0.19264508,  0.19264508,  0.19264508,</span>
+<span class="go">        0.19264508,  0.4150375 ,  0.4150375 ,  0.4150375 ,  2.        ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([ 1.32192809,  1.32192809,  0.09953567,  0.09953567,  0.09953567,</span>
+<span class="go">        0.09953567,  0.09953567,  0.09953567,  0.09953567,  0.09953567,</span>
+<span class="go">        0.09953567,  0.09953567,  0.09953567,  0.09953567,  0.09953567,</span>
+<span class="go">        0.09953567,  0.73696559,  0.73696559,  0.73696559,  3.9068906 ])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id17">
+<h3>API Documentation<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.conditionalentropy.conditional_entropy">
+<code class="descclassname">pyinform.conditionalentropy.</code><code class="descname">conditional_entropy</code><span class="sig-paren">(</span><em>xs</em>, <em>ys</em>, <em>bx=0</em>, <em>by=0</em>, <em>b=2.0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/conditionalentropy.html#conditional_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.conditionalentropy.conditional_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the (local) conditional entropy between two time series.</p>
+<p>This function expects the <strong>condition</strong> to be the first argument.</p>
+<p>The bases <em>bx</em> and <em>by</em> are inferred from their respective time series if
+they are not provided (or are 0). The minimum value in both cases is 2.</p>
+<p>This function explicitly takes the logarithmic base <em>b</em> as an argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xs</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series drawn from the conditional distribution</li>
+<li><strong>ys</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series drawn from the target distribution</li>
+<li><strong>bx</strong> (<em>int</em>) – the base of the conditional time series</li>
+<li><strong>by</strong> (<em>int</em>) – the base of the target time series</li>
+<li><strong>b</strong> (<em>double</em>) – the logarithmic base</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local conditional entropy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the local or average conditional entropy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series have different shapes</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.entropyrate">
+<span id="id18"></span><span id="entropy-rate"></span><h2>Entropy Rate<a class="headerlink" href="#module-pyinform.entropyrate" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Entropy_rate">Entropy rate</a> (ER) quantifies the amount of information needed to describe the
+<span class="math">\(X\)</span> given observations of <span class="math">\(X^{(k)}\)</span>. In other words, it is the
+entropy of the time series conditioned on the <span class="math">\(k\)</span>-histories. The local
+entropy rate</p>
+<div class="math">
+\[h_{X,i}(k,b) = \log_b \frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}\]</div>
+<p>can be averaged to obtain the global entropy rate</p>
+<div class="math">
+\[H_X(k,b) = \langle h_{X,i}(k,b) \rangle_{i}
+         = \sum_{x^{(k)}_i,\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \log_b \frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}.\]</div>
+<p>Much as with <a class="reference internal" href="#active-information"><span class="std std-ref">Active Information</span></a>, the local and average entropy rates are
+formally obtained in the limit</p>
+<div class="math">
+\[h_{X,i}(b) = \lim_{k \rightarrow \infty} h_{X,i}(k,b)
+\quad \textrm{and} \quad
+H_X(b) = \lim_{k \rightarrow \infty} H_X(k,b),\]</div>
+<p>but we do not provide limiting functionality in this library (yet!).</p>
+<p>See <a class="reference internal" href="#cover1991" id="id19">[Cover1991]</a> for more details.</p>
+<div class="section" id="id21">
+<h3>Examples<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id22">
+<h4>A Single Initial Condition<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<p>Let’s apply the entropy rate to a single initial condition. Typically, you will
+just provide the time series and the history length, and let
+<a class="reference internal" href="#pyinform.entropyrate.entropy_rate" title="pyinform.entropyrate.entropy_rate"><code class="xref py py-func docutils literal"><span class="pre">entropy_rate()</span></code></a> take care of the rest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.6792696431662095</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 1.       ,  0.       ,  0.5849625,  0.5849625,  1.5849625,</span>
+<span class="go">         0.       ,  1.       ]])</span>
+</pre></div>
+</div>
+<p>As with all of the time series measures, you can override the default base.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.24830578469386944</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">0.19677767872596208</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/home/ubuntu/workspace/pyinform/entropyrate.py&quot;</span>, line <span class="m">79</span>, in <span class="n">entropy_rate</span>
+    <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/ubuntu/workspace/pyinform/error.py&quot;</span>, line <span class="m">57</span>, in <span class="n">error_guard</span>
+    <span class="k">raise</span> <span class="n">InformError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">func</span><span class="p">)</span>
+<span class="gr">pyinform.error.InformError</span>: <span class="n">an inform error occurred - &quot;unexpected state in timeseries&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id23">
+<h4>Multiple Initial Conditions<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<p>Of course multiple initial conditions are handled.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.6253491072973907</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy_rate</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.4150375,  1.5849625,  0.5849625,  0.5849625,  1.5849625,</span>
+<span class="go">         0.       ,  2.       ],</span>
+<span class="go">       [ 0.       ,  0.4150375,  0.5849625,  0.       ,  0.4150375,</span>
+<span class="go">         0.5849625,  0.       ]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id24">
+<h3>API Documentation<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.entropyrate.entropy_rate">
+<code class="descclassname">pyinform.entropyrate.</code><code class="descname">entropy_rate</code><span class="sig-paren">(</span><em>series</em>, <em>k</em>, <em>b=0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/entropyrate.html#entropy_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.entropyrate.entropy_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average or local entropy rate of a time series with history
+length <em>k</em>.</p>
+<p>If the base <em>b</em> is not specified (or is 0), then it is inferred from the
+time series (with 2) as a minimum. <em>b</em> must be at least the base of the time
+series and is used a the base of the logarithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series</strong> (sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series</li>
+<li><strong>k</strong> (<em>int</em>) – the history length</li>
+<li><strong>b</strong> (<em>int</em>) – the base of the time series and logarithm</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local active information</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the average or local entropy rate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series has no initial conditions</li>
+<li><strong>ValueError</strong> – if the time series is greater than 2-D</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.mutualinfo">
+<span id="id25"></span><span id="mutual-information"></span><h2>Mutual Information<a class="headerlink" href="#module-pyinform.mutualinfo" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Mutual_information">Mutual information</a> (MI) is a measure of the amount of mutual dependence
+between two random variables. When applied to time series, two time series are
+used to construct the empirical distributions and then
+<a class="reference internal" href="shannon.html#pyinform.shannon.mutual_info" title="pyinform.shannon.mutual_info"><code class="xref py py-func docutils literal"><span class="pre">mutual_info()</span></code></a> can be applied. Locally MI is defined as</p>
+<div class="math">
+\[i_{b,i}(X,Y) = -\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.\]</div>
+<p>The mutual information is then just the time average of <span class="math">\(i_{b,i}(X,Y)\)</span>.</p>
+<div class="math">
+\[I_b(X,Y) = -\sum_{x_i, y_i} p(x_i, y_i) \log_b \frac{p(x_i, y_i)}{p(x_i)p(y_i)}.\]</div>
+<p>See <a class="reference internal" href="#cover1991" id="id26">[Cover1991]</a> for more details.</p>
+<div class="section" id="id28">
+<h3>Examples<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutual_info</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="go">0.214170945007629</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutual_info</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([-1.        , -1.        ,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="go">        0.22239242,  0.22239242,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="go">        0.22239242,  0.22239242,  0.22239242,  0.22239242,  0.22239242,</span>
+<span class="go">        0.22239242,  1.5849625 ,  1.5849625 ,  1.5849625 , -1.5849625 ])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id29">
+<h3>API Documentation<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.mutualinfo.mutual_info">
+<code class="descclassname">pyinform.mutualinfo.</code><code class="descname">mutual_info</code><span class="sig-paren">(</span><em>xs</em>, <em>ys</em>, <em>bx=0</em>, <em>by=0</em>, <em>b=2.0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/mutualinfo.html#mutual_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.mutualinfo.mutual_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the (local) mutual information between two time series.</p>
+<p>The bases <em>bx</em> and <em>by</em> are inferred from their respective time series if
+they are not provided (or are 0). The minimum value in both cases is 2.</p>
+<p>This function explicitly takes the logarithmic base <em>b</em> as an argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xs</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – a time series</li>
+<li><strong>ys</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – a time series</li>
+<li><strong>bx</strong> (<em>int</em>) – the base of the first time series</li>
+<li><strong>by</strong> (<em>int</em>) – the base of the second time series</li>
+<li><strong>b</strong> (<em>double</em>) – the logarithmic base</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local mutual information</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the local or average mutual information</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series have different shapes</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.relativeentropy">
+<span id="id30"></span><span id="relative-entropy"></span><h2>Relative Entropy<a class="headerlink" href="#module-pyinform.relativeentropy" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Relative entropy</a>, also known as the Kullback-Leibler divergence, measures the
+amount of information gained in switching from a prior <span class="math">\(q_X\)</span> to a
+posterior distribution <span class="math">\(p_X\)</span> <em>over the same support</em>. That is <span class="math">\(q_X\)</span>
+and <span class="math">\(P\)</span> represent hypotheses of the distribution of some random variable
+<span class="math">\(X.\)</span> Time series data sampled from the posterior and prior can be used to
+estiamte those distributions, and the relative entropy can the be computed via
+a call to <a class="reference internal" href="shannon.html#pyinform.shannon.relative_entropy" title="pyinform.shannon.relative_entropy"><code class="xref py py-func docutils literal"><span class="pre">relative_entropy()</span></code></a>. The result is</p>
+<div class="math">
+\[D_{KL}(p||q) = \sum_{x_i} p(x_i) \log_b \frac{p(x_i)}{q(x_i)}\]</div>
+<p>which has as its local counterpart</p>
+<div class="math">
+\[d_{KL, i}(p||q) = \log_b \frac{p(x_i)}{q(x_i)}.\]</div>
+<p>Note that the average in moving from the local to the non-local relative entropy
+is taken over the posterior distribution.</p>
+<p>See <a class="reference internal" href="#kullback1951" id="id31">[Kullback1951]</a> and <a class="reference internal" href="#cover1991" id="id32">[Cover1991]</a> for more information.</p>
+<div class="section" id="id34">
+<h3>Examples<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="go">0.27807190511263774</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+<span class="go">0.3219280948873624</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id35">
+<h3>API Documentation<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.relativeentropy.relative_entropy">
+<code class="descclassname">pyinform.relativeentropy.</code><code class="descname">relative_entropy</code><span class="sig-paren">(</span><em>xs</em>, <em>ys</em>, <em>b=0</em>, <em>base=2.0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/relativeentropy.html#relative_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.relativeentropy.relative_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the local or global relative entropy between two time series
+treating each as observations from a distribution.</p>
+<p>The base <em>b</em> is inferred from the time series if it is not provided (or is
+0). The minimum value is 2.</p>
+<p>This function explicitly takes the logarithmic base <em>base</em> as an argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xs</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series sampled from the posterior distribution</li>
+<li><strong>ys</strong> (a sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the time series sampled from the prior distribution</li>
+<li><strong>b</strong> (<em>double</em>) – the base of the time series</li>
+<li><strong>b</strong> – the logarithmic base</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local relative entropy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the local or global relative entropy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series have different shapes</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyinform.transferentropy">
+<span id="id36"></span><span id="transfer-entropy"></span><h2>Transfer Entropy<a class="headerlink" href="#module-pyinform.transferentropy" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Transfer_entropy">Transfer entropy</a> (TE) measures the amount of directed transfer of information
+between two random processes. The local variant of TE is defined as</p>
+<div class="math">
+\[t_{Y \rightarrow X, i}(k,b) = \log_b \frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.\]</div>
+<p>Averaging in time we have</p>
+<div class="math">
+\[T_{Y \rightarrow X}(k,b) = \sum_{x^{(k)}_i,\, x_{i+1},\, y_i} p(x_{i+1}, y_i, x^{(k)}_i) \log_b \frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.\]</div>
+<p>As in the case of <a class="reference internal" href="#active-information"><span class="std std-ref">Active Information</span></a> and <a class="reference internal" href="#entropy-rate"><span class="std std-ref">Entropy Rate</span></a>, the
+transfer entropy is formally defined as the limit of the <span class="math">\(k\)</span>-history
+transfer entropy as <span class="math">\(k \rightarrow \infty\)</span>:</p>
+<div class="math">
+\[t_{Y \rightarrow X,i}(b) = \lim_{k \rightarrow \infty} t_{Y \rightarrow X,i}(k,b)
+\quad \textrm{and} \quad
+T_{Y \rightarrow X}(b) = \lim_{k \rightarrow \infty} T_{Y \rightarrow X}(k,b),\]</div>
+<p>but we do not provide limiting functionality in this library (yet!).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">What we call “transfer entropy” is referred to as “apparent transfer
+entropy” in the parlance of <a class="reference internal" href="#lizier2008" id="id37">[Lizier2008]</a>. A related quantity, complete
+transfer entropy, also considers the semi-infinite histories of all other
+random processes associated with the system. An implementation of
+complete transfer entropy is planned for a future release of
+<a class="reference external" href="http://github.com/elife-asu/inform">Inform</a>/PyInform.</p>
+</div>
+<p>See <a class="reference internal" href="#schreiber2000" id="id38">[Schreiber2000]</a>, <a class="reference internal" href="#kraiser2002" id="id39">[Kraiser2002]</a> and <a class="reference internal" href="#lizier2008" id="id40">[Lizier2008]</a> for more details.</p>
+<div class="section" id="id42">
+<h3>Examples<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id43">
+<h4>A Single Initial Condition<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h4>
+<p>Just give us a couple of time series and tell us the history length and we’ll
+give you a number</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.8112781244591329</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.6792696431662095</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.21691718668869964</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># pesky floating-point math</span>
+<span class="go">-2.220446049250313e-16</span>
+</pre></div>
+</div>
+<p>or an array if you ask for it</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.4150375,  2.       ,  0.4150375,  0.4150375,  0.4150375,</span>
+<span class="go">         2.       ,  0.4150375,  0.4150375]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 1.       ,  0.       ,  0.5849625,  0.5849625,  1.5849625,</span>
+<span class="go">         0.       ,  1.       ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.4150375,  0.4150375, -0.169925 , -0.169925 ,  0.4150375,</span>
+<span class="go">         1.       , -0.5849625,  0.4150375]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id44">
+<h4>Multiple Initial Conditions<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h4>
+<p>Uhm, yes we can! (Did you really expect anything less?)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ys</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.8828560636920486</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.6935361388961918</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">0.15969728512148262</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<p>And local too:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.4150375 ,  2.        ,  0.67807191,  0.67807191,  0.67807191,</span>
+<span class="go">         1.4150375 ,  0.4150375 ,  0.4150375 ],</span>
+<span class="go">       [ 1.4150375 ,  0.4150375 ,  0.4150375 ,  0.4150375 ,  2.        ,</span>
+<span class="go">         0.67807191,  0.67807191,  1.4150375 ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 1.32192809,  0.        ,  0.73696559,  0.73696559,  1.32192809,</span>
+<span class="go">         0.        ,  0.73696559],</span>
+<span class="go">       [ 0.        ,  0.73696559,  0.73696559,  1.32192809,  0.        ,</span>
+<span class="go">         0.73696559,  1.32192809]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[ 0.5849625 ,  0.48542683, -0.25153877, -0.25153877,  0.48542683,</span>
+<span class="go">         0.36257008, -0.22239242, -0.22239242],</span>
+<span class="go">       [ 0.36257008, -0.22239242, -0.22239242,  0.5849625 ,  0.48542683,</span>
+<span class="go">        -0.25153877,  0.48542683,  0.36257008]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transfer_entropy</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[  0.00000000e+00,  -2.22044605e-16,  -2.22044605e-16,</span>
+<span class="go">         -2.22044605e-16,   0.00000000e+00,  -2.22044605e-16,</span>
+<span class="go">         -2.22044605e-16],</span>
+<span class="go">       [ -2.22044605e-16,  -2.22044605e-16,  -2.22044605e-16,</span>
+<span class="go">          0.00000000e+00,  -2.22044605e-16,  -2.22044605e-16,</span>
+<span class="go">          0.00000000e+00]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id45">
+<h3>API Documentation<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pyinform.transferentropy.transfer_entropy">
+<code class="descclassname">pyinform.transferentropy.</code><code class="descname">transfer_entropy</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>k</em>, <em>b=0</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/transferentropy.html#transfer_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.transferentropy.transfer_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the local or average transfer entropy from one time series to
+another with target history length <em>k</em>.</p>
+<p>If the base <em>b</em> is not specified (or is 0), then it is inferred from the
+time series with 2 as a minimum. <em>b</em> must be at least the base of the time
+series and is used as the base of the logarithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the source time series</li>
+<li><strong>target</strong> (sequence or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>) – the target time series</li>
+<li><strong>k</strong> (<em>int</em>) – the history length</li>
+<li><strong>b</strong> (<em>int</em>) – the base of the time series and logarithm</li>
+<li><strong>local</strong> (<em>bool</em>) – compute the local transfer entropy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the average or local transfer entropy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the time series have different shapes</li>
+<li><strong>ValueError</strong> – if either time series has no initial conditions</li>
+<li><strong>ValueError</strong> – if either time series is greater than 2-D</li>
+<li><strong>InformError</strong> – if an error occurs within the <code class="docutils literal"><span class="pre">inform</span></code> C call</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="cover1991" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Cover1991]</td><td><em>(<a class="fn-backref" href="#id14">1</a>, <a class="fn-backref" href="#id19">2</a>, <a class="fn-backref" href="#id26">3</a>, <a class="fn-backref" href="#id32">4</a>)</em> T.M. Cover amd J.A. Thomas (1991). “Elements of information theory” (1st ed.). New York: Wiley. ISBN 0-471-06259-6.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="kraiser2002" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id39">[Kraiser2002]</a></td><td><ol class="first last upperalpha simple">
+<li>Kaiser, T. Schreiber, “<a class="reference external" href="http://dx.doi.org/10.1016/S0167-2789(02)00432-3">Information transfer in continuous processes</a>”, Physica D: Nonlinear Phenomena, Volume 166, Issues 1–2, 1 June 2002, Pages 43-62, ISSN 0167-2789</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="kullback1951" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id31">[Kullback1951]</a></td><td>Kullback, S.; Leibler, R.A. (1951). “<a class="reference external" href="http://projecteuclid.org/DPubS?service=UI&amp;version=1.0&amp;verb=Display&amp;handle=euclid.aoms/1177729694">On information and sufficiency</a>”. Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lizier2008" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Lizier2008]</td><td><em>(<a class="fn-backref" href="#id37">1</a>, <a class="fn-backref" href="#id40">2</a>)</em> J.T. Lizier M. Prokopenko and A. Zomaya, “<a class="reference external" href="http://dx.doi.org/10.1103/PhysRevE.77.026110">Local information transfer as a spatiotemporal filter for complex systems</a>”, Phys. Rev. E 77, 026110, 2008.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lizier2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[Lizier2012]</a></td><td>J.T. Lizier, M. Prokopenko and A.Y. Zomaya, “<a class="reference external" href="http://dx.doi.org/10.1016/j.ins.2012.04.016">Local measures of information storage in complex distributed computation</a>” Information Sciences, vol. 208, pp. 39-54, 2012.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="schreiber2000" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id38">[Schreiber2000]</a></td><td><ol class="first last upperalpha simple" start="20">
+<li>Schreiber, “<a class="reference external" href="http://dx.doi.org/10.1103/PhysRevLett.85.461">Measuring information transfer</a>”, Phys.Rev.Lett. 85 (2) pp.461-464, 2000.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="shannon1948" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[Shannon1948]</a></td><td>Shannon, Claude E. (July-October 1948). “<a class="reference external" href="https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x">A Mathematical Theory of Communication</a>”. Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shannon.html" class="btn btn-neutral" title="Shannon Information Measures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, ELIFE.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
