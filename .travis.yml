@@ -8,12 +8,16 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
+  - "3.6"
 
 install:
-  - wget https://github.com/ELIFE-ASU/Inform/releases/download/v0.0.5/inform-0.0.5_mixed.zip
-  - unzip inform-0.0.5_mixed.zip
-  - mv inform-0.0.5 pyinform/inform-0.0.5
-  - rm inform-0.0.5_mixed.zip
+  - wget https://github.com/ELIFE-ASU/Inform/releases/download/v1.0.0/inform-1.0.0_mixed.zip
+  - unzip inform-1.0.0_mixed.zip
+  - mv inform-1.0.0 pyinform/inform-1.0.0
+  - rm inform-1.0.0_mixed.zip
+  - pip install .
+  - pip install codecov
 
 script:
-  - nosetests
+  - python setup.py test
+  - codecov
