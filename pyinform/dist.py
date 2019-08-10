@@ -6,6 +6,7 @@ import numpy as np
 from ctypes import c_bool, c_double, c_uint, c_ulong, c_void_p, POINTER
 from pyinform import _inform
 
+
 class Dist:
     """
     Dist is class designed to represent empirical probability distributions,
@@ -26,7 +27,7 @@ class Dist:
         ``numpy.ndarray``, the sequence is treated as the underlying support.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(5)
@@ -65,7 +66,7 @@ class Dist:
         Determine the size of the support of the distribution.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> len(Dist(5))
@@ -91,7 +92,7 @@ class Dist:
         - **is unchanged** - well, that sorta says it all, doesn't it?
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(5)
@@ -127,7 +128,7 @@ class Dist:
         Perform a deep copy of the distribution.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist([1,2,3])
@@ -159,7 +160,7 @@ class Dist:
         Return the number of observations made thus far.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(5)
@@ -185,7 +186,7 @@ class Dist:
         if the support is not empty and at least one observation has been made.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(5)
@@ -199,7 +200,7 @@ class Dist:
             True
 
         See also :py:meth:`.__len__` and :py:meth:`.counts`.
-    
+
         :return: a boolean signifying that the distribution is valid
         :rtype: bool
         """
@@ -210,7 +211,7 @@ class Dist:
         Get the number of observations made of *event*.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(2)
@@ -241,7 +242,7 @@ class Dist:
         If *value* is negative, then the observation count is set to zero.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(2)
@@ -260,9 +261,9 @@ class Dist:
             >>> list(d)
             [0, 2, 4, 6]
 
-        
+
         See also :py:meth:`.__getitem__` and :py:meth:`.tick`.
-        
+
         :param int event: the observed event
         :param int value: the number of observations
         :raises IndexError: if ``event < 0 or len(self) <= event``
@@ -278,7 +279,7 @@ class Dist:
         of observations of said *event*.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist(5)
@@ -298,7 +299,7 @@ class Dist:
             [1, 2, 3, 4]
 
         See also :py:meth:`.__getitem__` and :py:meth:`.__setitem__`.
-        
+
         :param int event: the observed event
         :return: the total number of observations of *event*
         :rtype: int
@@ -313,7 +314,7 @@ class Dist:
         Compute the empiricial probability of an *event*.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist([1,1,1,1])
@@ -322,7 +323,7 @@ class Dist:
             ...
 
         See also :py:meth:`.__getitem__` and :py:meth:`.dump`.
-        
+
         :param int event: the observed event
         :return: the empirical probability *event*
         :rtype: float
@@ -341,7 +342,7 @@ class Dist:
         the result as an array.
 
         .. rubric:: Examples:
-        
+
         ::
 
             >>> d = Dist([1,2,2,1])
@@ -365,6 +366,7 @@ class Dist:
         if m != n:
             raise RuntimeError("cannot dump the distribution")
         return probs
+
 
 _dist_alloc = _inform.inform_dist_alloc
 _dist_alloc.argtypes = [c_ulong]

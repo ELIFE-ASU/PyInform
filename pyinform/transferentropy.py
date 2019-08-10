@@ -14,16 +14,16 @@ Averaging in time we have
 .. math::
 
     T_{Y \\rightarrow X}(k) = \\sum_{x^{(k)}_i,\\, x_{i+1},\\, y_i} p(x_{i+1}, y_i, x^{(k)}_i) \\log_2 \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
-    
+
 As in the case of :ref:`active-information` and :ref:`entropy-rate`, the
 transfer entropy is formally defined as the limit of the :math:`k`-history
-transfer entropy as :math:`k \\rightarrow \infty`:
+transfer entropy as :math:`k \\rightarrow \\infty`:
 
 .. math::
 
-    t_{Y \\rightarrow X,i}(b) = \\lim_{k \\rightarrow \infty} t_{Y \\rightarrow X,i}(k,b)
+    t_{Y \\rightarrow X,i} = \\lim_{k \\rightarrow \\infty} t_{Y \\rightarrow X,i}(k)
     \\quad \\textrm{and} \\quad
-    T_{Y \\rightarrow X}(b) = \\lim_{k \\rightarrow \infty} T_{Y \\rightarrow X}(k,b),
+    T_{Y \\rightarrow X} = \\lim_{k \\rightarrow \\infty} T_{Y \\rightarrow X}(k),
 
 but we do not provide limiting functionality in this library (yet!).
 
@@ -74,7 +74,7 @@ or an array if you ask for it ::
              1.       , -0.5849625,  0.4150375]])
     >>> transfer_entropy(xs, ys, k=2, local=True)
     array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.]])
-    
+
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -90,8 +90,8 @@ Uhm, yes we can! (Did you really expect anything less?) ::
     0.15969728512148262
     >>> transfer_entropy(xs, ys, k=2)
     0.0
- 
- 
+
+
 And local too::
 
     >>> transfer_entropy(ys, xs, k=1, local=True)
@@ -119,9 +119,10 @@ And local too::
 """
 import numpy as np
 
-from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
+from ctypes import byref, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
+
 
 def transfer_entropy(source, target, k, local=False):
     """
@@ -166,18 +167,23 @@ def transfer_entropy(source, target, k, local=False):
         q = max(0, m - k)
         te = np.empty((n, q), dtype=np.float64)
         out = te.ctypes.data_as(POINTER(c_double))
-        _local_transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
+        _local_transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(
+            n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        te = _transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+        te = _transfer_entropy(ydata, xdata, None, c_ulong(
+            0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
     return te
 
+
 _transfer_entropy = _inform.inform_transfer_entropy
-_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(
+    c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _transfer_entropy.restype = c_double
 
 _local_transfer_entropy = _inform.inform_local_transfer_entropy
-_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(
+    c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_transfer_entropy.restype = POINTER(c_double)

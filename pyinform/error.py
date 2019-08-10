@@ -6,6 +6,7 @@ from pyinform import _inform
 
 ErrorCode = c_int
 
+
 def error_string(e):
     """
     Generate an error message from an integral error code `e`.
@@ -14,6 +15,7 @@ def error_string(e):
         return error_string(ErrorCode(e))
     else:
         return _strerror(byref(e)).decode("utf-8")
+
 
 def is_success(e):
     """
@@ -24,6 +26,7 @@ def is_success(e):
     else:
         return _is_success(byref(e))
 
+
 def is_failure(e):
     """
     Determine if an error code represents a failure.
@@ -33,10 +36,12 @@ def is_failure(e):
     else:
         return _is_failure(byref(e))
 
+
 class InformError(Exception):
     """
     InformError signifies an error occurred in a call to inform.
     """
+
     def __init__(self, e=-1, func=None):
         msg = error_string(e)
 
@@ -49,12 +54,14 @@ class InformError(Exception):
 
         self.error_code = e if isinstance(e, ErrorCode) else ErrorCode(e)
 
+
 def error_guard(e, func=None):
     """
     Raise an appropriately formated error if `e` is a failure
     """
     if is_failure(e):
-        raise InformError(e,func)
+        raise InformError(e, func)
+
 
 _strerror = _inform.inform_strerror
 _strerror.argtypes = [POINTER(c_int)]

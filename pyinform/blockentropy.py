@@ -9,10 +9,10 @@ of a time series (or sequence):
 .. math::
 
     H(X^{(k)}) = -\\sum_{x^{(k)}_i} p(x^{(k)}_i) \\log_2 p(x^{(k)}_i)
-    
+
 which of course reduces to the traditional Shannon entropy for ``k == 1``. Much
 as with :ref:`active-information`, the ideal usage is to take
-:math:`k \\rightarrow \infty`.
+:math:`k \\rightarrow \\infty`.
 
 Examples
 --------
@@ -51,7 +51,7 @@ Do we support multiple initial conditions? Of course we do! ::
              2.       ,  1.4150375,  1.4150375],
            [ 2.       ,  1.4150375,  2.4150375,  2.       ,  1.4150375,
              2.4150375,  2.       ,  1.4150375]])
-             
+
 Or you can compute the block entropy on each initial condition and average: ::
 
     >>> np.apply_along_axis(block_entropy, 1, series, 2).mean()
@@ -59,9 +59,10 @@ Or you can compute the block entropy on each initial condition and average: ::
 """
 import numpy as np
 
-from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
+from ctypes import byref, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
+
 
 def block_entropy(series, k, local=False):
     """
@@ -84,7 +85,7 @@ def block_entropy(series, k, local=False):
     elif xs.ndim > 2:
         raise ValueError("dimension greater than 2")
 
-    b = max(2, np.amax(xs)+1)
+    b = max(2, np.amax(xs) + 1)
 
     data = xs.ctypes.data_as(POINTER(c_int))
     if xs.ndim == 1:
@@ -96,20 +97,25 @@ def block_entropy(series, k, local=False):
 
     if local is True:
         q = max(0, m - k + 1)
-        ai = np.empty((n,q), dtype=np.float64)
+        ai = np.empty((n, q), dtype=np.float64)
         out = ai.ctypes.data_as(POINTER(c_double))
-        _local_block_entropy(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
+        _local_block_entropy(data, c_ulong(n), c_ulong(
+            m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        ai = _block_entropy(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+        ai = _block_entropy(data, c_ulong(n), c_ulong(m),
+                            c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
     return ai
 
+
 _block_entropy = _inform.inform_block_entropy
-_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_block_entropy.argtypes = [
+    POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _block_entropy.restype = c_double
 
 _local_block_entropy = _inform.inform_local_block_entropy
-_local_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_block_entropy.argtypes = [POINTER(
+    c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_block_entropy.restype = POINTER(c_double)

@@ -2,7 +2,6 @@
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
 from setuptools import setup
-from platform import system
 
 with open('README.rst') as f:
     readme = f.read()
@@ -30,7 +29,7 @@ setup(
     license=license,
     requires=['numpy'],
     packages=['pyinform', 'pyinform.utils'],
-    package_data = { 'pyinform' : inform_files },
-    test_suite = "test",
-    platforms = ["Windows", "OS X", "Linux"],
+    package_data={'pyinform': inform_files},
+    test_suite="test",
+    platforms=["Windows", "OS X", "Linux"]
 )

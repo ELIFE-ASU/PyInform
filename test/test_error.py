@@ -5,7 +5,6 @@ import sys
 import unittest
 import pyinform.error as err
 
-from ctypes import *
 
 class TestError(unittest.TestCase):
     def test_error_string_success(self):
@@ -65,6 +64,7 @@ class TestError(unittest.TestCase):
         except err.InformError:
             e = sys.exc_info()[1]
             self.assertEqual(1000, e.error_code.value)
+
 
 if __name__ == "__main__":
     unittest.main()

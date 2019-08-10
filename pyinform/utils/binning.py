@@ -27,12 +27,13 @@ from ctypes import byref, c_double, c_int, c_ulong, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
+
 def series_range(series):
     """
     Compute the range of a continuously-valued time series.
-    
+
     Examples: ::
-    
+
         >>> from pyinform import utils
         >>> utils.series_range([0,1,2,3,4,5])
         (5, 0, 5)
@@ -48,24 +49,26 @@ def series_range(series):
     data = xs.ctypes.data_as(POINTER(c_double))
 
     min, max = c_double(), c_double()
-    
+
     e = ErrorCode(0)
-    rng = _inform_range(data, c_ulong(xs.size), byref(min), byref(max), byref(e))
+    rng = _inform_range(data, c_ulong(xs.size),
+                        byref(min), byref(max), byref(e))
     error_guard(e)
-    
+
     return rng, min.value, max.value
+
 
 def bin_series(series, b=None, step=None, bounds=None):
     """
     Bin a continously-valued times series.
-    
+
     The binning can be performed in any one of three ways.
-    
+
     .. rubric:: 1. Specified Number of Bins
-    
+
     The first is binning the time series into *b* uniform bins (with *b* an
     integer). ::
-    
+
         >>> from pyinform import utils
         >>> import numpy as np
         >>> xs = 10 * np.random.rand(20)
@@ -79,36 +82,36 @@ def bin_series(series, b=None, step=None, bounds=None):
         >>> utils.bin_series(xs, b=3)
         (array([2, 2, 0, 0, 1, 2, 2, 2, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 1, 0], dtype=int32), 3, 2.8422714910900173)
 
-    
+
     With this approach the binned sequence (as an ``numpy.ndarray``), the number
     of bins, and the size of each bin are returned.
-    
+
     This binning method is useful if, for example, the user wants to bin several
     time series to the same base.
-    
+
     .. rubric:: 2. Fixed Size Bins
-    
+
     The second type of binning produces bins of a specific size *step*.::
-    
+
         >>> utils.bin_series(xs, step=4.0)
         (array([1, 1, 0, 0, 0, 2, 1, 1, 0, 1, 2, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 3, 4.0)
         >>> utils.bin_series(xs, step=2.0)
         (array([3, 3, 0, 1, 1, 4, 3, 3, 1, 3, 4, 3, 0, 3, 3, 0, 0, 1, 1, 1], dtype=int32), 5, 2.0)
-        
+
     As in the previous case the binned sequence, the number of bins, and the
     size of each bin are returned.
-    
+
     This approach is appropriate when the system at hand has a particular
     sensitivity or precision, e.g. if the system is sensitive down to 5.0mV
     changes in potential.
-    
+
     .. rubric:: 3. Thresholds
-    
+
     The third type of binning is breaks the real number line into segments with
     specified boundaries or thresholds, and the time series is binned according
     to this partitioning. The bounds are expected to be provided in ascending
     order.::
-    
+
         >>> utils.bin_series(xs, bounds=[2.0, 7.5])
         (array([1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 2, 1, 0, 1, 2, 0, 0, 1, 1, 1], dtype=int32), 3, [2.0, 7.5])
         >>> utils.bin_series(xs, bounds=[2.0])
@@ -117,7 +120,7 @@ def bin_series(series, b=None, step=None, bounds=None):
     Unlike the previous two types of binning, this approach returns the specific
     bounds rather than the bin sizes. The other two returns, the binned
     sequence and the number of bins, are returned as before.
-    
+
     This approach is useful in situations where the system has natural
     thesholds, e.g. the polarized/hyperpolarized states of a neuron.
 
@@ -132,14 +135,16 @@ def bin_series(series, b=None, step=None, bounds=None):
     :raises InformError: if an error occurs in the ``inform`` C call
     """
     if b is None and step is None and bounds is None:
-        raise ValueError("must provide either number of bins, step size, or bin boundaries")
+        raise ValueError(
+            "must provide either number of bins, step size, or bin boundaries")
     elif b is not None and step is not None:
         raise ValueError("cannot provide both number of bins and step size")
     elif b is not None and bounds is not None:
-        raise ValueError("cannot provide both number of bins and bin boundaries")
+        raise ValueError(
+            "cannot provide both number of bins and bin boundaries")
     elif step is not None and bounds is not None:
         raise ValueError("cannot provide both step size and bin boundaries")
-    
+
     xs = np.ascontiguousarray(series, dtype=np.float64)
     data = xs.ctypes.data_as(POINTER(c_double))
 
@@ -151,28 +156,35 @@ def bin_series(series, b=None, step=None, bounds=None):
         spec = _inform_bin(data, c_ulong(xs.size), c_int(b), out, byref(e))
     elif step is not None:
         spec = step
-        b = _inform_bin_step(data, c_ulong(xs.size), c_double(step), out, byref(e))
+        b = _inform_bin_step(data, c_ulong(xs.size),
+                             c_double(step), out, byref(e))
     elif bounds is not None:
         boundaries = np.ascontiguousarray(bounds, dtype=np.float64)
         bnds = boundaries.ctypes.data_as(POINTER(c_double))
         spec = bounds
-        b = _inform_bin_bounds(data, c_ulong(xs.size), bnds, c_ulong(boundaries.size), out, byref(e))
+        b = _inform_bin_bounds(data, c_ulong(
+            xs.size), bnds, c_ulong(boundaries.size), out, byref(e))
     error_guard(e)
 
     return binned, b, spec
 
+
 _inform_range = _inform.inform_range
-_inform_range.argtypes = [POINTER(c_double), c_ulong, POINTER(c_double), POINTER(c_double), POINTER(c_int)]
+_inform_range.argtypes = [POINTER(c_double), c_ulong, POINTER(
+    c_double), POINTER(c_double), POINTER(c_int)]
 _inform_range.restype = c_double
 
 _inform_bin = _inform.inform_bin
-_inform_bin.argtypes = [POINTER(c_double), c_ulong, c_int, POINTER(c_int), POINTER(c_int)]
+_inform_bin.argtypes = [
+    POINTER(c_double), c_ulong, c_int, POINTER(c_int), POINTER(c_int)]
 _inform_bin.restype = c_double
 
 _inform_bin_step = _inform.inform_bin_step
-_inform_bin_step.argtypes = [POINTER(c_double), c_ulong, c_double, POINTER(c_int), POINTER(c_int)]
+_inform_bin_step.argtypes = [
+    POINTER(c_double), c_ulong, c_double, POINTER(c_int), POINTER(c_int)]
 _inform_bin_step.restype = c_int
 
 _inform_bin_bounds = _inform.inform_bin_bounds
-_inform_bin_bounds.argtypes = [POINTER(c_double), c_ulong, POINTER(c_double), c_ulong, POINTER(c_int), POINTER(c_int)]
+_inform_bin_bounds.argtypes = [POINTER(c_double), c_ulong, POINTER(
+    c_double), c_ulong, POINTER(c_int), POINTER(c_int)]
 _inform_bin_bounds.restype = c_int

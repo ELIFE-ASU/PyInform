@@ -3,6 +3,7 @@
 # license that can be found in the LICENSE file.
 from ctypes import CDLL
 
+
 def get_libpath():
     """
     Get the library path of the the distributed inform binary.
@@ -19,11 +20,11 @@ def get_libpath():
     libdir = None
     major, minor, revision = 0, 0, 0
     for _, dirnames, _ in os.walk(root):
-        for dirname in dirnames:
-            match = libre.match(dirname) 
+        for dir in dirnames:
+            match = libre.match(dir)
             if match:
-                a, b, c = tuple(int(x) for x in match.group(1,2,3))
-                if (major, minor, revision) < (a,b,c):
+                a, b, c = tuple(int(x) for x in match.group(1, 2, 3))
+                if (major, minor, revision) < (a, b, c):
                     major, minor, revision = a, b, c
                     libdir = join(root, match.group())
         break
@@ -33,10 +34,10 @@ def get_libpath():
 
     if system() == 'Linux':
         platform = "linux-x86_64"
-        library = "libinform.so.{}.{}.{}".format(major,minor,revision)
+        library = "libinform.so.{}.{}.{}".format(major, minor, revision)
     elif system() == 'Darwin':
         platform = "macosx-x86_64"
-        library = "libinform.{}.{}.{}.dylib".format(major,minor,revision)
+        library = "libinform.{}.{}.{}.dylib".format(major, minor, revision)
     elif system() == 'Windows':
         platform = "win-amd64"
         library = "inform.dll"
@@ -45,17 +46,17 @@ def get_libpath():
 
     return os.path.join(libdir, "lib", platform, library)
 
+
 _inform = CDLL(get_libpath())
 
-from .activeinfo import active_info
-from .blockentropy import block_entropy
-from .conditionalentropy import conditional_entropy
-from .dist import Dist
-from .entropyrate import entropy_rate
-from .error import InformError
-from .mutualinfo import mutual_info
-from .relativeentropy import relative_entropy
-from .transferentropy import transfer_entropy
-
-from . import shannon
-from . import utils
+from . import utils                                  # noqa: F401
+from . import shannon                                # noqa: F401
+from .transferentropy import transfer_entropy        # noqa: F401
+from .relativeentropy import relative_entropy        # noqa: F401
+from .mutualinfo import mutual_info                  # noqa: F401
+from .error import InformError                       # noqa: F401
+from .entropyrate import entropy_rate                # noqa: F401
+from .dist import Dist                               # noqa: F401
+from .conditionalentropy import conditional_entropy  # noqa: F401
+from .blockentropy import block_entropy              # noqa: F401
+from .activeinfo import active_info                  # noqa: F401

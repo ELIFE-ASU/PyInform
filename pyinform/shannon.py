@@ -1,11 +1,9 @@
 # Copyright 2016 ELIFE. All rights reserved.
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
-import numpy as np
-
 from ctypes import c_double, c_void_p
 from pyinform import _inform
-from pyinform.dist import Dist
+
 
 def entropy(p, b=2.0):
     """
@@ -13,16 +11,16 @@ def entropy(p, b=2.0):
 
     Taking :math:`X` to be a random variable with :math:`p_X` a probability
     distribution on :math:`X`, the base-:math:`b` Shannon entropy is defined
-    as 
+    as
 
     .. math::
 
         H(X) = -\\sum_{x} p_X(x) \\log_b p_X(x).
 
     .. rubric:: Examples:
-    
+
     ::
-    
+
         >>> d = Dist([1,1,1,1])
         >>> entropy(d)
         2.0
@@ -30,13 +28,13 @@ def entropy(p, b=2.0):
         1.0
 
     ::
-    
+
         >>> d = Dist([2,1])
         >>> entropy(d)
         0.9182958340544896
         >>> entropy(d, b=3)
         0.579380164285695
-        
+
     See [Shannon1948a]_ for more details.
 
     :param p: the distribution
@@ -46,6 +44,7 @@ def entropy(p, b=2.0):
     :rtype: float
     """
     return _entropy(p._dist, c_double(b))
+
 
 def mutual_info(p_xy, p_x, p_y, b=2.0):
     """
@@ -59,7 +58,7 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
     defined as
 
     .. math::
-    
+
         I(X;Y) &= \\sum_{x,y} p_{X,Y}(x,y) \\log_b \\frac{p_{X,Y}(x,y)}{p_X(x)p_Y(y)}\\\\
                &= H(X) + H(Y) - H(X,Y).
 
@@ -68,13 +67,13 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
 
     To some degree one can think of mutual information as a measure of the
     (linear and non-linear) coorelations between random variables.
-    
+
     See [Cover1991a]_ for more details.
 
-    .. rubric:: Examples: 
-    
+    .. rubric:: Examples:
+
     ::
-    
+
         >>> xy = Dist([10,70,15,5])
         >>> x = Dist([80,20])
         >>> y = Dist([25,75])
@@ -95,6 +94,7 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
     """
     return _mutual_info(p_xy._dist, p_x._dist, p_y._dist, c_double(b))
 
+
 def conditional_entropy(p_xy, p_y, b=2.0):
     """
     Compute the base-*b* conditional entropy given joint (*p_xy*) and marginal
@@ -107,16 +107,16 @@ def conditional_entropy(p_xy, p_y, b=2.0):
     the base-:math:`b` conditional entropy is defined as
 
     .. math::
-    
+
         H(X|Y) &= -\\sum_{x,y} p_{X,Y}(x,y) \\log_b \\frac{p_{X,Y}(x,y)}{p_Y(y)}\\\\
                &= H(X,Y) - H(Y).
-    
+
     See [Cover1991a]_ for more details.
 
     .. rubric:: Examples:
-    
+
     ::
-    
+
         >>> xy = Dist([10,70,15,5])
         >>> x = Dist([80,20])
         >>> y = Dist([25,75])
@@ -137,6 +137,7 @@ def conditional_entropy(p_xy, p_y, b=2.0):
     """
     return _conditional_entropy(p_xy._dist, p_y._dist, c_double(b))
 
+
 def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
     """
     Compute the base-*b* conditional mutual information the given joint
@@ -150,18 +151,18 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
     information is defined as
 
     .. math::
-    
+
         I(X;Y|Z) &= -\\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \\log_b \\frac{p_{X,Y|Z}(x,y|z)}{p_{X|Z}(x|z)p_{Y|Z}(y|z)}\\\\
                  &= -\\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \\log_b \\frac{p_{X,Y,Z}(x,y,z)p_{Z}(z)}{p_{X,Z}(x,z)p_{Y,Z}(y,z)}\\\\
                  &= H(X,Z) + H(Y,Z) - H(Z) - H(X,Y,Z)
-    
-    
+
+
     .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_entropy
 
     .. rubric:: Examples:
-    
+
     ::
-    
+
         >>> xyz = Dist([24,24,9,6,25,15,10,5])
         >>> xz = Dist([15,9,5,10])
         >>> yz = Dist([9,15,10,15])
@@ -182,7 +183,8 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
     :rtype: float
     """
     return _conditional_mutual_info(p_xyz._dist, p_xz._dist, p_yz._dist,
-        p_z._dist, c_double(b))
+                                    p_z._dist, c_double(b))
+
 
 def relative_entropy(p, q, b=2.0):
     """
@@ -196,7 +198,7 @@ def relative_entropy(p, q, b=2.0):
     from the prior :math:`q_X` to the posterior :math:`p_X`:
 
     .. math::
-    
+
         D_{KL}(p_X || q_X) = \\sum_x p_X(x) \\log_b \\frac{p_X(x)}{q_X(x)}.
 
     Many of the information measures, e.g. :py:func:`.mutual_info`,
@@ -204,9 +206,9 @@ def relative_entropy(p, q, b=2.0):
     entropy for various prior and posterior distributions.
 
     .. rubric:: Examples:
-    
+
     ::
-    
+
         >>> p = Dist([4,1])
         >>> q = Dist([1,1])
         >>> relative_entropy(p,q)
@@ -215,7 +217,7 @@ def relative_entropy(p, q, b=2.0):
         0.32192809488736235
 
     ::
-    
+
         >>> p = Dist([1,0])
         >>> q = Dist([1,1])
         >>> relative_entropy(p,q)
@@ -233,6 +235,7 @@ def relative_entropy(p, q, b=2.0):
     """
     return _relative_entropy(p._dist, q._dist, c_double(b))
 
+
 _entropy = _inform.inform_shannon_entropy
 _entropy.argtypes = [c_void_p, c_double]
 _entropy.restype = c_double
@@ -246,7 +249,8 @@ _conditional_entropy.argtypes = [c_void_p, c_void_p, c_double]
 _conditional_entropy.restype = c_double
 
 _conditional_mutual_info = _inform.inform_shannon_cmi
-_conditional_mutual_info.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_double]
+_conditional_mutual_info.argtypes = [
+    c_void_p, c_void_p, c_void_p, c_void_p, c_double]
 _conditional_mutual_info.restype = c_double
 
 _relative_entropy = _inform.inform_shannon_re

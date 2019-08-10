@@ -10,8 +10,8 @@ to construct the empirical distributions and then
 
 .. math::
 
-    H(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_2 \\frac{p(x_i, y_i)}{p(x_i)}.
-    
+    H(Y|X) = -\\sum_{x_i, y_i} p(x_i, y_i) \\log_2 \\frac{p(x_i, y_i)}{p(x_i)}.
+
 This can be viewed as the time-average of the local conditional entropy
 
 .. math::
@@ -47,14 +47,15 @@ Examples
 """
 import numpy as np
 
-from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
+from ctypes import byref, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
+
 
 def conditional_entropy(xs, ys, b=2.0, local=False):
     """
     Compute the (local) conditional entropy between two time series.
-    
+
     This function expects the **condition** to be the first argument.
 
     This function explicitly takes the logarithmic base *b* as an argument.
@@ -75,8 +76,8 @@ def conditional_entropy(xs, ys, b=2.0, local=False):
     if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
-    bx = max(2, np.amax(us)+1)
-    by = max(2, np.amax(vs)+1)
+    bx = max(2, np.amax(us) + 1)
+    by = max(2, np.amax(vs) + 1)
 
     xdata = us.ctypes.data_as(POINTER(c_int))
     ydata = vs.ctypes.data_as(POINTER(c_int))
@@ -87,18 +88,23 @@ def conditional_entropy(xs, ys, b=2.0, local=False):
     if local is True:
         ce = np.empty(us.shape, dtype=np.float64)
         out = ce.ctypes.data_as(POINTER(c_double))
-        _local_conditional_entropy(xdata, ydata, c_ulong(n), c_int(bx), c_int(by), c_double(b), out, byref(e))
+        _local_conditional_entropy(xdata, ydata, c_ulong(
+            n), c_int(bx), c_int(by), c_double(b), out, byref(e))
     else:
-        ce = _conditional_entropy(xdata, ydata, c_ulong(n), c_int(bx), c_int(by), c_double(b), byref(e))
+        ce = _conditional_entropy(xdata, ydata, c_ulong(
+            n), c_int(bx), c_int(by), c_double(b), byref(e))
 
     error_guard(e)
 
     return ce
 
+
 _conditional_entropy = _inform.inform_conditional_entropy
-_conditional_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_int, c_int, c_double, POINTER(c_int)]
+_conditional_entropy.argtypes = [POINTER(c_int), POINTER(
+    c_int), c_ulong, c_int, c_int, c_double, POINTER(c_int)]
 _conditional_entropy.restype = c_double
 
 _local_conditional_entropy = _inform.inform_local_conditional_entropy
-_local_conditional_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_int, c_int, c_double, POINTER(c_double), POINTER(c_int)]
+_local_conditional_entropy.argtypes = [POINTER(c_int), POINTER(
+    c_int), c_ulong, c_int, c_int, c_double, POINTER(c_double), POINTER(c_int)]
 _local_conditional_entropy.restype = c_double

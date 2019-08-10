@@ -6,6 +6,7 @@ import unittest
 
 from pyinform.dist import Dist
 
+
 class TestDist(unittest.TestCase):
     def test_alloc_negative(self):
         with self.assertRaises(ValueError):
@@ -18,16 +19,16 @@ class TestDist(unittest.TestCase):
     def test_alloc_empty(self):
         with self.assertRaises(ValueError):
             Dist([])
-        
+
         with self.assertRaises(ValueError):
             Dist(np.array([]))
 
     def test_alloc_mulitdimensional(self):
         with self.assertRaises(ValueError):
-            Dist([[1,1,2,2]])
+            Dist([[1, 1, 2, 2]])
 
         with self.assertRaises(ValueError):
-            Dist(np.array([[1,1,2,2]]))
+            Dist(np.array([[1, 1, 2, 2]]))
 
     def test_alloc_size(self):
         d = Dist(5)
@@ -35,14 +36,14 @@ class TestDist(unittest.TestCase):
         self.assertEqual(5, len(d))
 
     def test_alloc_list(self):
-        lst = [1,1,2,2]
+        lst = [1, 1, 2, 2]
         d = Dist(lst)
         self.assertEqual(4, len(d))
         for i in range(len(d)):
             self.assertEqual(lst[i], d[i])
 
     def test_alloc_list_copies(self):
-        lst = [0,0,0,0]
+        lst = [0, 0, 0, 0]
         d = Dist(lst)
         for i in range(len(d)):
             d[i] = i
@@ -50,14 +51,14 @@ class TestDist(unittest.TestCase):
             self.assertEqual(lst[i], 0)
 
     def test_alloc_array(self):
-        arr = np.array([1,1,2,2], dtype=np.uint32)
+        arr = np.array([1, 1, 2, 2], dtype=np.uint32)
         d = Dist(arr)
         self.assertEqual(4, len(d))
         for i in range(len(arr)):
             self.assertEqual(arr[i], d[i])
 
     def test_alloc_array_copies(self):
-        arr = np.array([0,0,0,0], dtype=np.uint32)
+        arr = np.array([0, 0, 0, 0], dtype=np.uint32)
         d = Dist(arr)
         for i in range(len(d)):
             d[i] = i
@@ -77,7 +78,7 @@ class TestDist(unittest.TestCase):
     def test_resize_grow(self):
         d = Dist(3)
         for i in range(len(d)):
-            d[i] = i+1
+            d[i] = i + 1
         self.assertEqual(3, len(d))
         self.assertEqual(6, d.counts())
 
@@ -85,14 +86,14 @@ class TestDist(unittest.TestCase):
         self.assertEqual(5, len(d))
         self.assertEqual(6, d.counts())
         for i in range(3):
-            self.assertEqual(i+1, d[i])
-        for i in range(3,len(d)):
+            self.assertEqual(i + 1, d[i])
+        for i in range(3, len(d)):
             self.assertEqual(0, d[i])
 
     def test_resize_shrink(self):
         d = Dist(5)
         for i in range(len(d)):
-            d[i] = i+1
+            d[i] = i + 1
         self.assertEqual(5, len(d))
         self.assertEqual(15, d.counts())
 
@@ -100,12 +101,12 @@ class TestDist(unittest.TestCase):
         self.assertEqual(3, len(d))
         self.assertEqual(6, d.counts())
         for i in range(len(d)):
-            self.assertEqual(i+1, d[i])
+            self.assertEqual(i + 1, d[i])
 
     def test_copy(self):
         d = Dist(5)
         for i in range(len(d)):
-            d[i] = i+1
+            d[i] = i + 1
         self.assertEqual(5, len(d))
         self.assertEqual(15, d.counts())
 
@@ -217,9 +218,9 @@ class TestDist(unittest.TestCase):
     def test_probability(self):
         d = Dist(5)
         for i in range(len(d)):
-            d[i] = i+1
+            d[i] = i + 1
         for i in range(len(d)):
-            self.assertAlmostEqual((i+1)/15., d.probability(i))
+            self.assertAlmostEqual((i + 1) / 15., d.probability(i))
 
     def test_dump_invalid(self):
         d = Dist(2)
@@ -229,10 +230,12 @@ class TestDist(unittest.TestCase):
     def test_dump(self):
         d = Dist(5)
         for i in range(1, len(d)):
-            d[i] = i+1
+            d[i] = i + 1
         self.assertEqual(14, d.counts())
         probs = d.dump()
-        self.assertTrue((probs == np.array([0., 2./14, 3./14, 4./14, 5./14])).all())
+        self.assertTrue(
+            (probs == np.array([0., 2. / 14, 3. / 14, 4. / 14, 5. / 14])).all())
+
 
 if __name__ == "__main__":
     unittest.main()

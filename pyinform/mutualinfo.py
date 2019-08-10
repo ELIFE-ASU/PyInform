@@ -9,13 +9,13 @@ used to construct the empirical distributions and then
 
 .. math::
 
-    i_{i}(X,Y) = -\log_2 \frac{p(x_i, y_i)}{p(x_i)p(y_i)}.
+    i_{i}(X,Y) = -\\log_2 \\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.
 
 The mutual information is then just the time average of :math:`i_{i}(X,Y)`.
 
 .. math::
 
-    I(X,Y) = -\sum_{x_i, y_i} p(x_i, y_i) \log_2 \\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.
+    I(X,Y) = -\\sum_{x_i, y_i} p(x_i, y_i) \\log_2 \\frac{p(x_i, y_i)}{p(x_i)p(y_i)}.
 
 
 See [Cover1991]_ for more details.
@@ -39,9 +39,10 @@ Examples
 """
 import numpy as np
 
-from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
+from ctypes import byref, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
+
 
 def mutual_info(xs, ys, local=False):
     """
@@ -66,8 +67,8 @@ def mutual_info(xs, ys, local=False):
 
     series = np.ascontiguousarray([us.flatten(), vs.flatten()], dtype=np.int32)
 
-    bx = max(2, np.amax(us)+1)
-    by = max(2, np.amax(vs)+1)
+    bx = max(2, np.amax(us) + 1)
+    by = max(2, np.amax(vs) + 1)
 
     bs = np.ascontiguousarray([bx, by], dtype=np.int32)
 
@@ -80,7 +81,8 @@ def mutual_info(xs, ys, local=False):
     if local is True:
         mi = np.empty(us.shape, dtype=np.float64)
         out = mi.ctypes.data_as(POINTER(c_double))
-        _local_mutual_info(seriesdata, c_ulong(l), c_ulong(n), bsdata, out, byref(e))
+        _local_mutual_info(seriesdata, c_ulong(
+            l), c_ulong(n), bsdata, out, byref(e))
     else:
         mi = _mutual_info(seriesdata, c_ulong(l), c_ulong(n), bsdata, byref(e))
 
@@ -88,10 +90,13 @@ def mutual_info(xs, ys, local=False):
 
     return mi
 
+
 _mutual_info = _inform.inform_mutual_info
-_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_int)]
+_mutual_info.argtypes = [
+    POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_int)]
 _mutual_info.restype = c_double
 
 _local_mutual_info = _inform.inform_local_mutual_info
-_local_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_double), POINTER(c_int)]
+_local_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(
+    c_int), POINTER(c_double), POINTER(c_int)]
 _local_mutual_info.restype = c_double
