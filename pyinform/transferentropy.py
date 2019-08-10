@@ -7,13 +7,13 @@ between two random processes. The local variant of TE is defined as
 
 .. math::
 
-    t_{Y \\rightarrow X, i}(k,b) = \\log_b \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
+    t_{Y \\rightarrow X, i}(k) = \\log_2 \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
 
 Averaging in time we have
 
 .. math::
 
-    T_{Y \\rightarrow X}(k,b) = \\sum_{x^{(k)}_i,\\, x_{i+1},\\, y_i} p(x_{i+1}, y_i, x^{(k)}_i) \\log_b \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
+    T_{Y \\rightarrow X}(k) = \\sum_{x^{(k)}_i,\\, x_{i+1},\\, y_i} p(x_{i+1}, y_i, x^{(k)}_i) \\log_2 \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
     
 As in the case of :ref:`active-information` and :ref:`entropy-rate`, the
 transfer entropy is formally defined as the limit of the :math:`k`-history
@@ -123,21 +123,16 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-def transfer_entropy(source, target, k, b=0, local=False):
+def transfer_entropy(source, target, k, local=False):
     """
     Compute the local or average transfer entropy from one time series to
     another with target history length *k*.
-    
-    If the base *b* is not specified (or is 0), then it is inferred from the
-    time series with 2 as a minimum. *b* must be at least the base of the time
-    series and is used as the base of the logarithm.
 
     :param source: the source time series
     :type source: sequence or ``numpy.ndarray``
     :param target: the target time series
     :type target: sequence or ``numpy.ndarray``
     :param int k: the history length
-    :param int b: the base of the time series and logarithm
     :param bool local: compute the local transfer entropy
     :returns: the average or local transfer entropy
     :rtype: float or ``numpy.ndarray``
@@ -156,8 +151,7 @@ def transfer_entropy(source, target, k, b=0, local=False):
     elif xs.ndim > 2:
         raise ValueError("dimension greater than 2")
 
-    if b == 0:
-        b = max(2, max(np.amax(xs),np.amax(ys)) + 1)
+    b = max(2, max(np.amax(xs), np.amax(ys)) + 1)
 
     ydata = ys.ctypes.data_as(POINTER(c_int))
     xdata = xs.ctypes.data_as(POINTER(c_int))
@@ -170,20 +164,20 @@ def transfer_entropy(source, target, k, b=0, local=False):
 
     if local is True:
         q = max(0, m - k)
-        ai = np.empty((n,q), dtype=np.float64)
-        out = ai.ctypes.data_as(POINTER(c_double))
-        _local_transfer_entropy(ydata, xdata, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
+        te = np.empty((n, q), dtype=np.float64)
+        out = te.ctypes.data_as(POINTER(c_double))
+        _local_transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        ai = _transfer_entropy(ydata, xdata, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+        te = _transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
-    return ai
+    return te
 
 _transfer_entropy = _inform.inform_transfer_entropy
-_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _transfer_entropy.restype = c_double
 
 _local_transfer_entropy = _inform.inform_local_transfer_entropy
-_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_transfer_entropy.restype = POINTER(c_double)

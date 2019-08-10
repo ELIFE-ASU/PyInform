@@ -29,20 +29,9 @@ class TestEntropyRate(unittest.TestCase):
         with self.assertRaises(InformError):
             entropy_rate([1,2], k=3)
 
-    def test_entropy_rate_invalid_base(self):
-        with self.assertRaises(InformError):
-            entropy_rate([0,0,1], k=1, b=-1)
-
-        with self.assertRaises(InformError):
-            entropy_rate([0,0,1], k=1, b=1)
-
     def test_entropy_rate_negative_states(self):
         with self.assertRaises(InformError):
             entropy_rate([-1,0,0], k=3)
-
-    def test_entropy_rate_bad_states(self):
-        with self.assertRaises(InformError):
-            entropy_rate([0,2,0], k=3, b=2)
 
     def test_entropy_rate_base_2(self):
         self.assertAlmostEqual(0.000000,
@@ -88,21 +77,18 @@ class TestEntropyRate(unittest.TestCase):
         self.assertAlmostEqual(0.610249, entropy_rate(xs, 2), places=6)
 
     def test_entropy_rate_base_4(self):
-        self.assertAlmostEqual(0.285714,
+        self.assertAlmostEqual(0.571429,
                 entropy_rate([3,3,3,2,1,0,0,0,1], 2), places=6)
 
-        self.assertAlmostEqual(0.196778,
+        self.assertAlmostEqual(0.393555,
                 entropy_rate([2,2,3,3,3,3,2,1,0], 2), places=6)
-
-        self.assertAlmostEqual(0.257831,
-                entropy_rate([2,2,2,2,2,2,1,1,1], 2, b=4), places=6)
 
     def test_entropy_rate_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(0.272234, entropy_rate(xs, 2), places=6)
+        self.assertAlmostEqual(0.544468, entropy_rate(xs, 2), places=6)
 
 class TestLocalEntropyRate(unittest.TestCase):
     def test_entropy_rate_empty(self):
@@ -128,20 +114,9 @@ class TestLocalEntropyRate(unittest.TestCase):
         with self.assertRaises(InformError):
             entropy_rate([1,2], k=3, local=True)
 
-    def test_entropy_rate_invalid_base(self):
-        with self.assertRaises(InformError):
-            entropy_rate([0,0,1], k=1, b=-1, local=True)
-
-        with self.assertRaises(InformError):
-            entropy_rate([0,0,1], k=1, b=1, local=True)
-
     def test_entropy_rate_negative_states(self):
         with self.assertRaises(InformError):
             entropy_rate([-1,0,0], k=3, local=True)
-
-    def test_entropy_rate_bad_states(self):
-        with self.assertRaises(InformError):
-            entropy_rate([0,2,0], k=3, b=2, local=True)
 
     def test_entropy_rate_base_2(self):
         self.assertAlmostEqual(0.000000,
@@ -188,21 +163,18 @@ class TestLocalEntropyRate(unittest.TestCase):
         self.assertAlmostEqual(0.610249, entropy_rate(xs, 2, local=True).mean(), places=6)
 
     def test_entropy_rate_base_4(self):
-        self.assertAlmostEqual(0.285714,
+        self.assertAlmostEqual(0.571429,
                 entropy_rate([3,3,3,2,1,0,0,0,1], 2, local=True).mean(), places=6)
 
-        self.assertAlmostEqual(0.196778,
+        self.assertAlmostEqual(0.393555,
                 entropy_rate([2,2,3,3,3,3,2,1,0], 2, local=True).mean(), places=6)
-
-        self.assertAlmostEqual(0.257831,
-                entropy_rate([2,2,2,2,2,2,1,1,1], 2, b=4, local=True).mean(), places=6)
 
     def test_entropy_rate_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(0.272234,
+        self.assertAlmostEqual(0.544468,
                 entropy_rate(xs, 2, local=True).mean(), places=6)
 
 if __name__ == "__main__":

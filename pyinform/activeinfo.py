@@ -8,23 +8,23 @@ a temporally local variant
 
 .. math::
 
-    a_{X,i}(k,b) = \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.
+    a_{X,i}(k) = \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.
     
 where the probabilities are constructed empirically from the *entire* time
 series. From the local variant, the temporally global active information as
 
 .. math::
 
-    A_X(k,b) = \\langle a_{X,i}(k,b) \\rangle_{i}
-             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.
+    A_X(k) = \\langle a_{X,i}(k) \\rangle_{i}
+             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)p(x_{i+1})}.
 
 Strictly speaking, the local and average active information are defined as
 
 .. math::
 
-    a_{X,i}(b) = \\lim_{k \\rightarrow \infty} a_{X,i}(k,b)
+    a_{X,i}(k) = \\lim_{k \\rightarrow \infty} a_{X,i}(k)
     \\quad \\textrm{and} \\quad
-    A_X(b) = \\lim_{k \\rightarrow \infty} A_X(k,b),
+    A_X = \\lim_{k \\rightarrow \infty} A_X(k),
 
 but we do not provide limiting functionality in this library (yet!).
 
@@ -43,23 +43,6 @@ The typical usage is to provide the time series as a sequence (or
     >>> active_info([0,0,1,1,1,1,0,0,0], k=2, local=True)
     array([[-0.19264508,  0.80735492,  0.22239242,  0.22239242, -0.36257008,
              1.22239242,  0.22239242]])
-
-You can always override the base, but be careful: ::
-
-    >>> active_info([0,0,1,1,2,2], k=2)
-    0.6309297535714575
-    >>> active_info([0,0,1,1,2,2], k=2, b=3)
-    0.6309297535714575
-    >>> active_info([0,0,1,1,2,2], k=2, b=4)
-    0.5
-    >>> active_info([0,0,1,1,2,2], k=2, b=2)
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "pyinform/activeinfo.py", line 126, in active_info
-    
-      File "pyinform/error.py", line 57, in error_guard
-        raise InformError(e,func)
-    pyinform.error.InformError: an inform error occurred - "unexpected state in timeseries"
 
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -102,19 +85,14 @@ from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
 
-def active_info(series, k, b=0, local=False):
+def active_info(series, k, local=False):
     """
     Compute the average or local active information of a timeseries with history
     length *k*.
-    
-    If the base *b* is not specified (or is 0), then it is inferred from the
-    time series with 2 as a minimum. *b* must be at least the base of the time
-    series and is used as the base of the logarithm.
 
     :param series: the time series
     :type series: sequence or ``numpy.ndarray``
     :param int k: the history length
-    :param int b: the base of the time series and logarithm
     :param bool local: compute the local active information
     :returns: the average or local active information
     :rtype: float or ``numpy.ndarray``
@@ -129,8 +107,7 @@ def active_info(series, k, b=0, local=False):
     elif xs.ndim > 2:
         raise ValueError("dimension greater than 2")
 
-    if b == 0:
-        b = max(2, np.amax(xs)+1)
+    b = max(2, np.amax(xs)+1)
 
     data = xs.ctypes.data_as(POINTER(c_int))
     if xs.ndim == 1:

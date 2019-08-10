@@ -30,26 +30,12 @@ class TestConditionalEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             conditional_entropy([1,2], [1,2,3])
 
-    def test_conditional_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            conditional_entropy([0,0,1], [0,0,1], bx=1)
-
-        with self.assertRaises(InformError):
-            conditional_entropy([0,0,1], [0,0,1], by=1)
-
     def test_conditional_entropy_negative_states(self):
         with self.assertRaises(InformError):
             conditional_entropy([-1,0,0], [0,0,1])
 
         with self.assertRaises(InformError):
             conditional_entropy([1,0,0], [0,0,-1])
-
-    def test_conditional_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            conditional_entropy([0,2,0], [0,0,1], bx=2)
-
-        with self.assertRaises(InformError):
-            conditional_entropy([0,1,0], [0,0,2], by=2)
 
     def test_conditional_entropy(self):
         self.assertAlmostEqual(0.899985,
@@ -68,7 +54,7 @@ class TestConditionalEntropy(unittest.TestCase):
                 conditional_entropy([1,1,0,1,0,1,1,1,0], [1,1,0,0,0,1,0,1,1]), places=6)
 
         self.assertAlmostEqual(0.918296,
-                conditional_entropy([0,0,0,0,0,0,0,0,0], [1,1,1,0,0,0,1,1,1], bx=2), places=6)
+                conditional_entropy([0,0,0,0,0,0,0,0,0], [1,1,1,0,0,0,1,1,1]), places=6)
 
         self.assertAlmostEqual(0.845516,
                 conditional_entropy([1,1,1,1,0,0,0,0,1], [1,1,1,0,0,0,1,1,1]), places=6)
@@ -127,26 +113,12 @@ class TestLocalConditionalEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             conditional_entropy([1,2], [1,2,3], local=True)
 
-    def test_conditional_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            conditional_entropy([0,0,1], [0,0,1], bx=1, local=True)
-
-        with self.assertRaises(InformError):
-            conditional_entropy([0,0,1], [0,0,1], by=1, local=True)
-
     def test_conditional_entropy_negative_states(self):
         with self.assertRaises(InformError):
             conditional_entropy([-1,0,0], [0,0,1], local=True)
 
         with self.assertRaises(InformError):
             conditional_entropy([1,0,0], [0,0,-1], local=True)
-
-    def test_conditional_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            conditional_entropy([0,2,0], [0,0,1], bx=2, local=True)
-
-        with self.assertRaises(InformError):
-            conditional_entropy([0,1,0], [0,0,2], by=2, local=True)
 
     def test_conditional_entropy_base_2(self):
         self.assertAlmostEqual(0.899985,
@@ -165,7 +137,7 @@ class TestLocalConditionalEntropy(unittest.TestCase):
                 conditional_entropy([1,1,0,1,0,1,1,1,0], [1,1,0,0,0,1,0,1,1], local=True).mean(), places=6)
 
         self.assertAlmostEqual(0.918296,
-                conditional_entropy([0,0,0,0,0,0,0,0,0], [1,1,1,0,0,0,1,1,1], bx=2, local=True).mean(), places=6)
+                conditional_entropy([0,0,0,0,0,0,0,0,0], [1,1,1,0,0,0,1,1,1], local=True).mean(), places=6)
 
         self.assertAlmostEqual(0.845516,
                 conditional_entropy([1,1,1,1,0,0,0,0,1], [1,1,1,0,0,0,1,1,1], local=True).mean(), places=6)

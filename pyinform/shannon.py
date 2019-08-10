@@ -233,7 +233,7 @@ def relative_entropy(p, q, b=2.0):
     """
     return _relative_entropy(p._dist, q._dist, c_double(b))
 
-_entropy = _inform.inform_shannon
+_entropy = _inform.inform_shannon_entropy
 _entropy.argtypes = [c_void_p, c_double]
 _entropy.restype = c_double
 

@@ -55,21 +55,17 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-def relative_entropy(xs, ys, b=0, base=2.0, local=False):
+def relative_entropy(xs, ys, b=2.0, local=False):
     """
     Compute the local or global relative entropy between two time series
     treating each as observations from a distribution.
     
-    The base *b* is inferred from the time series if it is not provided (or is
-    0). The minimum value is 2.
-    
-    This function explicitly takes the logarithmic base *base* as an argument.
+    This function explicitly takes the logarithmic base *b* as an argument.
     
     :param xs: the time series sampled from the posterior distribution
     :type xs: a sequence or ``numpy.ndarray``
     :param ys: the time series sampled from the prior distribution
     :type ys: a sequence or ``numpy.ndarray``
-    :param int b: the base of the time series
     :param double b: the logarithmic base
     :param bool local: compute the local relative entropy
     :return: the local or global relative entropy
@@ -82,8 +78,7 @@ def relative_entropy(xs, ys, b=0, base=2.0, local=False):
     if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
-    if b == 0:
-        b = max(2, np.amax(us)+1, np.amax(vs)+1)
+    base = max(2, np.amax(us)+1, np.amax(vs)+1)
 
     xdata = us.ctypes.data_as(POINTER(c_int))
     ydata = vs.ctypes.data_as(POINTER(c_int))
@@ -92,11 +87,11 @@ def relative_entropy(xs, ys, b=0, base=2.0, local=False):
     e = ErrorCode(0)
 
     if local is True:
-        re = np.empty(b, dtype=np.float64)
+        re = np.empty(base, dtype=np.float64)
         out = re.ctypes.data_as(POINTER(c_double))
-        _local_relative_entropy(xdata, ydata, c_ulong(n), c_int(b), c_double(base), out, byref(e))
+        _local_relative_entropy(xdata, ydata, c_ulong(n), c_int(base), c_double(b), out, byref(e))
     else:
-        re = _relative_entropy(xdata, ydata, c_ulong(n), c_int(b), c_double(base), byref(e))
+        re = _relative_entropy(xdata, ydata, c_ulong(n), c_int(base), c_double(b), byref(e))
 
     error_guard(e)
 

@@ -9,23 +9,23 @@ entropy rate
 
 .. math::
 
-    h_{X,i}(k,b) = \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}
+    h_{X,i}(k) = \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}
 
 can be averaged to obtain the global entropy rate
 
 .. math::
 
-    H_X(k,b) = \\langle h_{X,i}(k,b) \\rangle_{i}
-             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}.
+    H_X(k) = \\langle h_{X,i}(k) \\rangle_{i}
+             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}.
 
 Much as with :ref:`active-information`, the local and average entropy rates are
 formally obtained in the limit
 
 .. math::
 
-    h_{X,i}(b) = \\lim_{k \\rightarrow \infty} h_{X,i}(k,b)
+    h_{X,i} = \\lim_{k \\rightarrow \infty} h_{X,i}(k)
     \\quad \\textrm{and} \\quad
-    H_X(b) = \\lim_{k \\rightarrow \infty} H_X(k,b),
+    H_X = \\lim_{k \\rightarrow \infty} H_X(k),
 
 but we do not provide limiting functionality in this library (yet!).
 
@@ -48,21 +48,8 @@ just provide the time series and the history length, and let
     >>> entropy_rate([0,0,1,1,1,1,0,0,0], k=2, local=True)
     array([[ 1.       ,  0.       ,  0.5849625,  0.5849625,  1.5849625,
              0.       ,  1.       ]])
-             
-As with all of the time series measures, you can override the default base. ::
-
     >>> entropy_rate([0,0,1,1,1,1,2,2,2], k=2)
     0.24830578469386944
-    >>> entropy_rate([0,0,1,1,1,1,2,2,2], k=2, b=4)
-    0.19677767872596208
-    >>> entropy_rate([0,0,1,1,1,1,2,2,2], k=2, b=2)
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "/home/ubuntu/workspace/pyinform/entropyrate.py", line 79, in entropy_rate
-        error_guard(e)
-      File "/home/ubuntu/workspace/pyinform/error.py", line 57, in error_guard
-        raise InformError(e,func)
-    pyinform.error.InformError: an inform error occurred - "unexpected state in timeseries"
 
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -89,15 +76,10 @@ def entropy_rate(series, k, b=0, local=False):
     """
     Compute the average or local entropy rate of a time series with history
     length *k*.
-    
-    If the base *b* is not specified (or is 0), then it is inferred from the
-    time series (with 2) as a minimum. *b* must be at least the base of the time
-    series and is used a the base of the logarithm.
 
     :param series: the time series
     :type series: sequence or ``numpy.ndarray``
     :param int k: the history length
-    :param int b: the base of the time series and logarithm
     :param bool local: compute the local active information
     :returns: the average or local entropy rate
     :rtype: float or ``numpy.ndarray``
@@ -112,8 +94,7 @@ def entropy_rate(series, k, b=0, local=False):
     elif xs.ndim > 2:
         raise ValueError("dimension greater than 2")
 
-    if b == 0:
-        b = max(2, np.amax(xs)+1)
+    b = max(2, np.amax(xs)+1)
 
     data = xs.ctypes.data_as(POINTER(c_int))
     if xs.ndim == 1:

@@ -29,20 +29,9 @@ class TestActiveInfo(unittest.TestCase):
         with self.assertRaises(InformError):
             active_info([1,2], k=3)
 
-    def test_active_info_invalid_base(self):
-        with self.assertRaises(InformError):
-            active_info([0,0,1], k=1, b=-1)
-
-        with self.assertRaises(InformError):
-            active_info([0,0,1], k=1, b=1)
-
     def test_active_info_negative_states(self):
         with self.assertRaises(InformError):
             active_info([-1,0,0], k=3)
-
-    def test_active_info_bad_states(self):
-        with self.assertRaises(InformError):
-            active_info([0,2,0], k=3, b=2)
 
     def test_active_info_base_2(self):
         self.assertAlmostEqual(0.918296,
@@ -88,21 +77,18 @@ class TestActiveInfo(unittest.TestCase):
         self.assertAlmostEqual(0.3080467, active_info(xs, 2), places=6)
 
     def test_active_info_base_4(self):
-        self.assertAlmostEqual(0.635471,
+        self.assertAlmostEqual(1.270942,
                 active_info([3,3,3,2,1,0,0,0,1], 2), places=6)
 
-        self.assertAlmostEqual(0.635471,
+        self.assertAlmostEqual(1.270942,
                 active_info([2,2,3,3,3,3,2,1,0], 2), places=6)
-
-        self.assertAlmostEqual(0.234783,
-                active_info([2,2,2,2,2,2,1,1,1], 2, b=4), places=6)
 
     def test_active_info_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(0.662146, active_info(xs, 2), places=6)
+        self.assertAlmostEqual(1.324291, active_info(xs, 2), places=6)
 
 class TestLocalActiveInfo(unittest.TestCase):
     def test_active_info_empty(self):
@@ -128,20 +114,9 @@ class TestLocalActiveInfo(unittest.TestCase):
         with self.assertRaises(InformError):
             active_info([1,2], k=3, local=True)
 
-    def test_active_info_invalid_base(self):
-        with self.assertRaises(InformError):
-            active_info([0,0,1], k=1, b=-1, local=True)
-
-        with self.assertRaises(InformError):
-            active_info([0,0,1], k=1, b=1, local=True)
-
     def test_active_info_negative_states(self):
         with self.assertRaises(InformError):
             active_info([-1,0,0], k=3, local=True)
-
-    def test_active_info_bad_states(self):
-        with self.assertRaises(InformError):
-            active_info([0,2,0], k=3, b=2, local=True)
 
     def test_active_info_base_2(self):
         self.assertAlmostEqual(0.918296,
@@ -188,21 +163,18 @@ class TestLocalActiveInfo(unittest.TestCase):
         self.assertAlmostEqual(0.3080467, active_info(xs, 2, local=True).mean(), places=6)
 
     def test_active_info_base_4(self):
-        self.assertAlmostEqual(0.635471,
+        self.assertAlmostEqual(1.270942,
                 active_info([3,3,3,2,1,0,0,0,1], 2, local=True).mean(), places=6)
 
-        self.assertAlmostEqual(0.635471,
+        self.assertAlmostEqual(1.270942,
                 active_info([2,2,3,3,3,3,2,1,0], 2, local=True).mean(), places=6)
-
-        self.assertAlmostEqual(0.234783,
-                active_info([2,2,2,2,2,2,1,1,1], 2, b=4, local=True).mean(), places=6)
 
     def test_active_info_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(0.662146,
+        self.assertAlmostEqual(1.324291,
                 active_info(xs, 2, local=True).mean(), places=6)
 
 if __name__ == "__main__":

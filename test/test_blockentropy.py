@@ -29,20 +29,9 @@ class TestBlockEntropy(unittest.TestCase):
         with self.assertRaises(InformError):
             block_entropy([1,2], k=3)
 
-    def test_block_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            block_entropy([0,0,1], k=1, b=-1)
-
-        with self.assertRaises(InformError):
-            block_entropy([0,0,1], k=1, b=1)
-
     def test_block_entropy_negative_states(self):
         with self.assertRaises(InformError):
             block_entropy([-1,0,0], k=3)
-
-    def test_block_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            block_entropy([0,2,0], k=3, b=2)
 
     def test_block_entropy_base_2(self):
         self.assertAlmostEqual(1.950212,
@@ -88,21 +77,18 @@ class TestBlockEntropy(unittest.TestCase):
         self.assertAlmostEqual(1.649204, block_entropy(xs, 2), places=6)
 
     def test_block_entropy_base_4(self):
-        self.assertAlmostEqual(1.250000,
+        self.assertAlmostEqual(2.500000,
                 block_entropy([3,3,3,2,1,0,0,0,1], 2), places=6)
 
-        self.assertAlmostEqual(1.202820,
+        self.assertAlmostEqual(2.405639,
                 block_entropy([2,2,3,3,3,3,2,1,0], 2), places=6)
-
-        self.assertAlmostEqual(0.649397,
-                block_entropy([2,2,2,2,2,2,1,1,1], 2, b=4), places=6)
 
     def test_block_entropy_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(1.505488, block_entropy(xs, 2), places=6)
+        self.assertAlmostEqual(3.010977, block_entropy(xs, 2), places=6)
 
 class TestLocalBlockEntropy(unittest.TestCase):
     def test_block_entropy_empty(self):
@@ -128,20 +114,9 @@ class TestLocalBlockEntropy(unittest.TestCase):
         with self.assertRaises(InformError):
             block_entropy([1,2], k=3, local=True)
 
-    def test_block_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            block_entropy([0,0,1], k=1, b=-1, local=True)
-
-        with self.assertRaises(InformError):
-            block_entropy([0,0,1], k=1, b=1, local=True)
-
     def test_block_entropy_negative_states(self):
         with self.assertRaises(InformError):
             block_entropy([-1,0,0], k=3, local=True)
-
-    def test_block_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            block_entropy([0,2,0], k=3, b=2, local=True)
 
     def test_block_entropy_base_2(self):
         self.assertAlmostEqual(1.950212,
@@ -188,21 +163,18 @@ class TestLocalBlockEntropy(unittest.TestCase):
         self.assertAlmostEqual(1.649204, block_entropy(xs, 2, local=True).mean(), places=6)
 
     def test_block_entropy_base_4(self):
-        self.assertAlmostEqual(1.250000,
+        self.assertAlmostEqual(2.500000,
                 block_entropy([3,3,3,2,1,0,0,0,1], 2, local=True).mean(), places=6)
 
-        self.assertAlmostEqual(1.202820,
+        self.assertAlmostEqual(2.405639,
                 block_entropy([2,2,3,3,3,3,2,1,0], 2, local=True).mean(), places=6)
-
-        self.assertAlmostEqual(0.649397,
-                block_entropy([2,2,2,2,2,2,1,1,1], 2, b=4, local=True).mean(), places=6)
 
     def test_block_entropy_base_4_ensemble(self):
         xs = [[3,3,3,2,1,0,0,0,1],
               [2,2,3,3,3,3,2,1,0],
               [0,0,0,0,1,1,0,0,0],
               [1,1,0,0,0,1,1,2,2]]
-        self.assertAlmostEqual(1.505488,
+        self.assertAlmostEqual(3.010977,
                 block_entropy(xs, 2, local=True).mean(), places=6)
 
 if __name__ == "__main__":

@@ -50,26 +50,12 @@ class TestTransferEntropy(unittest.TestCase):
         with self.assertRaises(InformError):
             transfer_entropy([1,2], [1,2], k=3)
 
-    def test_transfer_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,1], [0,0,1], k=1, b=-1)
-
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,1], [0,0,1], k=1, b=1)
-
     def test_transfer_entropy_negative_states(self):
         with self.assertRaises(InformError):
             transfer_entropy([-1,0,0], [1,1,1], k=3)
 
         with self.assertRaises(InformError):
             transfer_entropy([1,0,0], [-1,1,1], k=3)
-
-    def test_transfer_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            transfer_entropy([0,2,0], [1,1,1], k=3, b=2)
-
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,0], [0,0,2], k=3, b=2)
 
     def test_transfer_entropy_base_2(self):
         xs = [1,1,1,0,0]
@@ -179,26 +165,12 @@ class TestLocalTransferEntropy(unittest.TestCase):
         with self.assertRaises(InformError):
             transfer_entropy([1,2], [1,2], k=3, local=True)
 
-    def test_transfer_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,1], [0,0,1], k=1, b=-1, local=True)
-
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,1], [0,0,1], k=1, b=1, local=True)
-
     def test_transfer_entropy_negative_states(self):
         with self.assertRaises(InformError):
             transfer_entropy([-1,0,0], [1,1,1], k=3, local=True)
 
         with self.assertRaises(InformError):
             transfer_entropy([1,0,0], [-1,1,1], k=3, local=True)
-
-    def test_transfer_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            transfer_entropy([0,2,0], [1,1,1], k=3, b=2, local=True)
-
-        with self.assertRaises(InformError):
-            transfer_entropy([0,0,0], [0,0,2], k=3, b=2, local=True)
 
     def test_transfer_entropy_base_2(self):
         xs = [1,1,1,0,0]

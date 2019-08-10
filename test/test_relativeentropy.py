@@ -43,20 +43,12 @@ class TestRelativeEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             relative_entropy([1,2], [1,2,3])
 
-    def test_relative_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            relative_entropy([0,0,1], [0,0,1], b=1)
-
     def test_relative_entropy_negative_states(self):
         with self.assertRaises(InformError):
             relative_entropy([-1,0,0], [0,0,1])
 
         with self.assertRaises(InformError):
             relative_entropy([1,0,0], [0,0,-1])
-
-    def test_relative_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            relative_entropy([0,2,0], [0,0,1], b=2)
 
     def test_relative_entropy(self):
         self.assertAlmostEqual(0.038331,
@@ -110,11 +102,11 @@ class TestRelativeEntropy(unittest.TestCase):
     def test_relative_entropy_2D(self):
         xs = np.random.randint(0,5,20)
         ys = np.random.randint(0,5,20)
-        expect = relative_entropy(xs, ys, b=5)
+        expect = relative_entropy(xs, ys)
 
         us = np.copy(np.reshape(xs, (4,5)))
         vs = np.copy(np.reshape(ys, (4,5)))
-        got = relative_entropy(us, vs, b=5)
+        got = relative_entropy(us, vs)
 
         self.assertQuasiEqual(expect, got)
 
@@ -157,20 +149,12 @@ class TestLocalRelativeEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             relative_entropy([1,2], [1,2,3], local=True)
 
-    def test_relative_entropy_invalid_base(self):
-        with self.assertRaises(InformError):
-            relative_entropy([0,0,1], [0,0,1], b=1, local=True)
-
     def test_relative_entropy_negative_states(self):
         with self.assertRaises(InformError):
             relative_entropy([-1,0,0], [0,0,1], local=True)
 
         with self.assertRaises(InformError):
             relative_entropy([1,0,0], [0,0,-1], local=True)
-
-    def test_relative_entropy_bad_states(self):
-        with self.assertRaises(InformError):
-            relative_entropy([0,2,0], [0,0,1], b=2, local=True)
 
     def test_relative_entropy(self):
         self.assertQuasiEqual([-0.263034, 0.415037],
@@ -228,12 +212,12 @@ class TestLocalRelativeEntropy(unittest.TestCase):
     def test_relative_entropy_2D(self):
         xs = np.random.randint(0,5,20)
         ys = np.random.randint(0,5,20)
-        expect = relative_entropy(xs, ys, b=5, local=True)
+        expect = relative_entropy(xs, ys, local=True)
         self.assertEqual((5,), expect.shape)
 
         us = np.copy(np.reshape(xs, (4,5)))
         vs = np.copy(np.reshape(ys, (4,5)))
-        got = relative_entropy(us, vs, b=5, local=True)
+        got = relative_entropy(us, vs, local=True)
         self.assertTrue((5,), got.shape)
 
         self.assertQuasiEqual(expect, np.reshape(got,expect.shape))

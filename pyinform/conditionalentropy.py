@@ -10,13 +10,13 @@ to construct the empirical distributions and then
 
 .. math::
 
-    H_b(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_b \\frac{p(x_i, y_i)}{p(x_i)}.
+    H(Y|X) = -\sum_{x_i, y_i} p(x_i, y_i) \\log_2 \\frac{p(x_i, y_i)}{p(x_i)}.
     
 This can be viewed as the time-average of the local conditional entropy
 
 .. math::
 
-    h_{b,i}(Y|X) = -\\log_b \\frac{p(x_i, y_i)}{p(x_i)}.
+    h_{i}(Y|X) = -\\log_2 \\frac{p(x_i, y_i)}{p(x_i)}.
 
 
 See [Cover1991]_ for more information.
@@ -51,23 +51,18 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-def conditional_entropy(xs, ys, bx=0, by=0, b=2.0, local=False):
+def conditional_entropy(xs, ys, b=2.0, local=False):
     """
     Compute the (local) conditional entropy between two time series.
     
     This function expects the **condition** to be the first argument.
-    
-    The bases *bx* and *by* are inferred from their respective time series if
-    they are not provided (or are 0). The minimum value in both cases is 2.
-    
+
     This function explicitly takes the logarithmic base *b* as an argument.
-    
+
     :param xs: the time series drawn from the conditional distribution
     :type xs: a sequence or ``numpy.ndarray``
     :param ys: the time series drawn from the target distribution
     :type ys: a sequence or ``numpy.ndarray``
-    :param int bx: the base of the conditional time series
-    :param int by: the base of the target time series
     :param double b: the logarithmic base
     :param bool local: compute the local conditional entropy
     :return: the local or average conditional entropy
@@ -80,11 +75,8 @@ def conditional_entropy(xs, ys, bx=0, by=0, b=2.0, local=False):
     if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
-    if bx == 0:
-        bx = max(2, np.amax(us)+1)
-
-    if by == 0:
-        by = max(2, np.amax(vs)+1)
+    bx = max(2, np.amax(us)+1)
+    by = max(2, np.amax(vs)+1)
 
     xdata = us.ctypes.data_as(POINTER(c_int))
     ydata = vs.ctypes.data_as(POINTER(c_int))

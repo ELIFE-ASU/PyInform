@@ -10,7 +10,7 @@ with open('README.rst') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-inform_version = "0.0.5"
+inform_version = "1.0.0"
 inform_files = [
     "README.rst",
     "LICENSE",

@@ -8,7 +8,7 @@ of a time series (or sequence):
 
 .. math::
 
-    H_b(X^{(k)}) = -\\sum_{x^{(k)}_i} p(x^{(k)}_i) \\log_b p(x^{(k)}_i)
+    H(X^{(k)}) = -\\sum_{x^{(k)}_i} p(x^{(k)}_i) \\log_2 p(x^{(k)}_i)
     
 which of course reduces to the traditional Shannon entropy for ``k == 1``. Much
 as with :ref:`active-information`, the ideal usage is to take
@@ -37,14 +37,6 @@ The typical usage is to provide the time series as a sequence (or
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, local=True)
     array([[ 1.4150375,  3.       ,  1.4150375,  1.4150375,  1.4150375,
             3.       ,  1.4150375,  1.4150375]])
-            
-You can override the base so that the entropy is in the unit interval: ::
-
-    >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, b=4)
-    0.9056390622295665
-    >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, local=True)
-    array([[ 0.70751875,  1.5       ,  0.70751875,  0.70751875,  0.70751875,
-             1.5       ,  0.70751875,  0.70751875]])
 
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,18 +63,13 @@ from ctypes import byref, c_char_p, c_int, c_ulong, c_double, POINTER
 from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
-def block_entropy(series, k, b=0, local=False):
+def block_entropy(series, k, local=False):
     """
     Compute the (local) block entropy of a time series with block size *k*.
-    
-    If *b* is 0, then the base is inferred from the time series with a minimum
-    value of 2. The base *b* must be at least the base of the time series and
-    is used as the base of the logarithm.
 
     :param series: the time series
     :type series: sequence or `numpy.ndarray`
     :param int k: the block size
-    :param int b: the base of the logarithm
     :param bool local: compute the local block entropy
     :returns: the average or local block entropy
     :rtype: float or `numpy.ndarray`
@@ -97,8 +84,7 @@ def block_entropy(series, k, b=0, local=False):
     elif xs.ndim > 2:
         raise ValueError("dimension greater than 2")
 
-    if b == 0:
-        b = max(2, np.amax(xs)+1)
+    b = max(2, np.amax(xs)+1)
 
     data = xs.ctypes.data_as(POINTER(c_int))
     if xs.ndim == 1:
