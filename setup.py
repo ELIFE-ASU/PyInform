@@ -27,7 +27,7 @@ setup(
     maintainer_email='douglas.g.moore@asu.edu',
     url='https://github.com/elife-asu/pyinform',
     license=license,
-    requires=['numpy'],
+    install_requires=['numpy'],
     packages=['pyinform', 'pyinform.utils'],
     package_data={'pyinform': inform_files},
     test_suite="test",
