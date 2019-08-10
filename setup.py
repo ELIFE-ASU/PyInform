@@ -24,7 +24,7 @@ setup(
     description='A wrapper for the Inform library',
     long_description=readme,
     maintainer='Douglas G. Moore',
-    maintainer_email='douglas.g.moore@asu.edu',
+    maintainer_email='doug@dglmoore.com',
     url='https://github.com/elife-asu/pyinform',
     license=license,
     install_requires=['numpy'],
