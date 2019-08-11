@@ -15,7 +15,7 @@ or use the ``requirements.txt`` provided in the PyInform git repo::
 
 PyInform is continuously tested on **Linux** and **Windows** via `Travis-CI`_
 and `AppVeyor`_ respectively, and used regularly on **OS X** by the
-maintainers. Python version 2.7 and 3.4 to 3.7 are supported.
+maintainers. Python version 2.7 and 3.5 to 3.7 are supported.
 
 .. _NumPy: http://www.numpy.org/
 .. _Travis-CI: https://travis-ci.org/ELIFE-ASU/PyInform
