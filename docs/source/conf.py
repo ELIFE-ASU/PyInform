@@ -52,8 +52,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyInform'
-copyright = '2016, ELIFE'
-author = 'ELife ASU'
+copyright = '2016-2019, Douglas G. Moore'
+author = 'Douglas G. Moore'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -180,7 +180,7 @@ html_static_path = ['_static']
 #html_show_sphinx = True
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
-#html_show_copyright = True
+html_show_copyright = True
 
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
@@ -228,7 +228,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'PyInform.tex', 'PyInform Documentation',
-     'ELife ASU', 'manual'),
+     'Douglas G. Moore', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
