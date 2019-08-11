@@ -8,19 +8,14 @@ PyInform is installable under **Linux**, **OS X** and **Windows** via pip. To
 install, all you have to do is ::
 
     $ pip install pyinform
-
-If you don't already have `NumPy`_ installed, you can either install it manually
-via ::
-
-    $ pip install numpy
     
-or use the ``REQUIREMENTS.txt`` provided in the PyInform git repo::
+or use the ``requirements.txt`` provided in the PyInform git repo::
 
-    $ pip install -r REQUIREMENTS.txt
+    $ pip install -r requirements.txt
 
 PyInform is continuously tested on **Linux** and **Windows** via `Travis-CI`_
 and `AppVeyor`_ respectively, and used regularly on **OS X** by the
-maintainers. Python version 2.7, 3.4 and 3.5 are supported.
+maintainers. Python version 2.7 and 3.4 to 3.7 are supported.
 
 .. _NumPy: http://www.numpy.org/
 .. _Travis-CI: https://travis-ci.org/ELIFE-ASU/PyInform

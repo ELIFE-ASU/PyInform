@@ -1,6 +1,23 @@
 PyInform
 ========
 
++--------------+
+| Build Status |
++==============+
+| |TravisCI|_  |
+| |Appveyor|_  |
+| |Codecov|_   |
++--------------+
+
+.. |TravisCI| image:: https://travis-ci.com/elife-asu/pyinform.svg?branch=master
+.. _TravisCI: https://travis-ci.com/elife-asu/pyinform
+
+.. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/iqkvfppimba5thwo/branch/master?svg=true
+.. _Appveyor: https://appveyor.com/project/dglmoore/pyinform-i8m0b/branch/master
+
+.. |Codecov| image:: https://codecov.io/gh/elife-asu/pyinform/branch/master/graph/badge.svg
+.. _Codecov: https://codecov.io/gh/elife-asu/pyinform
+
 PyInform is a python library of information-theoretic measures for time series
 data. PyInform is backed by the `Inform <https://github.com/elife-asu/inform>`_
 C library.

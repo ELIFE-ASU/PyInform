@@ -22,7 +22,7 @@ Strictly speaking, the local and average active information are defined as
 
 .. math::
 
-    a_{X,i}(k) = \\lim_{k \\rightarrow \\infty} a_{X,i}(k)
+    a_{X,i} = \\lim_{k \\rightarrow \\infty} a_{X,i}(k)
     \\quad \\textrm{and} \\quad
     A_X = \\lim_{k \\rightarrow \\infty} A_X(k),
 
