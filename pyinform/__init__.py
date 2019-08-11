@@ -39,7 +39,7 @@ def get_libpath():
         platform = "macosx-x86_64"
         library = "libinform.{}.{}.{}.dylib".format(major, minor, revision)
     elif system() == 'Windows':
-        platform = "win-amd64"
+        platform = "win-any"
         library = "inform.dll"
     else:
         raise RuntimeError("unsupported platform - \"{}\"".format(system()))
