@@ -16,10 +16,9 @@ install:
   - ps: 7z x inform-1.0.0_mixed.zip
   - ps: Move-Item inform-1.0.0 pyinform/inform-1.0.0
   - ps: Remove-Item inform-1.0.0_mixed.zip
-  - cmd: "%PYTHON%\\python.exe -m pip install lxml nose"
   - cmd: "%PYTHON%\\python.exe -m pip install ."
 
 build: off
 
 test_script:
-  - "%PYTHON%\\Scripts\\nosetests -coverage"
+  - "%PYTHON%\\python.exe setup.py test"

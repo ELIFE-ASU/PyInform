@@ -39,14 +39,13 @@ def get_libpath():
         platform = "macosx-x86_64"
         library = "libinform.{}.{}.{}.dylib".format(major, minor, revision)
     elif system() == 'Windows':
-        platform = "win32"
+        platform = "win-amd64"
         library = "inform.dll"
     else:
         raise RuntimeError("unsupported platform - \"{}\"".format(system()))
 
     return os.path.join(libdir, "lib", platform, library)
 
-print('inform lib:', get_libpath())
 _inform = CDLL(get_libpath())
 
 from . import utils                                  # noqa: F401
