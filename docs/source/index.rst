@@ -9,11 +9,11 @@ PyInform
 | |Codecov|_   |
 +--------------+
 
-.. |TravisCI| image:: https://travis-ci.com/elife-asu/pyinform.svg?branch=master
-.. _TravisCI: https://travis-ci.com/elife-asu/pyinform
+.. |TravisCI| image:: https://travis-ci.org/elife-asu/pyinform.svg?branch=master
+.. _TravisCI: https://travis-ci.org/elife-asu/pyinform
 
-.. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/iqkvfppimba5thwo/branch/master?svg=true
-.. _Appveyor: https://appveyor.com/project/dglmoore/pyinform-i8m0b/branch/master
+.. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/txd9atm8m852b8ns/branch/master?svg=true
+.. _Appveyor: https://ci.appveyor.com/project/dglmoore/pyinform-o2fv2/branch/master
 
 .. |Codecov| image:: https://codecov.io/gh/elife-asu/pyinform/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/elife-asu/pyinform
