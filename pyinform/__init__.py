@@ -46,7 +46,7 @@ def get_libpath():
 
     return os.path.join(libdir, "lib", platform, library)
 
-
+print('inform lib:', get_libpath())
 _inform = CDLL(get_libpath())
 
 from . import utils                                  # noqa: F401
