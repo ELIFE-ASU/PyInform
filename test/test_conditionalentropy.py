@@ -83,11 +83,11 @@ class TestConditionalEntropy(unittest.TestCase):
     def test_conditional_entropy_2D(self):
         xs = np.random.randint(0, 5, 20)
         ys = np.random.randint(0, 5, 20)
-        expect = conditional_entropy(xs, ys, b=5)
+        expect = conditional_entropy(xs, ys)
 
         us = np.copy(np.reshape(xs, (4, 5)))
         vs = np.copy(np.reshape(ys, (4, 5)))
-        got = conditional_entropy(us, vs, b=5)
+        got = conditional_entropy(us, vs)
 
         self.assertAlmostEqual(expect, got)
 
@@ -167,12 +167,12 @@ class TestLocalConditionalEntropy(unittest.TestCase):
     def test_conditional_entropy_2D(self):
         xs = np.random.randint(0, 5, 20)
         ys = np.random.randint(0, 5, 20)
-        expect = conditional_entropy(xs, ys, b=5, local=True)
+        expect = conditional_entropy(xs, ys, local=True)
         self.assertEqual(xs.shape, expect.shape)
 
         us = np.copy(np.reshape(xs, (4, 5)))
         vs = np.copy(np.reshape(ys, (4, 5)))
-        got = conditional_entropy(us, vs, b=5, local=True)
+        got = conditional_entropy(us, vs, local=True)
         self.assertTrue(us.shape, got.shape)
 
         self.assertTrue((expect == np.reshape(got, expect.shape)).all())

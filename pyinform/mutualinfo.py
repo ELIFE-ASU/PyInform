@@ -81,8 +81,7 @@ def mutual_info(xs, ys, local=False):
     if local is True:
         mi = np.empty(us.shape, dtype=np.float64)
         out = mi.ctypes.data_as(POINTER(c_double))
-        _local_mutual_info(seriesdata, c_ulong(
-            l), c_ulong(n), bsdata, out, byref(e))
+        _local_mutual_info(seriesdata, c_ulong(l), c_ulong(n), bsdata, out, byref(e))
     else:
         mi = _mutual_info(seriesdata, c_ulong(l), c_ulong(n), bsdata, byref(e))
 
@@ -92,11 +91,9 @@ def mutual_info(xs, ys, local=False):
 
 
 _mutual_info = _inform.inform_mutual_info
-_mutual_info.argtypes = [
-    POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_int)]
+_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_int)]
 _mutual_info.restype = c_double
 
 _local_mutual_info = _inform.inform_local_mutual_info
-_local_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(
-    c_int), POINTER(c_double), POINTER(c_int)]
+_local_mutual_info.argtypes = [POINTER(c_int), c_ulong, c_ulong, POINTER(c_int), POINTER(c_double), POINTER(c_int)]
 _local_mutual_info.restype = c_double

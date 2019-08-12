@@ -46,6 +46,7 @@ def get_libpath():
 
     return os.path.join(libdir, "lib", platform, library)
 
+
 _inform = CDLL(get_libpath())
 
 from . import utils                                  # noqa: F401

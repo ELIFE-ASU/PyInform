@@ -167,11 +167,9 @@ def transfer_entropy(source, target, k, local=False):
         q = max(0, m - k)
         te = np.empty((n, q), dtype=np.float64)
         out = te.ctypes.data_as(POINTER(c_double))
-        _local_transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(
-            n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
+        _local_transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        te = _transfer_entropy(ydata, xdata, None, c_ulong(
-            0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
+        te = _transfer_entropy(ydata, xdata, None, c_ulong(0), c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
@@ -179,11 +177,9 @@ def transfer_entropy(source, target, k, local=False):
 
 
 _transfer_entropy = _inform.inform_transfer_entropy
-_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(
-    c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _transfer_entropy.restype = c_double
 
 _local_transfer_entropy = _inform.inform_local_transfer_entropy
-_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(
-    c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_transfer_entropy.argtypes = [POINTER(c_int), POINTER(c_int), POINTER(c_int), c_ulong, c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_transfer_entropy.restype = POINTER(c_double)

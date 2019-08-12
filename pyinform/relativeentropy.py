@@ -12,13 +12,13 @@ a call to :py:func:`~.shannon.relative_entropy`. The result is
 
 .. math::
 
-    D_{KL}(p||q) = \\sum_{x_i} p(x_i) \\log_b \\frac{p(x_i)}{q(x_i)}
+    D_{KL}(p||q) = \\sum_{x_i} p(x_i) \\log_2 \\frac{p(x_i)}{q(x_i)}
 
 which has as its local counterpart
 
 .. math::
 
-    d_{KL, i}(p||q) = \\log_b \\frac{p(x_i)}{q(x_i)}.
+    d_{KL, i}(p||q) = \\log_2 \\frac{p(x_i)}{q(x_i)}.
 
 Note that the average in moving from the local to the non-local relative entropy
 is taken over the posterior distribution.
@@ -56,18 +56,15 @@ from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
 
-def relative_entropy(xs, ys, b=2.0, local=False):
+def relative_entropy(xs, ys, local=False):
     """
     Compute the local or global relative entropy between two time series
     treating each as observations from a distribution.
-
-    This function explicitly takes the logarithmic base *b* as an argument.
 
     :param xs: the time series sampled from the posterior distribution
     :type xs: a sequence or ``numpy.ndarray``
     :param ys: the time series sampled from the prior distribution
     :type ys: a sequence or ``numpy.ndarray``
-    :param double b: the logarithmic base
     :param bool local: compute the local relative entropy
     :return: the local or global relative entropy
     :rtype: float or ``numpy.ndarray``
@@ -79,7 +76,7 @@ def relative_entropy(xs, ys, b=2.0, local=False):
     if us.shape != vs.shape:
         raise ValueError("timeseries lengths do not match")
 
-    base = max(2, np.amax(us) + 1, np.amax(vs) + 1)
+    b = max(2, np.amax(us) + 1, np.amax(vs) + 1)
 
     xdata = us.ctypes.data_as(POINTER(c_int))
     ydata = vs.ctypes.data_as(POINTER(c_int))
@@ -88,13 +85,11 @@ def relative_entropy(xs, ys, b=2.0, local=False):
     e = ErrorCode(0)
 
     if local is True:
-        re = np.empty(base, dtype=np.float64)
+        re = np.empty(b, dtype=np.float64)
         out = re.ctypes.data_as(POINTER(c_double))
-        _local_relative_entropy(xdata, ydata, c_ulong(
-            n), c_int(base), c_double(b), out, byref(e))
+        _local_relative_entropy(xdata, ydata, c_ulong(n), c_int(b), out, byref(e))
     else:
-        re = _relative_entropy(xdata, ydata, c_ulong(
-            n), c_int(base), c_double(b), byref(e))
+        re = _relative_entropy(xdata, ydata, c_ulong(n), c_int(b), byref(e))
 
     error_guard(e)
 
@@ -102,11 +97,9 @@ def relative_entropy(xs, ys, b=2.0, local=False):
 
 
 _relative_entropy = _inform.inform_relative_entropy
-_relative_entropy.argtypes = [POINTER(c_int), POINTER(
-    c_int), c_ulong, c_int, c_double, POINTER(c_int)]
+_relative_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_int, POINTER(c_int)]
 _relative_entropy.restype = c_double
 
 _local_relative_entropy = _inform.inform_local_relative_entropy
-_local_relative_entropy.argtypes = [POINTER(c_int), POINTER(
-    c_int), c_ulong, c_int, c_double, POINTER(c_double), POINTER(c_int)]
+_local_relative_entropy.argtypes = [POINTER(c_int), POINTER(c_int), c_ulong, c_int, POINTER(c_double), POINTER(c_int)]
 _local_relative_entropy.restype = POINTER(c_double)

@@ -249,8 +249,7 @@ _conditional_entropy.argtypes = [c_void_p, c_void_p, c_double]
 _conditional_entropy.restype = c_double
 
 _conditional_mutual_info = _inform.inform_shannon_cmi
-_conditional_mutual_info.argtypes = [
-    c_void_p, c_void_p, c_void_p, c_void_p, c_double]
+_conditional_mutual_info.argtypes = [c_void_p, c_void_p, c_void_p, c_void_p, c_double]
 _conditional_mutual_info.restype = c_double
 
 _relative_entropy = _inform.inform_shannon_re

@@ -73,7 +73,7 @@ from pyinform import _inform
 from pyinform.error import ErrorCode, error_guard
 
 
-def entropy_rate(series, k, b=0, local=False):
+def entropy_rate(series, k, local=False):
     """
     Compute the average or local entropy rate of a time series with history
     length *k*.
@@ -109,11 +109,9 @@ def entropy_rate(series, k, b=0, local=False):
         q = max(0, m - k)
         er = np.empty((n, q), dtype=np.float64)
         out = er.ctypes.data_as(POINTER(c_double))
-        _local_entropy_rate(data, c_ulong(n), c_ulong(
-            m), c_int(b), c_ulong(k), out, byref(e))
+        _local_entropy_rate(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        er = _entropy_rate(data, c_ulong(n), c_ulong(m),
-                           c_int(b), c_ulong(k), byref(e))
+        er = _entropy_rate(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
@@ -121,11 +119,9 @@ def entropy_rate(series, k, b=0, local=False):
 
 
 _entropy_rate = _inform.inform_entropy_rate
-_entropy_rate.argtypes = [
-    POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _entropy_rate.restype = c_double
 
 _local_entropy_rate = _inform.inform_local_entropy_rate
-_local_entropy_rate.argtypes = [POINTER(
-    c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_entropy_rate.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_entropy_rate.restype = POINTER(c_double)

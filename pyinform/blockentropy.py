@@ -99,11 +99,9 @@ def block_entropy(series, k, local=False):
         q = max(0, m - k + 1)
         ai = np.empty((n, q), dtype=np.float64)
         out = ai.ctypes.data_as(POINTER(c_double))
-        _local_block_entropy(data, c_ulong(n), c_ulong(
-            m), c_int(b), c_ulong(k), out, byref(e))
+        _local_block_entropy(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), out, byref(e))
     else:
-        ai = _block_entropy(data, c_ulong(n), c_ulong(m),
-                            c_int(b), c_ulong(k), byref(e))
+        ai = _block_entropy(data, c_ulong(n), c_ulong(m), c_int(b), c_ulong(k), byref(e))
 
     error_guard(e)
 
@@ -111,11 +109,9 @@ def block_entropy(series, k, local=False):
 
 
 _block_entropy = _inform.inform_block_entropy
-_block_entropy.argtypes = [
-    POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
+_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_int)]
 _block_entropy.restype = c_double
 
 _local_block_entropy = _inform.inform_local_block_entropy
-_local_block_entropy.argtypes = [POINTER(
-    c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
+_local_block_entropy.argtypes = [POINTER(c_int), c_ulong, c_ulong, c_int, c_ulong, POINTER(c_double), POINTER(c_int)]
 _local_block_entropy.restype = POINTER(c_double)
