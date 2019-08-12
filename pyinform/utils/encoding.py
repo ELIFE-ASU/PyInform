@@ -39,25 +39,27 @@ def encode(state, b=None):
     significant bits of the encoded integer are determined by the left-most
     end of the unencoded state.
 
-        >>> from pyinform.utils import *
-        >>> encode([0,0,1], b=2)
+    .. doctest:: utils
+
+        >>> utils.encode([0,0,1], b=2)
         1
-        >>> encode([0,1,0], b=3)
+        >>> utils.encode([0,1,0], b=3)
         3
-        >>> encode([1,0,0], b=4)
+        >>> utils.encode([1,0,0], b=4)
         16
-        >>> encode([1,0,4], b=5)
+        >>> utils.encode([1,0,4], b=5)
         29
 
     If *b* is not provided (or is None), the base is inferred from the state
     with a minimum value of 2.
 
-        >>> from pyinform.utils import *
-        >>> encode([0,0,2])
+    .. doctest:: utils
+
+        >>> utils.encode([0,0,2])
         2
-        >>> encode([0,2,0])
+        >>> utils.encode([0,2,0])
         6
-        >>> encode([1,2,1])
+        >>> utils.encode([1,2,1])
         16
 
     See also :py:func:`.decode`.
@@ -94,24 +96,30 @@ def decode(encoding, b, n=None):
     The provided encoded state is decoded using the `big-endian`__ encoding
     scheme.
 
-        >>> decode(2, b=2, n=2)
+    .. doctest:: utils
+
+        >>> utils.decode(2, b=2, n=2)
         array([1, 0], dtype=int32)
-        >>> decode(6, b=2, n=3)
+        >>> utils.decode(6, b=2, n=3)
         array([1, 1, 0], dtype=int32)
-        >>> decode(6, b=3, n=2)
+        >>> utils.decode(6, b=3, n=2)
         array([2, 0], dtype=int32)
 
     Note that the base *b* must be provided, but the number of digits *n* is
     optional. If it is provided then the decoded state will have exactly that
     many elements.
 
-        >>> decode(2, b=2, n=4)
+    .. doctest:: utils
+
+        >>> utils.decode(2, b=2, n=4)
         array([0, 0, 1, 0], dtype=int32)
 
     However, if *n* is too small to contain a full representation of the state,
     an error will be raised.
 
-        >>> decode(6, b=2, n=2)
+    .. doctest:: utils
+
+        >>> utils.decode(6, b=2, n=2)
         Traceback (most recent call last):
           File "<stdin>", line 1, in <module>
           File "/home/ubuntu/workspace/pyinform/utils/encoding.py", line 126, in decode
@@ -123,21 +131,25 @@ def decode(encoding, b, n=None):
     If *n* is not provided, the length of the decoded state is as small as
     possible:
 
-        >>> decode(1, b=2)
+    .. doctest:: utils
+
+        >>> utils.decode(1, b=2)
         array([1], dtype=int32)
-        >>> decode(1, b=3)
+        >>> utils.decode(1, b=3)
         array([1], dtype=int32)
-        >>> decode(3, b=2)
+        >>> utils.decode(3, b=2)
         array([1, 1], dtype=int32)
-        >>> decode(3, b=3)
+        >>> utils.decode(3, b=3)
         array([1, 0], dtype=int32)
-        >>> decode(3, b=4)
+        >>> utils.decode(3, b=4)
         array([3], dtype=int32)
 
     Of course :py:func:`.encode` and :py:func:`.decode` play well together.
 
+    .. doctest:: utils
+
         >>> for i in range(100):
-        ...     assert(encode(decode(i, b=2)) == i)
+        ...     assert(utils.encode(utils.decode(i, b=2)) == i)
         ...
         >>>
 

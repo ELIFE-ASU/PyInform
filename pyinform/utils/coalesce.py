@@ -19,7 +19,9 @@ def coalesce_series(series):
     relative number of states.
 
     This function thus provides a way of "compressing" a time series into as
-    small a base as possible. For example ::
+    small a base as possible. For example
+
+    .. doctest:: utils
 
         >>> utils.coalesce_series([2,9,2,9,9])
         (array([0, 1, 0, 1, 1], dtype=int32), 2)
@@ -32,10 +34,14 @@ def coalesce_series(series):
     The two standard usage cases for this function are to reduce the base of a
     time series
 
+    .. doctest:: utils
+
         >>> utils.coalesce_series([0,2,0,2,0,2])
         (array([0, 1, 0, 1, 0, 1], dtype=int32), 2)
 
     or ensure that the states are non-negative
+
+    .. doctest:: utils
 
         >>> utils.coalesce_series([-8,2,6,-2,4])
         (array([0, 2, 4, 1, 3], dtype=int32), 5)

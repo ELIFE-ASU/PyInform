@@ -22,40 +22,47 @@ A Single Initial Condition
 
 The typical usage is to provide the time series as a sequence (or
 ``numpy.ndarray``) and the block size as an integer and let the
-:py:func:`block_entropy` sort out the rest: ::
+:py:func:`block_entropy` sort out the rest:
+
+.. doctest:: block_entropy
 
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=1)
     0.9910760598382222
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=1, local=True)
-    array([[ 0.84799691,  0.84799691,  1.169925  ,  1.169925  ,  1.169925  ,
-            1.169925  ,  0.84799691,  0.84799691,  0.84799691]])
+    array([[0.84799691, 0.84799691, 1.169925  , 1.169925  , 1.169925  ,
+            1.169925  , 0.84799691, 0.84799691, 0.84799691]])
 
-::
+.. doctest:: block_entropy
 
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2)
     1.811278124459133
     >>> block_entropy([0,0,1,1,1,1,0,0,0], k=2, local=True)
-    array([[ 1.4150375,  3.       ,  1.4150375,  1.4150375,  1.4150375,
-            3.       ,  1.4150375,  1.4150375]])
+    array([[1.4150375, 3.       , 1.4150375, 1.4150375, 1.4150375, 3.       ,
+            1.4150375, 1.4150375]])
 
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Do we support multiple initial conditions? Of course we do! ::
+Do we support multiple initial conditions? Of course we do!
+
+.. doctest:: block_entropy
 
     >>> series = [[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]]
     >>> block_entropy(series, k=2)
     1.936278124459133
     >>> block_entropy(series, k=2, local=True)
-    array([[ 1.4150375,  2.4150375,  2.4150375,  2.4150375,  2.4150375,
-             2.       ,  1.4150375,  1.4150375],
-           [ 2.       ,  1.4150375,  2.4150375,  2.       ,  1.4150375,
-             2.4150375,  2.       ,  1.4150375]])
+    array([[1.4150375, 2.4150375, 2.4150375, 2.4150375, 2.4150375, 2.       ,
+            1.4150375, 1.4150375],
+           [2.       , 1.4150375, 2.4150375, 2.       , 1.4150375, 2.4150375,
+            2.       , 1.4150375]])
 
-Or you can compute the block entropy on each initial condition and average: ::
+Or you can compute the block entropy on each initial condition and average:
 
+.. doctest:: block_entropy
+
+    >>> import numpy as np
     >>> np.apply_along_axis(block_entropy, 1, series, 2).mean()
-    1.6862781244591329
+    1.686278124459133
 """
 import numpy as np
 

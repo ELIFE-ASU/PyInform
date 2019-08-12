@@ -1,5 +1,10 @@
 .. _dist:
 
+.. testsetup:: Dist
+
+    from pyinform import Dist
+
+
 Empirical Distributions
 =======================
 
@@ -15,7 +20,9 @@ Example 1: Construction
 ^^^^^^^^^^^^^^^^^^^^^^^
 You can construct a distribution with a specified number of unique observables.
 This construction method results in an *invalid* distribution as no
-observations have been made thus far. ::
+observations have been made thus far.
+
+.. doctest:: Dist
 
     >>> d = Dist(5)
     >>> d.valid()
@@ -26,7 +33,9 @@ observations have been made thus far. ::
     5
 
 Alternatively you can construct a distribution given a list (or NumPy array)
-of observation counts: ::
+of observation counts:
+
+.. doctest:: Dist
 
     >>> d = Dist([0,0,1,2,1,0,0])
     >>> d.valid()
@@ -41,16 +50,20 @@ Example 2: Making Observations
 
 Once a distribution has been constructed, we can begin making observations.
 There are two methods for doing so. The first uses the standard indexing
-operations, treating the distribution similarly to a list: ::
+operations, treating the distribution similarly to a list:
+
+.. doctest:: Dist
 
     >>> d = Dist(5)
     >>> for i in range(len(d)):
     ...     d[i] = i*i
     >>> list(d)
-    [0, 1, 4, 9, 25]
+    [0, 1, 4, 9, 16]
 
 The second method is to make *incremental* changes to the distribution. This
-is useful when making observations of timeseries: ::
+is useful when making observations of timeseries:
+
+.. doctest:: Dist
 
     >>> obs = [1,0,1,2,2,1,2,3,2,2]
     >>> d = Dist(max(obs) + 1)
@@ -61,7 +74,9 @@ is useful when making observations of timeseries: ::
     [1, 3, 5, 1]
 
 It is important to remember that :py:class:`~.dist.Dist` keeps track of your
-events as you provide them. For example: ::
+events as you provide them. For example:
+
+.. doctest:: Dist
 
     >>> obs = [1, 1, 3, 5, 1, 3, 7, 9]
     >>> d = Dist(max(obs) + 1)
@@ -77,12 +92,13 @@ events as you provide them. For example: ::
 
 If you know there are "gaps" in your time series, e.g. no even numbers, then you
 can use the utility function :py:func:`~.utils.coalesce.coalesce_series` to get
-rid of them: ::
+rid of them:
+
+.. doctest:: Dist
 
     >>> from pyinform import utils
     >>> obs = [1, 1, 3, 5, 1, 3, 7, 9]
     >>> coal, b = utils.coalesce_series(obs)
-    (array([0, 0, 1, 2, 0, 1, 3, 4], dtype=int32), 5)
     >>> d = Dist(b)
     >>> for event in coal:
     ...     assert(d[event] == d.tick(event) - 1)
@@ -92,7 +108,7 @@ rid of them: ::
     >>> d[1]
     2
     >>> d[3]
-    7
+    1
 
 This can significantly improve memory usage in situations where the range of
 possible states is large, but is sparsely sampled in the time series.
@@ -102,7 +118,9 @@ Example 3: Probabilities
 
 Once some observations have been made, we can start asking for probabilities.
 As in the previous examples, there are multiple ways of doing this. The first
-is to just ask for the probability of a given event. ::
+is to just ask for the probability of a given event.
+
+.. doctest:: Dist
 
     >>> d = Dist([3,0,1,2])
     >>> d.probability(0)
@@ -114,18 +132,22 @@ is to just ask for the probability of a given event. ::
     >>> d.probability(3)
     0.3333333333333333
 
-Sometimes it is nice to just dump the probabilities out to an array: ::
+Sometimes it is nice to just dump the probabilities out to an array:
+
+.. doctest:: Dist
 
     >>> d = Dist([3,0,1,2])
     >>> d.dump()
-    array([ 0.5       ,  0.        ,  0.16666667,  0.33333333])
+    array([0.5       , 0.        , 0.16666667, 0.33333333])
 
 Example 4: Shannon Entropy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once you have a distribution you can do lots of fun things with it. In
 this example, we will compute the shannon entropy of a timeseries of
-observed values. ::
+observed values.
+
+.. testcode:: Dist
 
     from math import log2
     from pyinform.dist import Dist
@@ -134,15 +156,21 @@ observed values. ::
     d = Dist(max(obs) + 1)
     for event in obs:
         d.tick(event)
-    
+
     h = 0.
     for p in d.dump():
         h -= p * log2(p)
 
-    print(h) # 1.68547529723
+    print(h)
+
+.. testoutput:: Dist
+
+    1.6854752972273344
 
 Of course **PyInform** provides a function for this:
-:py:func:`pyinform.shannon.entropy`. ::
+:py:func:`pyinform.shannon.entropy`.
+
+.. testcode:: Dist
 
     from pyinform.dist import Dist
     from pyinform.shannon import entropy
@@ -151,8 +179,12 @@ Of course **PyInform** provides a function for this:
     d = Dist(max(obs) + 1)
     for event in obs:
         d.tick(event)
-    
-    print(entropy(dist)) # 1.6854752972273344
+
+    print(entropy(d))
+
+.. testoutput:: Dist
+
+    1.6854752972273344
 
 
 API Documentation

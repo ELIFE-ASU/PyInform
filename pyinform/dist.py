@@ -28,7 +28,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(5)
             >>> d = Dist([0,0,1,2])
@@ -67,11 +67,11 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> len(Dist(5))
             5
-            >>> len(Dist[0,1,5])
+            >>> len(Dist([0,1,5]))
             3
 
         See also :py:meth:`.counts`.
@@ -93,7 +93,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(5)
             >>> d.resize(3)
@@ -103,7 +103,7 @@ class Dist:
             >>> len(d)
             8
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([1,2,3,4])
             >>> d.resize(2)
@@ -129,7 +129,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([1,2,3])
             >>> e = d
@@ -139,7 +139,7 @@ class Dist:
             >>> list(d)
             [3, 2, 3]
 
-        ::
+        .. doctest:: Dist
 
             >>> f = d.copy()
             >>> f[0] = 1
@@ -161,13 +161,13 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(5)
             >>> d.counts()
             0
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([1,0,3,2])
             >>> d.counts()
@@ -187,13 +187,13 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(5)
             >>> d.valid()
             False
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([0,0,0,1])
             >>> d.valid()
@@ -212,13 +212,13 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(2)
             >>> (d[0], d[1])
             (0, 0)
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([0,1])
             >>> (d[0], d[1])
@@ -243,7 +243,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(2)
             >>> for i, _ in enumerate(d):
@@ -252,7 +252,7 @@ class Dist:
             >>> list(d)
             [0, 1]
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([0,1,2,3])
             >>> for i, n in enumerate(d):
@@ -280,7 +280,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist(5)
             >>> for i, _ in enumerate(d):
@@ -289,7 +289,7 @@ class Dist:
             >>> list(d)
             [1, 1, 1, 1, 1]
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([0,1,2,3])
             >>> for i, _ in enumerate(d):
@@ -315,7 +315,7 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([1,1,1,1])
             >>> for i, _ in enumerate(d):
@@ -343,11 +343,11 @@ class Dist:
 
         .. rubric:: Examples:
 
-        ::
+        .. doctest:: Dist
 
             >>> d = Dist([1,2,2,1])
             >>> d.dump()
-            array([ 0.16666667,  0.33333333,  0.33333333,  0.16666667])
+            array([0.16666667, 0.33333333, 0.33333333, 0.16666667])
 
         See also :py:meth:`.probability`.
 

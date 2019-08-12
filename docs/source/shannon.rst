@@ -1,5 +1,10 @@
 .. _shannon:
 
+.. testsetup:: shannon
+
+    from pyinform import Dist
+    from pyinform import shannon
+
 Shannon Information Measures
 ============================
 
@@ -16,16 +21,26 @@ Example 1: Entropy and Random Numbers
 
 The :py:func:`pyinform.shannon.entropy` function allows us to calculate the
 Shannon entropy of a distributions. Let's try generating a random distribution
-and see what the entropy looks like? ::
+and see what the entropy looks like?
+
+.. testcode::
 
     import numpy as np
+    from pyinform.dist import Dist
+    from pyinform.shannon import entropy
 
+    np.random.seed(2019)
     xs = np.random.randint(0,10,10000)
     d = Dist(10)
     for x in xs:
         d.tick(x)
-    print(entropy(d))       # 3.32137023165359
-    print(entropy(d, b=10)) # 0.9998320664331565
+    print(entropy(d))
+    print(entropy(d, b=10))
+
+.. testoutput::
+
+    3.3216276921709724
+    0.9999095697715877
 
 This is exactly what you should expect; the pseudo-random number generate does
 a decent job producing integers in a uniform fashion.
@@ -34,14 +49,17 @@ Example 2: Mutual Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 How correlated are consecutive integers? Let's find out using
-:py:func:`mutual_info`. ::
+:py:func:`mutual_info`.
 
+.. testcode::
+
+    import numpy as np
     from pyinform.dist import Dist
     from pyinform.shannon import mutual_info
-    import numpy as np
 
-    obs = np.random.randint(0, 10, 10000)
-    
+    np.random.seed(2019)
+    obs = np.random.randint(0, 10, 100)
+
     p_xy = Dist(100)
     p_x  = Dist(10)
     p_y  = Dist(10)
@@ -52,8 +70,13 @@ How correlated are consecutive integers? Let's find out using
             p_y.tick(y)
             p_xy.tick(10*x + y)
 
-    print(mutual_info(p_xy, p_x, p_y))       # -1.7763568394002505e-15
-    print(mutual_info(p_xy, p_x, p_y, b=10)) # -6.661338147750939e-16
+    print(mutual_info(p_xy, p_x, p_y))
+    print(mutual_info(p_xy, p_x, p_y, b=10))
+
+.. testoutput::
+
+    1.3322676295501878e-15
+    4.440892098500626e-16
 
 Due to the subtlties of floating-point computation we don't get zero. Really,
 though the mutual information is zero.
@@ -62,26 +85,34 @@ Example 3: Relative Entropy and Biased Random Numbers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Okay. Now let's generate some binary sequences. The first will be roughly
-uniform, but the second will be biased toward 0. ::
+uniform, but the second will be biased toward 0.
 
+.. testcode::
+
+    import numpy as np
     from pyinform.dist import Dist
     from pyinform.shannon import relative_entropy
-    import numpy as np
-    
+
     p = Dist(2)
     q = Dist(2)
 
-    ys = np.random.randint(0, 2, 10000)
+    np.random.seed(2019)
+    ys = np.random.randint(0, 2, 100)
     for y in ys:
         p.tick(y)
 
-    xs = np.random.randint(0, 6, 10000)
+    xs = np.random.randint(0, 6, 100)
     for i, _ in enumerate(xs):
-        xs[i] = (((xs[i] % 5) % 4) % 3) % 2 
+        xs[i] = (((xs[i] % 5) % 4) % 3) % 2
         q.tick(xs[i])
 
-    print(relative_entropy(q,p)) # 0.3338542254583825
-    print(relative_entropy(p,q)) # 0.40107198925821924
+    print(relative_entropy(q,p))
+    print(relative_entropy(p,q))
+
+.. testoutput::
+
+    0.3810306585586593
+    0.4924878808808457
 
 API Documentation
 -----------------

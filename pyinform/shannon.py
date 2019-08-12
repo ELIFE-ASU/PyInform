@@ -19,20 +19,20 @@ def entropy(p, b=2.0):
 
     .. rubric:: Examples:
 
-    ::
+    .. doctest:: shannon
 
         >>> d = Dist([1,1,1,1])
-        >>> entropy(d)
+        >>> shannon.entropy(d)
         2.0
-        >>> entropy(d, 4)
+        >>> shannon.entropy(d, 4)
         1.0
 
-    ::
+    .. doctest:: shannon
 
         >>> d = Dist([2,1])
-        >>> entropy(d)
+        >>> shannon.entropy(d)
         0.9182958340544896
-        >>> entropy(d, b=3)
+        >>> shannon.entropy(d, b=3)
         0.579380164285695
 
     See [Shannon1948a]_ for more details.
@@ -72,13 +72,13 @@ def mutual_info(p_xy, p_x, p_y, b=2.0):
 
     .. rubric:: Examples:
 
-    ::
+    .. doctest:: shannon
 
         >>> xy = Dist([10,70,15,5])
         >>> x = Dist([80,20])
         >>> y = Dist([25,75])
-        >>> mutual_info(xy, x, y)
-        0.214170945007629
+        >>> shannon.mutual_info(xy, x, y)
+        0.21417094500762912
 
     :param p_xy: the joint distribution
     :type p_xy: :py:class:`pyinform.dist.Dist`
@@ -115,14 +115,14 @@ def conditional_entropy(p_xy, p_y, b=2.0):
 
     .. rubric:: Examples:
 
-    ::
+    .. doctest:: shannon
 
         >>> xy = Dist([10,70,15,5])
         >>> x = Dist([80,20])
         >>> y = Dist([25,75])
-        >>> conditional_entropy(xy, x)
+        >>> shannon.conditional_entropy(xy, x)
         0.5971071794515037
-        >>> conditional_entropy(xy, y)
+        >>> shannon.conditional_entropy(xy, y)
         0.5077571498797332
 
     :param p_xy: the joint distribution
@@ -157,18 +157,18 @@ def conditional_mutual_info(p_xyz, p_xz, p_yz, p_z, b=2.0):
                  &= H(X,Z) + H(Y,Z) - H(Z) - H(X,Y,Z)
 
 
-    .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_entropy
+    .. _Conditional mutual information: https://en.wikipedia.org/wiki/Conditional_mutual_information
 
     .. rubric:: Examples:
 
-    ::
+    .. doctest:: shannon
 
         >>> xyz = Dist([24,24,9,6,25,15,10,5])
         >>> xz = Dist([15,9,5,10])
         >>> yz = Dist([9,15,10,15])
         >>> z = Dist([3,5])
-        >>> conditional_mutual_info(xyz, xz, yz, z)
-        0.12594942727460323
+        >>> shannon.conditional_mutual_info(xyz, xz, yz, z)
+        0.12594942727460334
 
     :param p_xyz: the joint distribution
     :type p_xyz: :py:class:`pyinform.dist.Dist`
@@ -207,22 +207,22 @@ def relative_entropy(p, q, b=2.0):
 
     .. rubric:: Examples:
 
-    ::
+    .. doctest:: shannon
 
         >>> p = Dist([4,1])
         >>> q = Dist([1,1])
-        >>> relative_entropy(p,q)
+        >>> shannon.relative_entropy(p,q)
         0.27807190511263774
-        >>> relative_entropy(q,p)
-        0.32192809488736235
+        >>> shannon.relative_entropy(q,p)
+        0.3219280948873624
 
-    ::
+    .. doctest:: shannon
 
         >>> p = Dist([1,0])
         >>> q = Dist([1,1])
-        >>> relative_entropy(p,q)
+        >>> shannon.relative_entropy(p,q)
         1.0
-        >>> relative_entropy(q,p)
+        >>> shannon.relative_entropy(q,p)
         nan
 
     :param p: the *posterior* distribution

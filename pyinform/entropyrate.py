@@ -41,29 +41,33 @@ A Single Initial Condition
 
 Let's apply the entropy rate to a single initial condition. Typically, you will
 just provide the time series and the history length, and let
-:py:func:`.entropy_rate` take care of the rest: ::
+:py:func:`.entropy_rate` take care of the rest:
+
+.. doctest:: entropy_rate
 
     >>> entropy_rate([0,0,1,1,1,1,0,0,0], k=2)
     0.6792696431662095
     >>> entropy_rate([0,0,1,1,1,1,0,0,0], k=2, local=True)
-    array([[ 1.       ,  0.       ,  0.5849625,  0.5849625,  1.5849625,
-             0.       ,  1.       ]])
+    array([[1.       , 0.       , 0.5849625, 0.5849625, 1.5849625, 0.       ,
+            1.       ]])
     >>> entropy_rate([0,0,1,1,1,1,2,2,2], k=2)
-    0.24830578469386944
+    0.39355535745192416
 
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Of course multiple initial conditions are handled. ::
+Of course multiple initial conditions are handled.
+
+.. doctest:: entropy_rate
 
     >>> series = [[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]]
     >>> entropy_rate(series, k=2)
     0.6253491072973907
     >>> entropy_rate(series, k=2, local=True)
-    array([[ 0.4150375,  1.5849625,  0.5849625,  0.5849625,  1.5849625,
-             0.       ,  2.       ],
-           [ 0.       ,  0.4150375,  0.5849625,  0.       ,  0.4150375,
-             0.5849625,  0.       ]])
+    array([[0.4150375, 1.5849625, 0.5849625, 0.5849625, 1.5849625, 0.       ,
+            2.       ],
+           [0.       , 0.4150375, 0.5849625, 0.       , 0.4150375, 0.5849625,
+            0.       ]])
 """
 
 import numpy as np

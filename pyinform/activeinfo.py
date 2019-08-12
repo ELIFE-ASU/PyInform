@@ -36,10 +36,12 @@ A Single Initial Condition
 
 The typical usage is to provide the time series as a sequence (or
 ``numpy.ndarray``) and the history length as an integer and let the
-:py:func:`active_info` sort out the rest: ::
+:py:func:`active_info` sort out the rest:
+
+.. doctest:: active_info
 
     >>> active_info([0,0,1,1,1,1,0,0,0], k=2)
-    0.3059584928680419
+    0.3059584928680418
     >>> active_info([0,0,1,1,1,1,0,0,0], k=2, local=True)
     array([[-0.19264508,  0.80735492,  0.22239242,  0.22239242, -0.36257008,
              1.22239242,  0.22239242]])
@@ -47,10 +49,12 @@ The typical usage is to provide the time series as a sequence (or
 Multiple Initial Conditions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-What about multiple initial conditions? We've got that covered! ::
+What about multiple initial conditions? We've got that covered!
+
+.. doctest:: active_info
 
     >>> active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2)
-    0.35987902873686073
+    0.35987902873686084
     >>> active_info([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]], k=2, local=True)
     array([[ 0.80735492, -0.36257008,  0.63742992,  0.63742992, -0.77760758,
              0.80735492, -1.19264508],
@@ -59,23 +63,27 @@ What about multiple initial conditions? We've got that covered! ::
 
 As mentioned in :ref:`subtle-details`, averaging the AI for over the initial
 conditions does not give the same result as constructing the distributions using
-all of the initial conditions together. ::
+all of the initial conditions together.
+
+.. doctest:: active_info
 
     >>> import numpy as np
     >>> series = np.asarray([[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]])
     >>> np.apply_along_axis(active_info, 1, series, 2).mean()
-    0.58453953071733644
+    0.5845395307173363
 
-Or if you are feeling verbose: ::
+Or if you are feeling verbose:
+
+.. doctest:: active_info
 
     >>> ai = np.empty(len(series))
     >>> for i, xs in enumerate(series):
     ...     ai[i] = active_info(xs, k=2)
     ...
     >>> ai
-    array([ 0.30595849,  0.86312057])
+    array([0.30595849, 0.86312057])
     >>> ai.mean()
-    0.58453953071733644
+    0.5845395307173363
 """
 
 import numpy as np

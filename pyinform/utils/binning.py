@@ -32,11 +32,12 @@ def series_range(series):
     """
     Compute the range of a continuously-valued time series.
 
-    Examples: ::
+    Examples:
 
-        >>> from pyinform import utils
+    .. doctest:: utils
+
         >>> utils.series_range([0,1,2,3,4,5])
-        (5, 0, 5)
+        (5.0, 0.0, 5.0)
         >>> utils.series_range([-0.1, 8.5, 0.02, -6.3])
         (14.8, -6.3, 8.5)
 
@@ -67,20 +68,24 @@ def bin_series(series, b=None, step=None, bounds=None):
     .. rubric:: 1. Specified Number of Bins
 
     The first is binning the time series into *b* uniform bins (with *b* an
-    integer). ::
+    integer).
 
-        >>> from pyinform import utils
+    .. doctest:: utils
+
         >>> import numpy as np
+        >>> np.random.seed(2019)
         >>> xs = 10 * np.random.rand(20)
         >>> xs
-        array([ 6.62004974,  7.24471972,  0.76670198,  2.66306833,  4.32200795,
-                8.84902227,  6.83491844,  7.05008074,  3.79287646,  6.50844032,
-                8.68804879,  6.79543773,  0.3222078 ,  7.39576325,  7.54150189,
-                1.06422897,  1.91958431,  2.34760945,  3.90139184,  3.08885353])
+        array([9.03482214, 3.93080507, 6.23969961, 6.37877401, 8.80499069,
+               2.99172019, 7.0219827 , 9.03206161, 8.81381926, 4.05749798,
+               4.52446621, 2.67070324, 1.6286487 , 8.89214695, 1.48476226,
+               9.84723485, 0.32361219, 5.15350754, 2.01129047, 8.86010874])
         >>> utils.bin_series(xs, b=2)
-        (array([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 2, 4.263407236635026)
+        (array([1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
+              dtype=int32), 2, 4.761811327822174)
         >>> utils.bin_series(xs, b=3)
-        (array([2, 2, 0, 0, 1, 2, 2, 2, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 1, 0], dtype=int32), 3, 2.8422714910900173)
+        (array([2, 1, 1, 1, 2, 0, 2, 2, 2, 1, 1, 0, 0, 2, 0, 2, 0, 1, 0, 2],
+              dtype=int32), 3, 3.1745408852147823)
 
 
     With this approach the binned sequence (as an ``numpy.ndarray``), the number
@@ -91,12 +96,16 @@ def bin_series(series, b=None, step=None, bounds=None):
 
     .. rubric:: 2. Fixed Size Bins
 
-    The second type of binning produces bins of a specific size *step*.::
+    The second type of binning produces bins of a specific size *step*.
+
+    .. doctest:: utils
 
         >>> utils.bin_series(xs, step=4.0)
-        (array([1, 1, 0, 0, 0, 2, 1, 1, 0, 1, 2, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 3, 4.0)
+        (array([2, 0, 1, 1, 2, 0, 1, 2, 2, 0, 1, 0, 0, 2, 0, 2, 0, 1, 0, 2],
+              dtype=int32), 3, 4.0)
         >>> utils.bin_series(xs, step=2.0)
-        (array([3, 3, 0, 1, 1, 4, 3, 3, 1, 3, 4, 3, 0, 3, 3, 0, 0, 1, 1, 1], dtype=int32), 5, 2.0)
+        (array([4, 1, 2, 3, 4, 1, 3, 4, 4, 1, 2, 1, 0, 4, 0, 4, 0, 2, 0, 4],
+              dtype=int32), 5, 2.0)
 
     As in the previous case the binned sequence, the number of bins, and the
     size of each bin are returned.
@@ -110,12 +119,16 @@ def bin_series(series, b=None, step=None, bounds=None):
     The third type of binning is breaks the real number line into segments with
     specified boundaries or thresholds, and the time series is binned according
     to this partitioning. The bounds are expected to be provided in ascending
-    order.::
+    order.
+
+    .. doctest:: utils
 
         >>> utils.bin_series(xs, bounds=[2.0, 7.5])
-        (array([1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 2, 1, 0, 1, 2, 0, 0, 1, 1, 1], dtype=int32), 3, [2.0, 7.5])
+        (array([2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 0, 2, 0, 2, 0, 1, 1, 2],
+              dtype=int32), 3, [2.0, 7.5])
         >>> utils.bin_series(xs, bounds=[2.0])
-        (array([1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1], dtype=int32), 2, [2.0])
+        (array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+              dtype=int32), 2, [2.0])
 
     Unlike the previous two types of binning, this approach returns the specific
     bounds rather than the bin sizes. The other two returns, the binned

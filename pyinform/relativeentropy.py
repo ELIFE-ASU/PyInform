@@ -30,7 +30,7 @@ See [Kullback1951]_ and [Cover1991]_ for more information.
 Examples
 --------
 
-::
+.. doctest:: relative_entropy
 
         >>> xs = [0,1,0,0,0,0,0,0,0,1]
         >>> ys = [0,1,1,1,1,0,0,1,0,0]
@@ -39,7 +39,7 @@ Examples
         >>> relative_entropy(ys, xs)
         0.3219280948873624
 
-::
+.. doctest:: relative_entropy
 
         >>> xs = [0,0,0,0]
         >>> ys = [0,1,1,0]
