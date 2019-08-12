@@ -65,7 +65,7 @@ And you are ready to go!
 Building the Documentation
 --------------------------
 
-You can find live API documentation at https://elife-asu.github.io/pyinform. However, you might want to build the documentation yourself — in PDF format, for example. To build the documentation you will have to be able to run PyInform as the `sphinx <http://www.sphinx-doc.org/en/stable/>`_ documentation generator (also required) uses the docstrings in the source to build the documentation.
+You can find live API documentation at https://elife-asu.github.io/PyInform. However, you might want to build the documentation yourself — in PDF format, for example. To build the documentation you will have to be able to run PyInform as the `sphinx <http://www.sphinx-doc.org/en/stable/>`_ documentation generator (also required) uses the docstrings in the source to build the documentation.
 
 Once you have PyInform running and Sphinx installed you can build the HTML and PDF documentation via :code:`make`::
 
