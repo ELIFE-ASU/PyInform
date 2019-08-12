@@ -41,7 +41,7 @@ That's it! You're ready to go.
 Manually
 ^^^^^^^^
 
-If you plan on contributing to PyInform, you likely want to build the project manually. Once you have clone the repository, you will need to manually retrieve the most recent version of the `inform binaries <https://github.com/ELIFE-ASU/Inform/releases/download/v0.0.5/inform-0.0.5_mixed.zip>`_. The associated zip file should be extracted in the :code:`pyinform` subdirectory.
+If you plan on contributing to PyInform, you likely want to build the project manually. Once you have clone the repository, you will need to manually retrieve the most recent version of the `inform binaries <https://github.com/ELIFE-ASU/Inform/releases/download/v1.0.0/inform-1.0.0_mixed.zip>`_. The associated zip file should be extracted in the :code:`pyinform` subdirectory.
 
 PyInform has one python dependency: `NumPy <http://www.numpy.org>`_. This should be easy to fulfill.
 
