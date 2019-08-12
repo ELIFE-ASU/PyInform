@@ -10,6 +10,7 @@ PyInform is a python wrapper for the C `inform <https://github.com/elife-asu/inf
 | |TravisCI|_  |
 | |Appveyor|_  |
 | |Codecov|_   |
+| |DOI|_       |
 +--------------+
 
 .. |TravisCI| image:: https://travis-ci.org/elife-asu/pyinform.svg?branch=master
@@ -20,6 +21,9 @@ PyInform is a python wrapper for the C `inform <https://github.com/elife-asu/inf
 
 .. |Codecov| image:: https://codecov.io/gh/elife-asu/pyinform/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/elife-asu/pyinform
+
+.. |DOI| image:: https://zenodo.org/badge/57985361.svg
+.. _DOI: https://zenodo.org/badge/latestdoi/57985361
 
 -------------------------
 Building and Installation
