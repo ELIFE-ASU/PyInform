@@ -3,8 +3,15 @@
 # license that can be found in the LICENSE file.
 from setuptools import setup
 
-with open('README.rst') as f:
-    readme = f.read()
+long_description="""
+PyInform is a python wrapper for the C `inform <https://github.com/elife-asu/inform>`_ library. You can find live API documentation at https://elife-asu.github.io/PyInform. 
+
+So far the python wrapper has been tested under :code:`python2.7`, :code:`python3.4` and :code:`python3.5`, and on the following platforms:
+
+* Debian 8
+* Mac OS X 10.11 (El Capitan)
+* Windows 10
+"""
 
 with open('LICENSE') as f:
     license = f.read()
@@ -22,7 +29,7 @@ setup(
     name='pyinform',
     version='0.1.0',
     description='A wrapper for the Inform library',
-    long_description=readme,
+    long_description=long_description,
     maintainer='Douglas G. Moore',
     maintainer_email='doug@dglmoore.com',
     url='https://github.com/elife-asu/pyinform',
