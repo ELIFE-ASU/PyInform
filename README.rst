@@ -1,3 +1,7 @@
+========
+PyInform
+========
+
 PyInform is a python wrapper for the C `inform <https://github.com/elife-asu/inform>`_ library.
 
 +--------------+
