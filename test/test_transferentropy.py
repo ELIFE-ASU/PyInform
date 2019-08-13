@@ -18,6 +18,10 @@ class TestTransferEntropy(unittest.TestCase):
         with self.assertRaises(ValueError):
             transfer_entropy([1, 1, 1], [], 1)
 
+    def test_transfer_entropy_dimension_too_great(self):
+        with self.assertRaises(ValueError):
+            transfer_entropy([[[0, 1, 1, 0]]], [[[1, 1, 1, 1]]], 2)
+
     def test_transfer_entropy_shape_mismatch(self):
         with self.assertRaises(ValueError):
             transfer_entropy([1, 1, 1], [1, 1, 1, 1], 1)
@@ -36,6 +40,28 @@ class TestTransferEntropy(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             transfer_entropy([[1, 1, 1]], [[1, 1, 1, 1]], 1)
+
+    def test_transfer_entropy_condition_shape_mismatch(self):
+        with self.assertRaises(ValueError):
+            transfer_entropy([0, 1, 1, 0], [0, 1, 0, 1], k=2, condition=[])
+        with self.assertRaises(ValueError):
+            transfer_entropy([0, 1, 1, 0], [0, 1, 0, 1], k=2, condition=[0, 1, 1])
+        with self.assertRaises(ValueError):
+            transfer_entropy([0, 1, 1, 0], [0, 1, 0, 1], k=2, condition=[0, 1, 1, 1, 0])
+        with self.assertRaises(ValueError):
+            transfer_entropy([0, 1, 1, 0], [0, 1, 0, 1], k=2, condition=[[0, 1, 1]])
+        with self.assertRaises(ValueError):
+            transfer_entropy([0, 1, 1, 0], [0, 1, 0, 1], k=2, condition=[[0, 1, 1, 1, 1], [1, 1, 1]])
+        with self.assertRaises(ValueError):
+            transfer_entropy([[0, 1, 1, 0]], [[0, 1, 0, 1]], k=2, condition=[0, 1, 1])
+        with self.assertRaises(ValueError):
+            transfer_entropy([[0, 1, 1, 0]], [[0, 1, 0, 1]], k=2, condition=[[0, 1, 1]])
+        with self.assertRaises(ValueError):
+            transfer_entropy([[0, 1, 1, 0]], [[0, 1, 0, 1]], k=2, condition=[[[0, 1, 1]]])
+        with self.assertRaises(ValueError):
+            transfer_entropy([[0, 1, 1, 0]], [[0, 1, 0, 1]], k=2, condition=[[[0, 1, 1, 0], [0, 1, 1, 1]]])
+        with self.assertRaises(ValueError):
+            transfer_entropy([[0, 1, 1, 0]], [[0, 1, 0, 1]], k=2, condition=[[[[0, 1, 1, 0], [0, 1, 1, 1]]]])
 
     def test_transfer_entropy_short_series(self):
         with self.assertRaises(InformError):
@@ -129,6 +155,53 @@ class TestTransferEntropy(unittest.TestCase):
             xs[:-1, :], ys[:-1, :], 2), places=6)
         self.assertAlmostEqual(0.000000, transfer_entropy(
             ys[:-1, :], ys[:-1, :], 2), places=6)
+
+    def test_complete_transfer_entropy(self):
+        xs = [0, 0, 1, 1, 1, 0, 1, 1, 0]
+        ys = [1, 0, 1, 1, 0, 1, 0, 1, 1]
+        cs = [[0, 0, 1, 1, 0, 0, 0, 1, 0], [0, 1, 1, 0, 0, 1, 0, 0, 1]]
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            ys, xs, 2, condition=cs), places=6)
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            cs[0], xs, 2, condition=ys), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, cs[0], 2, condition=ys), places=6)
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            cs[0], ys, 2, condition=xs), places=6)
+        self.assertAlmostEqual(0.285714, transfer_entropy(
+            ys, cs[0], 2, condition=xs), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [0, 0, 1, 0, 1, 1, 0, 1, 0]
+
+        self.assertAlmostEqual(0.571429, transfer_entropy(
+            ys, xs, 2, condition=cs), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [[0, 0, 1, 0, 1, 1, 0, 1, 0], [1, 1, 0, 1, 0, 0, 1, 0, 1]]
+
+        self.assertAlmostEqual(0.571429, transfer_entropy(
+            ys, xs, 2, condition=cs), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [[0, 0, 1, 0, 1, 1, 0, 1, 0], [0, 0, 0, 1, 1, 0, 1, 0, 0]]
+
+        self.assertAlmostEqual(0.285714, transfer_entropy(
+            ys, xs, 2, condition=cs), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs), places=6)
 
 
 class TestLocalTransferEntropy(unittest.TestCase):
@@ -273,6 +346,53 @@ class TestLocalTransferEntropy(unittest.TestCase):
                                transfer_entropy(xs[:-1, :], ys[:-1, :], 2, local=True).mean(), places=6)
         self.assertAlmostEqual(0.000000,
                                transfer_entropy(ys[:-1, :], ys[:-1, :], 2, local=True).mean(), places=6)
+
+    def test_complete_transfer_entropy(self):
+        xs = [0, 0, 1, 1, 1, 0, 1, 1, 0]
+        ys = [1, 0, 1, 1, 0, 1, 0, 1, 1]
+        cs = [[0, 0, 1, 1, 0, 0, 0, 1, 0], [0, 1, 1, 0, 0, 1, 0, 0, 1]]
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            ys, xs, 2, condition=cs, local=True).mean(), places=6)
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            cs[0], xs, 2, condition=ys, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, cs[0], 2, condition=ys, local=True).mean(), places=6)
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            cs[0], ys, 2, condition=xs, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.285714, transfer_entropy(
+            ys, cs[0], 2, condition=xs, local=True).mean(), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [0, 0, 1, 0, 1, 1, 0, 1, 0]
+
+        self.assertAlmostEqual(0.571429, transfer_entropy(
+            ys, xs, 2, condition=cs, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs, local=True).mean(), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [[0, 0, 1, 0, 1, 1, 0, 1, 0], [1, 1, 0, 1, 0, 0, 1, 0, 1]]
+
+        self.assertAlmostEqual(0.571429, transfer_entropy(
+            ys, xs, 2, condition=cs, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs, local=True).mean(), places=6)
+
+        xs = [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ys = [0, 0, 1, 1, 1, 0, 0, 0, 1]
+        cs = [[0, 0, 1, 0, 1, 1, 0, 1, 0], [0, 0, 0, 1, 1, 0, 1, 0, 0]]
+
+        self.assertAlmostEqual(0.285714, transfer_entropy(
+            ys, xs, 2, condition=cs, local=True).mean(), places=6)
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, 2, condition=cs, local=True).mean(), places=6)
 
 
 if __name__ == "__main__":
