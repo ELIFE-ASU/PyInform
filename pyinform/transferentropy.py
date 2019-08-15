@@ -21,14 +21,14 @@ source and target, while all other nodes in the network are treated as the
 background. Transfer entropy is then defined in terms of a time-local variant:
 
 .. math::
-    
-    t_{X \\rightarrow Y,\\mathcal{W},i}(k) = \\log_2{\\frac{p(y_{i+1}, x_i~|~y^{(k)}_i, W_{\{1,i\}},\\ldots,W_{\{l,i\}})}{p(y_{i+1}~|~y^{(k)}_i, W_{\{1,i\}},\\ldots,W_{\{l,i\}})p(x_i~|~y^{(k)}_i,W_{\{1,i\}},\\ldots,W_{\{l,i\}})}}
+
+    t_{X \\rightarrow Y,\\mathcal{W},i}(k) = \\log_2{\\frac{p(y_{i+1}, x_i~|~y^{(k)}_i, W_{\\{1,i\\}},\\ldots,W_{\\{l,i\\}})}{p(y_{i+1}~|~y^{(k)}_i, W_{\\{1,i\\}},\\ldots,W_{\\{l,i\\}})p(x_i~|~y^{(k)}_i,W_{\\{1,i\\}},\\ldots,W_{\\{l,i\\}})}}
 
 Averaging in time we have
 
 .. math::
 
-    T_{Y \\rightarrow X,\mathcal{W}}(k) = \\langle t_{X \\rightarrow Y,\mathcal{W},i}(k) \\rangle_i
+    T_{Y \\rightarrow X,\\mathcal{W}}(k) = \\langle t_{X \\rightarrow Y,\\mathcal{W},i}(k) \\rangle_i
 
 As in the case of :ref:`active-information` and :ref:`entropy-rate`, the
 transfer entropy is formally defined as the limit of the :math:`k`-history
@@ -36,9 +36,9 @@ transfer entropy as :math:`k \\rightarrow \\infty`:
 
 .. math::
 
-    t_{Y \\rightarrow X,\mathcal{W},i} = \\lim_{k \\rightarrow \\infty} t_{Y \\rightarrow X,\mathcal{W},i}(k)
+    t_{Y \\rightarrow X,\\mathcal{W},i} = \\lim_{k \\rightarrow \\infty} t_{Y \\rightarrow X,\\mathcal{W},i}(k)
     \\quad \\textrm{and} \\quad
-    T_{Y \\rightarrow X,\mathcal{W}} = \\lim_{k \\rightarrow \\infty} T_{Y \\rightarrow X,\mathcal{W}}(k),
+    T_{Y \\rightarrow X,\\mathcal{W}} = \\lim_{k \\rightarrow \\infty} T_{Y \\rightarrow X,\\mathcal{W}}(k),
 
 but we do not provide limiting functionality in this library (yet!).
 
