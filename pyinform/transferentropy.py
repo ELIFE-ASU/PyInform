@@ -2,18 +2,33 @@
 # Use of this source code is governed by a MIT
 # license that can be found in the LICENSE file.
 """
-`Transfer entropy`_ (TE) measures the amount of directed transfer of information
-between two random processes. The local variant of TE is defined as
+`Transfer entropy`_ (TE) was introduced by [Schreiber2000]_ to quantify
+information transfer between an information source and destination,
+conditioning out shared history effects. TE was originally formulated
+considering only the source and destination; however, many systems of interest
+have more than just those two components. As such, it may be necessary to
+condition the probabilities on the states of all "background" components in the
+system. These two forms are sometimes called _apparent_ and _complete_ transfer
+entropy, respectively ([Lizier2008]_).
+
+This implementation of TE allows the user to condition the probabilities on
+any number of background processes, within hardware limits of course. For
+the subsequent description, take :math:`X` to be the source, :math:`Y`
+the target, and :math:`\\mathcal{W}=\\left\\{W_1, \\ldots, W_l\\right\\}`
+to be the background processes against which we'd like to condition. For
+example, we might take the state of two nodes in a dynamical network as the
+source and target, while all other nodes in the network are treated as the
+background. Transfer entropy is then defined in terms of a time-local variant:
 
 .. math::
-
-    t_{Y \\rightarrow X, i}(k) = \\log_2 \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
+    
+    t_{X \\rightarrow Y,\\mathcal{W},i}(k) = \\log_2{\\frac{p(y_{i+1}, x_i~|~y^{(k)}_i, W_{\{1,i\}},\\ldots,W_{\{l,i\}})}{p(y_{i+1}~|~y^{(k)}_i, W_{\{1,i\}},\\ldots,W_{\{l,i\}})p(x_i~|~y^{(k)}_i,W_{\{1,i\}},\\ldots,W_{\{l,i\}})}}
 
 Averaging in time we have
 
 .. math::
 
-    T_{Y \\rightarrow X}(k) = \\sum_{x^{(k)}_i,\\, x_{i+1},\\, y_i} p(x_{i+1}, y_i, x^{(k)}_i) \\log_2 \\frac{p(x_{i+1}, y_i | x^{(k)}_i)}{p(x_{i+1} | x^{(k)}_i)p(y_i | x^{(k)}_i)}.
+    T_{Y \\rightarrow X,\mathcal{W}}(k) = \\langle t_{X \\rightarrow Y,\mathcal{W},i}(k) \\rangle_i
 
 As in the case of :ref:`active-information` and :ref:`entropy-rate`, the
 transfer entropy is formally defined as the limit of the :math:`k`-history
@@ -21,21 +36,11 @@ transfer entropy as :math:`k \\rightarrow \\infty`:
 
 .. math::
 
-    t_{Y \\rightarrow X,i} = \\lim_{k \\rightarrow \\infty} t_{Y \\rightarrow X,i}(k)
+    t_{Y \\rightarrow X,\mathcal{W},i} = \\lim_{k \\rightarrow \\infty} t_{Y \\rightarrow X,\mathcal{W},i}(k)
     \\quad \\textrm{and} \\quad
-    T_{Y \\rightarrow X} = \\lim_{k \\rightarrow \\infty} T_{Y \\rightarrow X}(k),
+    T_{Y \\rightarrow X,\mathcal{W}} = \\lim_{k \\rightarrow \\infty} T_{Y \\rightarrow X,\mathcal{W}}(k),
 
 but we do not provide limiting functionality in this library (yet!).
-
-.. note::
-
-    What we call "transfer entropy" is referred to as "apparent transfer
-    entropy" in the parlance of [Lizier2008]_. A related quantity, complete
-    transfer entropy, also considers the semi-infinite histories of all other
-    random processes associated with the system. An implementation of
-    complete transfer entropy is planned for a future release of
-    `Inform <http://github.com/elife-asu/inform>`_/PyInform.
-
 
 See [Schreiber2000]_, [Kraiser2002]_ and [Lizier2008]_ for more details.
 
@@ -44,82 +49,92 @@ See [Schreiber2000]_, [Kraiser2002]_ and [Lizier2008]_ for more details.
 Examples
 --------
 
-A Single Initial Condition
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+One initial condition, no background
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Just give us a couple of time series and tell us the history length and we'll
 give you a number
 
 .. doctest:: transfer_entropy
 
-    >>> xs = [0,0,1,1,1,1,0,0,0]
-    >>> ys = [0,1,1,1,1,0,0,0,1]
-    >>> transfer_entropy(ys, xs, k=1)
-    0.8112781244591327
-    >>> transfer_entropy(ys, xs, k=2)
+    >>> xs = [0,1,1,1,1,0,0,0,0]
+    >>> ys = [0,0,1,1,1,1,0,0,0]
+    >>> transfer_entropy(xs, ys, k=2)
     0.6792696431662097
-    >>> transfer_entropy(xs, ys, k=1)
-    0.21691718668869922
-    >>> transfer_entropy(xs, ys, k=2) # pesky floating-point math
+    >>> transfer_entropy(ys, xs, k=2)
     0.0
 
 or an array if you ask for it
 
 .. doctest:: transfer_entropy
 
-    >>> transfer_entropy(ys, xs, k=1, local=True)
-    array([[0.4150375, 2.       , 0.4150375, 0.4150375, 0.4150375, 2.       ,
-            0.4150375, 0.4150375]])
-    >>> transfer_entropy(ys, xs, k=2, local=True)
+    >>> transfer_entropy(xs, ys, k=2, local=True)
     array([[1.       , 0.       , 0.5849625, 0.5849625, 1.5849625, 0.       ,
             1.       ]])
-    >>> transfer_entropy(xs, ys, k=1, local=True)
-    array([[ 0.4150375,  0.4150375, -0.169925 , -0.169925 ,  0.4150375,
-             1.       , -0.5849625,  0.4150375]])
-    >>> transfer_entropy(xs, ys, k=2, local=True)
+    >>> transfer_entropy(ys, xs, k=2, local=True)
     array([[0., 0., 0., 0., 0., 0., 0.]])
 
-Multiple Initial Conditions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Two initial conditions, no background
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Uhm, yes we can! (Did you really expect anything less?)
 
 .. doctest:: transfer_entropy
 
-    >>> xs = [[0,0,1,1,1,1,0,0,0], [1,0,0,0,0,1,1,1,0]]
-    >>> ys = [[1,0,0,0,0,1,1,1,1], [1,1,1,1,0,0,0,1,1]]
-    >>> transfer_entropy(ys, xs, k=1)
-    0.8828560636920488
-    >>> transfer_entropy(ys, xs, k=2)
-    0.693536138896192
-    >>> transfer_entropy(xs, ys, k=1)
-    0.15969728512148243
+    >>> xs = [[1,0,0,0,0,1,1,1,1], [1,1,1,1,0,0,0,1,1]]
+    >>> ys = [[0,0,1,1,1,1,0,0,0], [1,0,0,0,0,1,1,1,0]]
     >>> transfer_entropy(xs, ys, k=2)
-    0.0
-
-
-And local too
-
-.. doctest:: transfer_entropy
-
-    >>> transfer_entropy(ys, xs, k=1, local=True)
-    array([[0.4150375 , 2.        , 0.67807191, 0.67807191, 0.67807191,
-            1.4150375 , 0.4150375 , 0.4150375 ],
-           [1.4150375 , 0.4150375 , 0.4150375 , 0.4150375 , 2.        ,
-            0.67807191, 0.67807191, 1.4150375 ]])
-    >>> transfer_entropy(ys, xs, k=2, local=True)
+    0.693536138896192
+    >>> transfer_entropy(xs, ys, k=2, local=True)
     array([[1.32192809, 0.        , 0.73696559, 0.73696559, 1.32192809,
             0.        , 0.73696559],
            [0.        , 0.73696559, 0.73696559, 1.32192809, 0.        ,
             0.73696559, 1.32192809]])
-    >>> transfer_entropy(xs, ys, k=1, local=True)
-    array([[ 0.5849625 ,  0.48542683, -0.25153877, -0.25153877,  0.48542683,
-             0.36257008, -0.22239242, -0.22239242],
-           [ 0.36257008, -0.22239242, -0.22239242,  0.5849625 ,  0.48542683,
-            -0.25153877,  0.48542683,  0.36257008]])
-    >>> transfer_entropy(xs, ys, k=2, local=True)
-    array([[0., 0., 0., 0., 0., 0., 0.],
-           [0., 0., 0., 0., 0., 0., 0.]])
+
+One initial condition, one background process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doctest:: transfer_entropy
+
+    >>> xs = [0,1,1,1,1,0,0,0,0]
+    >>> ys = [0,0,1,1,1,1,0,0,0]
+    >>> ws = [0,1,1,1,1,0,1,1,1]
+    >>> transfer_entropy(xs, ys, k=2, condition=ws)
+    0.2857142857142857
+    >>> transfer_entropy(xs, ys, k=2, condition=ws, local=True)
+    array([[1., 0., 0., 0., 0., 0., 1.]])
+
+One initial condition, two background processes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doctest:: transfer_entropy
+
+    >>> xs = [0,1,1,1,1,0,0,0,0]
+    >>> ys = [0,0,1,1,1,1,0,0,0]
+    >>> ws = [[1,0,1,0,1,1,1,1,1], [1,1,0,1,0,1,1,1,1]]
+    >>> transfer_entropy(xs, ys, k=2, condition=ws)
+    0.0
+    >>> transfer_entropy(xs, ys, k=2, condition=ws, local=True)
+    array([[0., 0., 0., 0., 0., 0., 0.]])
+
+Two initial conditions, two background processes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doctest:: transfer_entropy
+
+    >>> xs = [[1,1,0,1,0,1,1,0,0],[0,1,0,1,1,1,0,0,1]]
+    >>> ys = [[1,1,1,0,1,1,1,0,0],[0,0,1,0,1,1,1,0,0]]
+    >>> ws = [[[1,1,0,1,1,0,1,0,1],[1,1,1,0,1,1,1,1,0]],
+    ...       [[1,1,1,1,0,0,0,0,1],[0,0,0,1,1,1,1,0,1]]]
+    >>> transfer_entropy(xs, ys, k=2)
+    0.5364125003090668
+    >>> transfer_entropy(xs, ys, k=2, condition=ws)
+    0.3396348215831049
+    >>> transfer_entropy(xs, ys, k=2, condition=ws, local=True)
+    array([[ 1.       ,  0.       ,  0.       , -0.4150375,  0.       ,
+             0.       ,  1.       ],
+           [ 0.       ,  0.5849625,  1.       ,  0.5849625,  0.       ,
+             1.       ,  0.       ]])
 """
 import numpy as np
 
@@ -131,13 +146,16 @@ from pyinform.error import ErrorCode, error_guard
 def transfer_entropy(source, target, k, condition=None, local=False):
     """
     Compute the local or average transfer entropy from one time series to
-    another with target history length *k*.
+    another with target history length *k*. Optionally, time series can be
+    provided against which to *condition*.
 
     :param source: the source time series
     :type source: sequence or ``numpy.ndarray``
     :param target: the target time series
     :type target: sequence or ``numpy.ndarray``
     :param int k: the history length
+    :param condition: time series of any conditions
+    :type condition: sequence or ``numpy.ndarray``
     :param bool local: compute the local transfer entropy
     :returns: the average or local transfer entropy
     :rtype: float or ``numpy.ndarray``
