@@ -1,9 +1,9 @@
-.. _shannon:
-
 .. testsetup:: shannon
 
     from pyinform import Dist
     from pyinform import shannon
+
+.. _shannon:
 
 Shannon Information Measures
 ============================

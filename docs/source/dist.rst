@@ -1,9 +1,8 @@
-.. _dist:
-
 .. testsetup:: Dist
 
     from pyinform import Dist
 
+.. _dist:
 
 Empirical Distributions
 =======================
