@@ -7,6 +7,7 @@ PyInform
 | |TravisCI|_  |
 | |Appveyor|_  |
 | |Codecov|_   |
+| |DOI|_       |
 +--------------+
 
 .. |TravisCI| image:: https://travis-ci.org/elife-asu/pyinform.svg?branch=master
@@ -17,6 +18,9 @@ PyInform
 
 .. |Codecov| image:: https://codecov.io/gh/elife-asu/pyinform/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/elife-asu/pyinform
+
+.. |DOI| image:: https://zenodo.org/badge/57985361.svg
+.. _DOI: https://zenodo.org/badge/latestdoi/57985361
 
 PyInform is a python library of information-theoretic measures for time series
 data. PyInform is backed by the `Inform <https://github.com/elife-asu/inform>`_
