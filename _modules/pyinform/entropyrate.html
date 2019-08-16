@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyinform.entropyrate &mdash; PyInform 0.0.5 documentation</title>
+  <title>pyinform.entropyrate &mdash; PyInform 0.2.0 documentation</title>
   
 
   
@@ -17,41 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyInform 0.0.5 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.2.0
               </div>
             
           
@@ -106,7 +100,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">PyInform</a>
@@ -114,9 +108,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -146,8 +141,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -159,7 +152,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyinform.entropyrate</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span></span><span class="c1"># Copyright 2016-2019 Douglas G. Moore. All rights reserved.</span>
 <span class="c1"># Use of this source code is governed by a MIT</span>
 <span class="c1"># license that can be found in the LICENSE file.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -170,23 +163,23 @@
 
 <span class="sd">.. math::</span>
 
-<span class="sd">    h_{X,i}(k,b) = \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}</span>
+<span class="sd">    h_{X,i}(k) = \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}</span>
 
 <span class="sd">can be averaged to obtain the global entropy rate</span>
 
 <span class="sd">.. math::</span>
 
-<span class="sd">    H_X(k,b) = \\langle h_{X,i}(k,b) \\rangle_{i}</span>
-<span class="sd">             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_b \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}.</span>
+<span class="sd">    H_X(k) = \\langle h_{X,i}(k) \\rangle_{i}</span>
+<span class="sd">             = \\sum_{x^{(k)}_i,\\, x_{i+1}} p(x^{(k)}_i, x_{i+1}) \\log_2 \\frac{p(x^{(k)}_i, x_{i+1})}{p(x^{(k)}_i)}.</span>
 
 <span class="sd">Much as with :ref:`active-information`, the local and average entropy rates are</span>
 <span class="sd">formally obtained in the limit</span>
 
 <span class="sd">.. math::</span>
 
-<span class="sd">    h_{X,i}(b) = \\lim_{k \\rightarrow \infty} h_{X,i}(k,b)</span>
+<span class="sd">    h_{X,i} = \\lim_{k \\rightarrow \\infty} h_{X,i}(k)</span>
 <span class="sd">    \\quad \\textrm{and} \\quad</span>
-<span class="sd">    H_X(b) = \\lim_{k \\rightarrow \infty} H_X(k,b),</span>
+<span class="sd">    H_X = \\lim_{k \\rightarrow \\infty} H_X(k),</span>
 
 <span class="sd">but we do not provide limiting functionality in this library (yet!).</span>
 
@@ -202,63 +195,50 @@
 
 <span class="sd">Let&#39;s apply the entropy rate to a single initial condition. Typically, you will</span>
 <span class="sd">just provide the time series and the history length, and let</span>
-<span class="sd">:py:func:`.entropy_rate` take care of the rest: ::</span>
+<span class="sd">:py:func:`.entropy_rate` take care of the rest:</span>
+
+<span class="sd">.. doctest:: entropy_rate</span>
 
 <span class="sd">    &gt;&gt;&gt; entropy_rate([0,0,1,1,1,1,0,0,0], k=2)</span>
 <span class="sd">    0.6792696431662095</span>
 <span class="sd">    &gt;&gt;&gt; entropy_rate([0,0,1,1,1,1,0,0,0], k=2, local=True)</span>
-<span class="sd">    array([[ 1.       ,  0.       ,  0.5849625,  0.5849625,  1.5849625,</span>
-<span class="sd">             0.       ,  1.       ]])</span>
-<span class="sd">             </span>
-<span class="sd">As with all of the time series measures, you can override the default base. ::</span>
-
+<span class="sd">    array([[1.       , 0.       , 0.5849625, 0.5849625, 1.5849625, 0.       ,</span>
+<span class="sd">            1.       ]])</span>
 <span class="sd">    &gt;&gt;&gt; entropy_rate([0,0,1,1,1,1,2,2,2], k=2)</span>
-<span class="sd">    0.24830578469386944</span>
-<span class="sd">    &gt;&gt;&gt; entropy_rate([0,0,1,1,1,1,2,2,2], k=2, b=4)</span>
-<span class="sd">    0.19677767872596208</span>
-<span class="sd">    &gt;&gt;&gt; entropy_rate([0,0,1,1,1,1,2,2,2], k=2, b=2)</span>
-<span class="sd">    Traceback (most recent call last):</span>
-<span class="sd">      File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span>
-<span class="sd">      File &quot;/home/ubuntu/workspace/pyinform/entropyrate.py&quot;, line 79, in entropy_rate</span>
-<span class="sd">        error_guard(e)</span>
-<span class="sd">      File &quot;/home/ubuntu/workspace/pyinform/error.py&quot;, line 57, in error_guard</span>
-<span class="sd">        raise InformError(e,func)</span>
-<span class="sd">    pyinform.error.InformError: an inform error occurred - &quot;unexpected state in timeseries&quot;</span>
+<span class="sd">    0.39355535745192416</span>
 
 <span class="sd">Multiple Initial Conditions</span>
 <span class="sd">^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
-<span class="sd">Of course multiple initial conditions are handled. ::</span>
+<span class="sd">Of course multiple initial conditions are handled.</span>
+
+<span class="sd">.. doctest:: entropy_rate</span>
 
 <span class="sd">    &gt;&gt;&gt; series = [[0,0,1,1,1,1,0,0,0], [1,0,0,1,0,0,1,0,0]]</span>
 <span class="sd">    &gt;&gt;&gt; entropy_rate(series, k=2)</span>
 <span class="sd">    0.6253491072973907</span>
 <span class="sd">    &gt;&gt;&gt; entropy_rate(series, k=2, local=True)</span>
-<span class="sd">    array([[ 0.4150375,  1.5849625,  0.5849625,  0.5849625,  1.5849625,</span>
-<span class="sd">             0.       ,  2.       ],</span>
-<span class="sd">           [ 0.       ,  0.4150375,  0.5849625,  0.       ,  0.4150375,</span>
-<span class="sd">             0.5849625,  0.       ]])</span>
+<span class="sd">    array([[0.4150375, 1.5849625, 0.5849625, 0.5849625, 1.5849625, 0.       ,</span>
+<span class="sd">            2.       ],</span>
+<span class="sd">           [0.       , 0.4150375, 0.5849625, 0.       , 0.4150375, 0.5849625,</span>
+<span class="sd">            0.       ]])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span>
 <span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
 <span class="kn">from</span> <span class="nn">pyinform.error</span> <span class="k">import</span> <span class="n">ErrorCode</span><span class="p">,</span> <span class="n">error_guard</span>
 
-<div class="viewcode-block" id="entropy_rate"><a class="viewcode-back" href="../../timeseries.html#pyinform.entropyrate.entropy_rate">[docs]</a><span class="k">def</span> <span class="nf">entropy_rate</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="entropy_rate"><a class="viewcode-back" href="../../timeseries.html#pyinform.entropyrate.entropy_rate">[docs]</a><span class="k">def</span> <span class="nf">entropy_rate</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the average or local entropy rate of a time series with history</span>
 <span class="sd">    length *k*.</span>
-<span class="sd">    </span>
-<span class="sd">    If the base *b* is not specified (or is 0), then it is inferred from the</span>
-<span class="sd">    time series (with 2) as a minimum. *b* must be at least the base of the time</span>
-<span class="sd">    series and is used a the base of the logarithm.</span>
 
 <span class="sd">    :param series: the time series</span>
 <span class="sd">    :type series: sequence or ``numpy.ndarray``</span>
 <span class="sd">    :param int k: the history length</span>
-<span class="sd">    :param int b: the base of the time series and logarithm</span>
 <span class="sd">    :param bool local: compute the local active information</span>
 <span class="sd">    :returns: the average or local entropy rate</span>
 <span class="sd">    :rtype: float or ``numpy.ndarray``</span>
@@ -273,8 +253,7 @@
     <span class="k">elif</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dimension greater than 2&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -286,7 +265,7 @@
 
     <span class="k">if</span> <span class="n">local</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">q</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
-        <span class="n">er</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">q</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">er</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">er</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
         <span class="n">_local_entropy_rate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -295,6 +274,7 @@
     <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">er</span></div>
+
 
 <span class="n">_entropy_rate</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_entropy_rate</span>
 <span class="n">_entropy_rate</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
@@ -306,9 +286,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -317,11 +295,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, ELIFE.
+        &copy; Copyright 2016-2019, Douglas G. Moore
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -334,37 +312,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.0.5',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

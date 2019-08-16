@@ -1,5 +1,34 @@
 .. _timeseries:
 
+.. testsetup:: active_info
+
+    from pyinform import active_info
+
+.. testsetup:: block_entropy
+
+    from pyinform import block_entropy
+
+.. testsetup:: conditional_entropy
+
+    from pyinform import conditional_entropy
+
+.. testsetup:: entropy_rate
+
+    from pyinform import entropy_rate
+
+.. testsetup:: mutual_info
+
+    from pyinform import mutual_info
+
+.. testsetup:: relative_entropy
+
+    from pyinform import relative_entropy
+
+.. testsetup:: transfer_entropy
+
+    from pyinform import transfer_entropy
+
+
 Time Series Measures
 ====================
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyinform.utils.binning &mdash; PyInform 0.0.5 documentation</title>
+  <title>pyinform.utils.binning &mdash; PyInform 0.2.0 documentation</title>
   
 
   
@@ -17,41 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="PyInform 0.0.5 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.2.0
               </div>
             
           
@@ -106,7 +100,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">PyInform</a>
@@ -114,9 +108,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -146,8 +141,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -159,7 +152,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyinform.utils.binning</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span></span><span class="c1"># Copyright 2016-2019 Douglas G. Moore. All rights reserved.</span>
 <span class="c1"># Use of this source code is governed by a MIT</span>
 <span class="c1"># license that can be found in the LICENSE file.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -188,15 +181,17 @@
 <span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
 <span class="kn">from</span> <span class="nn">pyinform.error</span> <span class="k">import</span> <span class="n">ErrorCode</span><span class="p">,</span> <span class="n">error_guard</span>
 
+
 <div class="viewcode-block" id="series_range"><a class="viewcode-back" href="../../../utils.html#pyinform.utils.binning.series_range">[docs]</a><span class="k">def</span> <span class="nf">series_range</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the range of a continuously-valued time series.</span>
-<span class="sd">    </span>
-<span class="sd">    Examples: ::</span>
-<span class="sd">    </span>
-<span class="sd">        &gt;&gt;&gt; from pyinform import utils</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    .. doctest:: utils</span>
+
 <span class="sd">        &gt;&gt;&gt; utils.series_range([0,1,2,3,4,5])</span>
-<span class="sd">        (5, 0, 5)</span>
+<span class="sd">        (5.0, 0.0, 5.0)</span>
 <span class="sd">        &gt;&gt;&gt; utils.series_range([-0.1, 8.5, 0.02, -6.3])</span>
 <span class="sd">        (14.8, -6.3, 8.5)</span>
 
@@ -209,76 +204,90 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
 
     <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span> <span class="o">=</span> <span class="n">c_double</span><span class="p">(),</span> <span class="n">c_double</span><span class="p">()</span>
-    
+
     <span class="n">e</span> <span class="o">=</span> <span class="n">ErrorCode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">rng</span> <span class="o">=</span> <span class="n">_inform_range</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="nb">min</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="nb">max</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">_inform_range</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+                        <span class="n">byref</span><span class="p">(</span><span class="nb">min</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="nb">max</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">rng</span><span class="p">,</span> <span class="nb">min</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">max</span><span class="o">.</span><span class="n">value</span></div>
+
 
 <div class="viewcode-block" id="bin_series"><a class="viewcode-back" href="../../../utils.html#pyinform.utils.binning.bin_series">[docs]</a><span class="k">def</span> <span class="nf">bin_series</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Bin a continously-valued times series.</span>
-<span class="sd">    </span>
+
 <span class="sd">    The binning can be performed in any one of three ways.</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. rubric:: 1. Specified Number of Bins</span>
-<span class="sd">    </span>
+
 <span class="sd">    The first is binning the time series into *b* uniform bins (with *b* an</span>
-<span class="sd">    integer). ::</span>
-<span class="sd">    </span>
-<span class="sd">        &gt;&gt;&gt; from pyinform import utils</span>
+<span class="sd">    integer).</span>
+
+<span class="sd">    .. doctest:: utils</span>
+
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(2019)</span>
 <span class="sd">        &gt;&gt;&gt; xs = 10 * np.random.rand(20)</span>
 <span class="sd">        &gt;&gt;&gt; xs</span>
-<span class="sd">        array([ 6.62004974,  7.24471972,  0.76670198,  2.66306833,  4.32200795,</span>
-<span class="sd">                8.84902227,  6.83491844,  7.05008074,  3.79287646,  6.50844032,</span>
-<span class="sd">                8.68804879,  6.79543773,  0.3222078 ,  7.39576325,  7.54150189,</span>
-<span class="sd">                1.06422897,  1.91958431,  2.34760945,  3.90139184,  3.08885353])</span>
+<span class="sd">        array([9.03482214, 3.93080507, 6.23969961, 6.37877401, 8.80499069,</span>
+<span class="sd">               2.99172019, 7.0219827 , 9.03206161, 8.81381926, 4.05749798,</span>
+<span class="sd">               4.52446621, 2.67070324, 1.6286487 , 8.89214695, 1.48476226,</span>
+<span class="sd">               9.84723485, 0.32361219, 5.15350754, 2.01129047, 8.86010874])</span>
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, b=2)</span>
-<span class="sd">        (array([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 2, 4.263407236635026)</span>
+<span class="sd">        (array([1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],</span>
+<span class="sd">              dtype=int32), 2, 4.761811327822174)</span>
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, b=3)</span>
-<span class="sd">        (array([2, 2, 0, 0, 1, 2, 2, 2, 1, 2, 2, 2, 0, 2, 2, 0, 0, 0, 1, 0], dtype=int32), 3, 2.8422714910900173)</span>
+<span class="sd">        (array([2, 1, 1, 1, 2, 0, 2, 2, 2, 1, 1, 0, 0, 2, 0, 2, 0, 1, 0, 2],</span>
+<span class="sd">              dtype=int32), 3, 3.1745408852147823)</span>
 
-<span class="sd">    </span>
+
 <span class="sd">    With this approach the binned sequence (as an ``numpy.ndarray``), the number</span>
 <span class="sd">    of bins, and the size of each bin are returned.</span>
-<span class="sd">    </span>
+
 <span class="sd">    This binning method is useful if, for example, the user wants to bin several</span>
 <span class="sd">    time series to the same base.</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. rubric:: 2. Fixed Size Bins</span>
-<span class="sd">    </span>
-<span class="sd">    The second type of binning produces bins of a specific size *step*.::</span>
-<span class="sd">    </span>
+
+<span class="sd">    The second type of binning produces bins of a specific size *step*.</span>
+
+<span class="sd">    .. doctest:: utils</span>
+
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, step=4.0)</span>
-<span class="sd">        (array([1, 1, 0, 0, 0, 2, 1, 1, 0, 1, 2, 1, 0, 1, 1, 0, 0, 0, 0, 0], dtype=int32), 3, 4.0)</span>
+<span class="sd">        (array([2, 0, 1, 1, 2, 0, 1, 2, 2, 0, 1, 0, 0, 2, 0, 2, 0, 1, 0, 2],</span>
+<span class="sd">              dtype=int32), 3, 4.0)</span>
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, step=2.0)</span>
-<span class="sd">        (array([3, 3, 0, 1, 1, 4, 3, 3, 1, 3, 4, 3, 0, 3, 3, 0, 0, 1, 1, 1], dtype=int32), 5, 2.0)</span>
-<span class="sd">        </span>
+<span class="sd">        (array([4, 1, 2, 3, 4, 1, 3, 4, 4, 1, 2, 1, 0, 4, 0, 4, 0, 2, 0, 4],</span>
+<span class="sd">              dtype=int32), 5, 2.0)</span>
+
 <span class="sd">    As in the previous case the binned sequence, the number of bins, and the</span>
 <span class="sd">    size of each bin are returned.</span>
-<span class="sd">    </span>
+
 <span class="sd">    This approach is appropriate when the system at hand has a particular</span>
 <span class="sd">    sensitivity or precision, e.g. if the system is sensitive down to 5.0mV</span>
 <span class="sd">    changes in potential.</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. rubric:: 3. Thresholds</span>
-<span class="sd">    </span>
+
 <span class="sd">    The third type of binning is breaks the real number line into segments with</span>
 <span class="sd">    specified boundaries or thresholds, and the time series is binned according</span>
 <span class="sd">    to this partitioning. The bounds are expected to be provided in ascending</span>
-<span class="sd">    order.::</span>
-<span class="sd">    </span>
+<span class="sd">    order.</span>
+
+<span class="sd">    .. doctest:: utils</span>
+
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, bounds=[2.0, 7.5])</span>
-<span class="sd">        (array([1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 2, 1, 0, 1, 2, 0, 0, 1, 1, 1], dtype=int32), 3, [2.0, 7.5])</span>
+<span class="sd">        (array([2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 0, 2, 0, 2, 0, 1, 1, 2],</span>
+<span class="sd">              dtype=int32), 3, [2.0, 7.5])</span>
 <span class="sd">        &gt;&gt;&gt; utils.bin_series(xs, bounds=[2.0])</span>
-<span class="sd">        (array([1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1], dtype=int32), 2, [2.0])</span>
+<span class="sd">        (array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1],</span>
+<span class="sd">              dtype=int32), 2, [2.0])</span>
 
 <span class="sd">    Unlike the previous two types of binning, this approach returns the specific</span>
 <span class="sd">    bounds rather than the bin sizes. The other two returns, the binned</span>
 <span class="sd">    sequence and the number of bins, are returned as before.</span>
-<span class="sd">    </span>
+
 <span class="sd">    This approach is useful in situations where the system has natural</span>
 <span class="sd">    thesholds, e.g. the polarized/hyperpolarized states of a neuron.</span>
 
@@ -293,14 +302,16 @@
 <span class="sd">    :raises InformError: if an error occurs in the ``inform`` C call</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;must provide either number of bins, step size, or bin boundaries&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;must provide either number of bins, step size, or bin boundaries&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot provide both number of bins and step size&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot provide both number of bins and bin boundaries&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;cannot provide both number of bins and bin boundaries&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot provide both step size and bin boundaries&quot;</span><span class="p">)</span>
-    
+
     <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
 
@@ -312,37 +323,42 @@
         <span class="n">spec</span> <span class="o">=</span> <span class="n">_inform_bin</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">elif</span> <span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">step</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">_inform_bin_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">c_double</span><span class="p">(</span><span class="n">step</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">_inform_bin_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+                             <span class="n">c_double</span><span class="p">(</span><span class="n">step</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">elif</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">bnds</span> <span class="o">=</span> <span class="n">boundaries</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">))</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">bounds</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">_inform_bin_bounds</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">bnds</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">boundaries</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">_inform_bin_bounds</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span>
+            <span class="n">xs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">bnds</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">(</span><span class="n">boundaries</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">out</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="n">error_guard</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">binned</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">spec</span></div>
 
+
 <span class="n">_inform_range</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_range</span>
-<span class="n">_inform_range</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_range</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span>
+    <span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
 <span class="n">_inform_range</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
 
 <span class="n">_inform_bin</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_bin</span>
-<span class="n">_inform_bin</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_bin</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
 <span class="n">_inform_bin</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_double</span>
 
 <span class="n">_inform_bin_step</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_bin_step</span>
-<span class="n">_inform_bin_step</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_bin_step</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
 <span class="n">_inform_bin_step</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
 
 <span class="n">_inform_bin_bounds</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_bin_bounds</span>
-<span class="n">_inform_bin_bounds</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
+<span class="n">_inform_bin_bounds</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span>
+    <span class="n">c_double</span><span class="p">),</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
 <span class="n">_inform_bin_bounds</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -351,11 +367,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, ELIFE.
+        &copy; Copyright 2016-2019, Douglas G. Moore
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -368,37 +384,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.0.5',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

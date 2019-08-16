@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Shannon Information Measures &mdash; PyInform 0.0.5 documentation</title>
+  <title>Shannon Information Measures &mdash; PyInform 0.2.0 documentation</title>
   
 
   
@@ -17,42 +17,37 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="PyInform 0.0.5 documentation" href="index.html"/>
-        <link rel="next" title="Time Series Measures" href="timeseries.html"/>
-        <link rel="prev" title="Empirical Distributions" href="dist.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Time Series Measures" href="timeseries.html" />
+    <link rel="prev" title="Empirical Distributions" href="dist.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -66,7 +61,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.2.0
               </div>
             
           
@@ -117,7 +112,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">PyInform</a>
@@ -125,9 +120,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -171,25 +167,32 @@
             
   <div class="section" id="shannon-information-measures">
 <span id="shannon"></span><h1>Shannon Information Measures<a class="headerlink" href="#shannon-information-measures" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-pyinform.shannon" title="pyinform.shannon"><code class="xref py py-mod docutils literal"><span class="pre">pyinform.shannon</span></code></a> module provides a collection of entropy and
+<p>The <a class="reference internal" href="#module-pyinform.shannon" title="pyinform.shannon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyinform.shannon</span></code></a> module provides a collection of entropy and
 information measures on discrete probability distributions
-(<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>). This module forms the core of PyInform as
+(<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>). This module forms the core of PyInform as
 all of the time series analysis functions are built upon this module.</p>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="example-1-entropy-and-random-numbers">
 <h3>Example 1: Entropy and Random Numbers<a class="headerlink" href="#example-1-entropy-and-random-numbers" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="#pyinform.shannon.entropy" title="pyinform.shannon.entropy"><code class="xref py py-func docutils literal"><span class="pre">pyinform.shannon.entropy()</span></code></a> function allows us to calculate the
+<p>The <a class="reference internal" href="#pyinform.shannon.entropy" title="pyinform.shannon.entropy"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyinform.shannon.entropy()</span></code></a> function allows us to calculate the
 Shannon entropy of a distributions. Let’s try generating a random distribution
 and see what the entropy looks like?</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
+<span class="kn">from</span> <span class="nn">pyinform.shannon</span> <span class="k">import</span> <span class="n">entropy</span>
 
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2019</span><span class="p">)</span>
 <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
     <span class="n">d</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>       <span class="c1"># 3.32137023165359</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span> <span class="c1"># 0.9998320664331565</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>3.3216276921709724
+0.9999095697715877
 </pre></div>
 </div>
 <p>This is exactly what you should expect; the pseudo-random number generate does
@@ -198,12 +201,13 @@ a decent job producing integers in a uniform fashion.</p>
 <div class="section" id="example-2-mutual-information">
 <h3>Example 2: Mutual Information<a class="headerlink" href="#example-2-mutual-information" title="Permalink to this headline">¶</a></h3>
 <p>How correlated are consecutive integers? Let’s find out using
-<code class="xref py py-func docutils literal"><span class="pre">mutual_info()</span></code>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">mutual_info()</span></code>.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
 <span class="kn">from</span> <span class="nn">pyinform.shannon</span> <span class="k">import</span> <span class="n">mutual_info</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2019</span><span class="p">)</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 
 <span class="n">p_xy</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">p_x</span>  <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -215,8 +219,12 @@ a decent job producing integers in a uniform fashion.</p>
         <span class="n">p_y</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">p_xy</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">mutual_info</span><span class="p">(</span><span class="n">p_xy</span><span class="p">,</span> <span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">))</span>       <span class="c1"># -1.7763568394002505e-15</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">mutual_info</span><span class="p">(</span><span class="n">p_xy</span><span class="p">,</span> <span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span> <span class="c1"># -6.661338147750939e-16</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mutual_info</span><span class="p">(</span><span class="n">p_xy</span><span class="p">,</span> <span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mutual_info</span><span class="p">(</span><span class="n">p_xy</span><span class="p">,</span> <span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1.3322676295501878e-15
+4.440892098500626e-16
 </pre></div>
 </div>
 <p>Due to the subtlties of floating-point computation we don’t get zero. Really,
@@ -226,24 +234,29 @@ though the mutual information is zero.</p>
 <h3>Example 3: Relative Entropy and Biased Random Numbers<a class="headerlink" href="#example-3-relative-entropy-and-biased-random-numbers" title="Permalink to this headline">¶</a></h3>
 <p>Okay. Now let’s generate some binary sequences. The first will be roughly
 uniform, but the second will be biased toward 0.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyinform.dist</span> <span class="k">import</span> <span class="n">Dist</span>
 <span class="kn">from</span> <span class="nn">pyinform.shannon</span> <span class="k">import</span> <span class="n">relative_entropy</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2019</span><span class="p">)</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ys</span><span class="p">:</span>
     <span class="n">p</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
-<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
     <span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(((</span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
     <span class="n">q</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">))</span> <span class="c1"># 0.3338542254583825</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">))</span> <span class="c1"># 0.40107198925821924</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.3810306585586593
+0.4924878808808457
 </pre></div>
 </div>
 </div>
@@ -252,283 +265,252 @@ uniform, but the second will be biased toward 0.</p>
 <span id="api-documentation"></span><h2>API Documentation<a class="headerlink" href="#module-pyinform.shannon" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="pyinform.shannon.entropy">
-<code class="descclassname">pyinform.shannon.</code><code class="descname">entropy</code><span class="sig-paren">(</span><em>p</em>, <em>b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.entropy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyinform.shannon.</code><code class="sig-name descname">entropy</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the base-<em>b</em> shannon entropy of the distribution <em>p</em>.</p>
-<p>Taking <span class="math">\(X\)</span> to be a random variable with <span class="math">\(p_X\)</span> a probability
-distribution on <span class="math">\(X\)</span>, the base-<span class="math">\(b\)</span> Shannon entropy is defined
+<p>Taking <span class="math notranslate nohighlight">\(X\)</span> to be a random variable with <span class="math notranslate nohighlight">\(p_X\)</span> a probability
+distribution on <span class="math notranslate nohighlight">\(X\)</span>, the base-<span class="math notranslate nohighlight">\(b\)</span> Shannon entropy is defined
 as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[H(X) = -\sum_{x} p_X(x) \log_b p_X(x).\]</div>
 <p class="rubric">Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 <span class="go">2.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="go">1.0</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 <span class="go">0.9182958340544896</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">0.579380164285695</span>
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="#shannon1948a" id="id1">[Shannon1948a]</a> for more details.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the distribution</li>
-<li><strong>b</strong> (<em>float</em>) – the logarithmic base</li>
+<p>See <a class="reference internal" href="#shannon1948a" id="id1"><span>[Shannon1948a]</span></a> for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the distribution</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the logarithmic base</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the shannon entropy of the distribution</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the shannon entropy of the distribution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyinform.shannon.mutual_info">
-<code class="descclassname">pyinform.shannon.</code><code class="descname">mutual_info</code><span class="sig-paren">(</span><em>p_xy</em>, <em>p_x</em>, <em>p_y</em>, <em>b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#mutual_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.mutual_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyinform.shannon.</code><code class="sig-name descname">mutual_info</code><span class="sig-paren">(</span><em class="sig-param">p_xy</em>, <em class="sig-param">p_x</em>, <em class="sig-param">p_y</em>, <em class="sig-param">b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#mutual_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.mutual_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the base-<em>b</em> mututal information between two random variables.</p>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Mutual_information">Mutual information</a> provides a measure of the mutual dependence between
-two random variables. Let <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> be random variables with
-probability distributions <span class="math">\(p_X\)</span> and <span class="math">\(p_Y\)</span> respectively, and
-<span class="math">\(p_{X,Y}\)</span> the joint probability distribution over <span class="math">\((X,Y)\)</span>. The
-base-<span class="math">\(b\)</span> mutual information between <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> is
+two random variables. Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be random variables with
+probability distributions <span class="math notranslate nohighlight">\(p_X\)</span> and <span class="math notranslate nohighlight">\(p_Y\)</span> respectively, and
+<span class="math notranslate nohighlight">\(p_{X,Y}\)</span> the joint probability distribution over <span class="math notranslate nohighlight">\((X,Y)\)</span>. The
+base-<span class="math notranslate nohighlight">\(b\)</span> mutual information between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> is
 defined as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}I(X;Y) &amp;= \sum_{x,y} p_{X,Y}(x,y) \log_b \frac{p_{X,Y}(x,y)}{p_X(x)p_Y(y)}\\
        &amp;= H(X) + H(Y) - H(X,Y).\end{split}\]</div>
 <p>Here the second line takes advantage of the properties of logarithms and
-the definition of Shannon entropy, <a class="reference internal" href="#pyinform.shannon.entropy" title="pyinform.shannon.entropy"><code class="xref py py-func docutils literal"><span class="pre">entropy()</span></code></a>.</p>
+the definition of Shannon entropy, <a class="reference internal" href="#pyinform.shannon.entropy" title="pyinform.shannon.entropy"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy()</span></code></a>.</p>
 <p>To some degree one can think of mutual information as a measure of the
 (linear and non-linear) coorelations between random variables.</p>
-<p>See <a class="reference internal" href="#cover1991a" id="id2">[Cover1991a]</a> for more details.</p>
+<p>See <a class="reference internal" href="#cover1991a" id="id2"><span>[Cover1991a]</span></a> for more details.</p>
 <p class="rubric">Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mutual_info</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="go">0.214170945007629</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">mutual_info</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">0.21417094500762912</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p_xy</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</li>
-<li><strong>p_x</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>x</em>-marginal distribution</li>
-<li><strong>p_y</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>y</em>-marginal distribution</li>
-<li><strong>b</strong> (<em>float</em>) – the logarithmic base</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_xy</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</p></li>
+<li><p><strong>p_x</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>x</em>-marginal distribution</p></li>
+<li><p><strong>p_y</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>y</em>-marginal distribution</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the logarithmic base</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the mutual information</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the mutual information</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyinform.shannon.conditional_entropy">
-<code class="descclassname">pyinform.shannon.</code><code class="descname">conditional_entropy</code><span class="sig-paren">(</span><em>p_xy</em>, <em>p_y</em>, <em>b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#conditional_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.conditional_entropy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyinform.shannon.</code><code class="sig-name descname">conditional_entropy</code><span class="sig-paren">(</span><em class="sig-param">p_xy</em>, <em class="sig-param">p_y</em>, <em class="sig-param">b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#conditional_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.conditional_entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the base-<em>b</em> conditional entropy given joint (<em>p_xy</em>) and marginal
 (<em>p_y</em>) distributions.</p>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Conditional_entropy">Conditional entropy</a> quantifies the amount of information required to
-describe a random variable <span class="math">\(X\)</span> given knowledge of a random variable
-<span class="math">\(Y\)</span>. With <span class="math">\(p_Y\)</span> the probability distribution of <span class="math">\(Y\)</span>, and
-<span class="math">\(p_{X,Y}\)</span> the distribution for the joint distribution <span class="math">\((X,Y)\)</span>,
-the base-<span class="math">\(b\)</span> conditional entropy is defined as</p>
-<div class="math">
+describe a random variable <span class="math notranslate nohighlight">\(X\)</span> given knowledge of a random variable
+<span class="math notranslate nohighlight">\(Y\)</span>. With <span class="math notranslate nohighlight">\(p_Y\)</span> the probability distribution of <span class="math notranslate nohighlight">\(Y\)</span>, and
+<span class="math notranslate nohighlight">\(p_{X,Y}\)</span> the distribution for the joint distribution <span class="math notranslate nohighlight">\((X,Y)\)</span>,
+the base-<span class="math notranslate nohighlight">\(b\)</span> conditional entropy is defined as</p>
+<div class="math notranslate nohighlight">
 \[\begin{split}H(X|Y) &amp;= -\sum_{x,y} p_{X,Y}(x,y) \log_b \frac{p_{X,Y}(x,y)}{p_Y(y)}\\
        &amp;= H(X,Y) - H(Y).\end{split}\]</div>
-<p>See <a class="reference internal" href="#cover1991a" id="id3">[Cover1991a]</a> for more details.</p>
+<p>See <a class="reference internal" href="#cover1991a" id="id3"><span>[Cover1991a]</span></a> for more details.</p>
 <p class="rubric">Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">70</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 <span class="go">0.5971071794515037</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">conditional_entropy</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="go">0.5077571498797332</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p_xy</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</li>
-<li><strong>p_y</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the marginal distribution</li>
-<li><strong>b</strong> (<em>float</em>) – the logarithmic base</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_xy</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</p></li>
+<li><p><strong>p_y</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the marginal distribution</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the logarithmic base</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the conditional entropy</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the conditional entropy</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyinform.shannon.conditional_mutual_info">
-<code class="descclassname">pyinform.shannon.</code><code class="descname">conditional_mutual_info</code><span class="sig-paren">(</span><em>p_xyz</em>, <em>p_xz</em>, <em>p_yz</em>, <em>p_z</em>, <em>b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#conditional_mutual_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.conditional_mutual_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyinform.shannon.</code><code class="sig-name descname">conditional_mutual_info</code><span class="sig-paren">(</span><em class="sig-param">p_xyz</em>, <em class="sig-param">p_xz</em>, <em class="sig-param">p_yz</em>, <em class="sig-param">p_z</em>, <em class="sig-param">b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#conditional_mutual_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.conditional_mutual_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the base-<em>b</em> conditional mutual information the given joint
 (<em>p_xyz</em>) and marginal (<em>p_xz</em>, <em>p_yz</em>, <em>p_z</em>) distributions.</p>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Conditional_entropy">Conditional mutual information</a> was introduced by <a class="reference internal" href="#dobrushin1959" id="id4">[Dobrushin1959]</a> and
-<a class="reference internal" href="#wyner1978" id="id5">[Wyner1978]</a>, and more or less quantifies the average mutual information
-between random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> given knowledge of a third
-<span class="math">\(Z\)</span>. Following the same notations as in
-<a class="reference internal" href="#pyinform.shannon.conditional_entropy" title="pyinform.shannon.conditional_entropy"><code class="xref py py-func docutils literal"><span class="pre">conditional_entropy()</span></code></a>, the base-<span class="math">\(b\)</span> conditional mutual
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Conditional_mutual_information">Conditional mutual information</a> was introduced by <a class="reference internal" href="#dobrushin1959" id="id4"><span>[Dobrushin1959]</span></a> and
+<a class="reference internal" href="#wyner1978" id="id5"><span>[Wyner1978]</span></a>, and more or less quantifies the average mutual information
+between random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> given knowledge of a third
+<span class="math notranslate nohighlight">\(Z\)</span>. Following the same notations as in
+<a class="reference internal" href="#pyinform.shannon.conditional_entropy" title="pyinform.shannon.conditional_entropy"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_entropy()</span></code></a>, the base-<span class="math notranslate nohighlight">\(b\)</span> conditional mutual
 information is defined as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}I(X;Y|Z) &amp;= -\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \log_b \frac{p_{X,Y|Z}(x,y|z)}{p_{X|Z}(x|z)p_{Y|Z}(y|z)}\\
          &amp;= -\sum_{x,y,z} p_{X,Y,Z}(x,y,z) \log_b \frac{p_{X,Y,Z}(x,y,z)p_{Z}(z)}{p_{X,Z}(x,z)p_{Y,Z}(y,z)}\\
          &amp;= H(X,Z) + H(Y,Z) - H(Z) - H(X,Y,Z)\end{split}\]</div>
 <p class="rubric">Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xyz</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xyz</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xz</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yz</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conditional_mutual_info</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">xz</span><span class="p">,</span> <span class="n">yz</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
-<span class="go">0.12594942727460323</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">conditional_mutual_info</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">xz</span><span class="p">,</span> <span class="n">yz</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="go">0.12594942727460334</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p_xyz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</li>
-<li><strong>p_xz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>x,z</em>-marginal distribution</li>
-<li><strong>p_yz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>y,z</em>-marginal distribution</li>
-<li><strong>p_z</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>z</em>-marginal distribution</li>
-<li><strong>b</strong> (<em>float</em>) – the logarithmic base</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_xyz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the joint distribution</p></li>
+<li><p><strong>p_xz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>x,z</em>-marginal distribution</p></li>
+<li><p><strong>p_yz</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>y,z</em>-marginal distribution</p></li>
+<li><p><strong>p_z</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>z</em>-marginal distribution</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the logarithmic base</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the conditional mutual information</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the conditional mutual information</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyinform.shannon.relative_entropy">
-<code class="descclassname">pyinform.shannon.</code><code class="descname">relative_entropy</code><span class="sig-paren">(</span><em>p</em>, <em>q</em>, <em>b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#relative_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.relative_entropy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyinform.shannon.</code><code class="sig-name descname">relative_entropy</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">q</em>, <em class="sig-param">b=2.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinform/shannon.html#relative_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinform.shannon.relative_entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the base-<em>b</em> relative entropy between posterior (<em>p</em>) and prior
 (<em>q</em>) distributions.</p>
 <p><cite>Relative entropy</cite>, also known as the Kullback-Leibler divergence, was
-introduced by Kullback and Leiber in 1951 (<a class="reference internal" href="#kullback1951a" id="id6">[Kullback1951a]</a>). Given a random
-variable <span class="math">\(X\)</span>, two probability distributions <span class="math">\(p_X\)</span> and
-<span class="math">\(q_X\)</span>, relative entropy measures the information gained in switching
-from the prior <span class="math">\(q_X\)</span> to the posterior <span class="math">\(p_X\)</span>:</p>
-<div class="math">
+introduced by Kullback and Leiber in 1951 (<a class="reference internal" href="#kullback1951a" id="id6"><span>[Kullback1951a]</span></a>). Given a random
+variable <span class="math notranslate nohighlight">\(X\)</span>, two probability distributions <span class="math notranslate nohighlight">\(p_X\)</span> and
+<span class="math notranslate nohighlight">\(q_X\)</span>, relative entropy measures the information gained in switching
+from the prior <span class="math notranslate nohighlight">\(q_X\)</span> to the posterior <span class="math notranslate nohighlight">\(p_X\)</span>:</p>
+<div class="math notranslate nohighlight">
 \[D_{KL}(p_X || q_X) = \sum_x p_X(x) \log_b \frac{p_X(x)}{q_X(x)}.\]</div>
-<p>Many of the information measures, e.g. <a class="reference internal" href="#pyinform.shannon.mutual_info" title="pyinform.shannon.mutual_info"><code class="xref py py-func docutils literal"><span class="pre">mutual_info()</span></code></a>,
-<a class="reference internal" href="#pyinform.shannon.conditional_entropy" title="pyinform.shannon.conditional_entropy"><code class="xref py py-func docutils literal"><span class="pre">conditional_entropy()</span></code></a>, etc…, amount to applications of relative
+<p>Many of the information measures, e.g. <a class="reference internal" href="#pyinform.shannon.mutual_info" title="pyinform.shannon.mutual_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">mutual_info()</span></code></a>,
+<a class="reference internal" href="#pyinform.shannon.conditional_entropy" title="pyinform.shannon.conditional_entropy"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_entropy()</span></code></a>, etc…, amount to applications of relative
 entropy for various prior and posterior distributions.</p>
 <p class="rubric">Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
 <span class="go">0.27807190511263774</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
-<span class="go">0.32192809488736235</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+<span class="go">0.3219280948873624</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
 <span class="go">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shannon</span><span class="o">.</span><span class="n">relative_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
 <span class="go">nan</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>posterior</em> distribution</li>
-<li><strong>q</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>prior</em> distribution</li>
-<li><strong>b</strong> (<em>float</em>) – the logarithmic base</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>posterior</em> distribution</p></li>
+<li><p><strong>q</strong> (<a class="reference internal" href="dist.html#pyinform.dist.Dist" title="pyinform.dist.Dist"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyinform.dist.Dist</span></code></a>) – the <em>prior</em> distribution</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – the logarithmic base</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the relative entropy</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the relative entropy</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<table class="docutils citation" frame="void" id="cover1991a" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[Cover1991a]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> T.M. Cover amd J.A. Thomas (1991). “Elements of information theory” (1st ed.). New York: Wiley. ISBN 0-471-06259-6.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="dobrushin1959" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[Dobrushin1959]</a></td><td>Dobrushin, R. L. (1959). “General formulation of Shannon’s main theorem in information theory”. Ushepi Mat. Nauk. 14: 3-104.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="kullback1951a" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[Kullback1951a]</a></td><td>Kullback, S.; Leibler, R.A. (1951). “<a class="reference external" href="http://projecteuclid.org/DPubS?service=UI&amp;version=1.0&amp;verb=Display&amp;handle=euclid.aoms/1177729694">On information and sufficiency</a>”. Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="shannon1948a" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[Shannon1948a]</a></td><td>Shannon, Claude E. (July-October 1948). “<a class="reference external" href="https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x">A Mathematical Theory of Communication</a>”. Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="wyner1978" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[Wyner1978]</a></td><td>Wyner, A. D. (1978). “<a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0019995878900268">A definition of conditional mutual information for arbitrary ensembles</a>”. Information and Control 38 (1): 51-59. doi:10.1015/s0019-9958(78)90026-8.</td></tr>
-</tbody>
-</table>
+<dl class="citation">
+<dt class="label" id="cover1991a"><span class="brackets">Cover1991a</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p>T.M. Cover amd J.A. Thomas (1991). “Elements of information theory” (1st ed.). New York: Wiley. ISBN 0-471-06259-6.</p>
+</dd>
+<dt class="label" id="dobrushin1959"><span class="brackets"><a class="fn-backref" href="#id4">Dobrushin1959</a></span></dt>
+<dd><p>Dobrushin, R. L. (1959). “General formulation of Shannon’s main theorem in information theory”. Ushepi Mat. Nauk. 14: 3-104.</p>
+</dd>
+<dt class="label" id="kullback1951a"><span class="brackets"><a class="fn-backref" href="#id6">Kullback1951a</a></span></dt>
+<dd><p>Kullback, S.; Leibler, R.A. (1951). “<a class="reference external" href="http://projecteuclid.org/DPubS?service=UI&amp;version=1.0&amp;verb=Display&amp;handle=euclid.aoms/1177729694">On information and sufficiency</a>”. Annals of Mathematical Statistics. 22 (1): 79-86. doi:10.1214/aoms/1177729694. MR 39968.</p>
+</dd>
+</dl>
+<dl class="citation">
+<dt class="label" id="shannon1948a"><span class="brackets"><a class="fn-backref" href="#id1">Shannon1948a</a></span></dt>
+<dd><p>Shannon, Claude E. (July-October 1948). “<a class="reference external" href="https://dx.doi.org/10.1002%2Fj.1538-7305.1948.tb01338.x">A Mathematical Theory of Communication</a>”. Bell System Technical Journal. 27 (3): 379-423. doi:10.1002/j.1538-7305.1948.tb01448.x.</p>
+</dd>
+</dl>
+<dl class="citation">
+<dt class="label" id="wyner1978"><span class="brackets"><a class="fn-backref" href="#id5">Wyner1978</a></span></dt>
+<dd><p>Wyner, A. D. (1978). “<a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0019995878900268">A definition of conditional mutual information for arbitrary ensembles</a>”. Information and Control 38 (1): 51-59. doi:10.1015/s0019-9958(78)90026-8.</p>
+</dd>
+</dl>
 </div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -537,7 +519,7 @@ entropy for various prior and posterior distributions.</p>
         <a href="timeseries.html" class="btn btn-neutral float-right" title="Time Series Measures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dist.html" class="btn btn-neutral" title="Empirical Distributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dist.html" class="btn btn-neutral float-left" title="Empirical Distributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -546,11 +528,11 @@ entropy for various prior and posterior distributions.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, ELIFE.
+        &copy; Copyright 2016-2019, Douglas G. Moore
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -563,37 +545,15 @@ entropy for various prior and posterior distributions.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.0.5',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

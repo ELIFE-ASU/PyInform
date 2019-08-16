@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyinform.dist &mdash; PyInform 0.0.5 documentation</title>
+  <title>pyinform.dist &mdash; PyInform 0.2.0 documentation</title>
   
 
   
@@ -17,41 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="PyInform 0.0.5 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.2.0
               </div>
             
           
@@ -106,7 +100,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">PyInform</a>
@@ -114,9 +108,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -146,8 +141,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -159,13 +152,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyinform.dist</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2016 ELIFE. All rights reserved.</span>
+<span></span><span class="c1"># Copyright 2016-2019 Douglas G. Moore. All rights reserved.</span>
 <span class="c1"># Use of this source code is governed by a MIT</span>
 <span class="c1"># license that can be found in the LICENSE file.</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_bool</span><span class="p">,</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">,</span> <span class="n">c_ulong</span><span class="p">,</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">POINTER</span>
 <span class="kn">from</span> <span class="nn">pyinform</span> <span class="k">import</span> <span class="n">_inform</span>
+
 
 <div class="viewcode-block" id="Dist"><a class="viewcode-back" href="../../dist.html#pyinform.dist.Dist">[docs]</a><span class="k">class</span> <span class="nc">Dist</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -187,8 +181,8 @@
 <span class="sd">        ``numpy.ndarray``, the sequence is treated as the underlying support.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
 <span class="sd">            &gt;&gt;&gt; d = Dist([0,0,1,2])</span>
@@ -226,12 +220,12 @@
 <span class="sd">        Determine the size of the support of the distribution.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; len(Dist(5))</span>
 <span class="sd">            5</span>
-<span class="sd">            &gt;&gt;&gt; len(Dist[0,1,5])</span>
+<span class="sd">            &gt;&gt;&gt; len(Dist([0,1,5]))</span>
 <span class="sd">            3</span>
 
 <span class="sd">        See also :py:meth:`.counts`.</span>
@@ -252,8 +246,8 @@
 <span class="sd">        - **is unchanged** - well, that sorta says it all, doesn&#39;t it?</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
 <span class="sd">            &gt;&gt;&gt; d.resize(3)</span>
@@ -263,7 +257,7 @@
 <span class="sd">            &gt;&gt;&gt; len(d)</span>
 <span class="sd">            8</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([1,2,3,4])</span>
 <span class="sd">            &gt;&gt;&gt; d.resize(2)</span>
@@ -288,8 +282,8 @@
 <span class="sd">        Perform a deep copy of the distribution.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([1,2,3])</span>
 <span class="sd">            &gt;&gt;&gt; e = d</span>
@@ -299,7 +293,7 @@
 <span class="sd">            &gt;&gt;&gt; list(d)</span>
 <span class="sd">            [3, 2, 3]</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; f = d.copy()</span>
 <span class="sd">            &gt;&gt;&gt; f[0] = 1</span>
@@ -320,14 +314,14 @@
 <span class="sd">        Return the number of observations made thus far.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
 <span class="sd">            &gt;&gt;&gt; d.counts()</span>
 <span class="sd">            0</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([1,0,3,2])</span>
 <span class="sd">            &gt;&gt;&gt; d.counts()</span>
@@ -346,21 +340,21 @@
 <span class="sd">        if the support is not empty and at least one observation has been made.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
 <span class="sd">            &gt;&gt;&gt; d.valid()</span>
 <span class="sd">            False</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([0,0,0,1])</span>
 <span class="sd">            &gt;&gt;&gt; d.valid()</span>
 <span class="sd">            True</span>
 
 <span class="sd">        See also :py:meth:`.__len__` and :py:meth:`.counts`.</span>
-<span class="sd">    </span>
+
 <span class="sd">        :return: a boolean signifying that the distribution is valid</span>
 <span class="sd">        :rtype: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -371,14 +365,14 @@
 <span class="sd">        Get the number of observations made of *event*.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(2)</span>
 <span class="sd">            &gt;&gt;&gt; (d[0], d[1])</span>
 <span class="sd">            (0, 0)</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([0,1])</span>
 <span class="sd">            &gt;&gt;&gt; (d[0], d[1])</span>
@@ -402,8 +396,8 @@
 <span class="sd">        If *value* is negative, then the observation count is set to zero.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(2)</span>
 <span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
@@ -412,7 +406,7 @@
 <span class="sd">            &gt;&gt;&gt; list(d)</span>
 <span class="sd">            [0, 1]</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([0,1,2,3])</span>
 <span class="sd">            &gt;&gt;&gt; for i, n in enumerate(d):</span>
@@ -421,9 +415,9 @@
 <span class="sd">            &gt;&gt;&gt; list(d)</span>
 <span class="sd">            [0, 2, 4, 6]</span>
 
-<span class="sd">        </span>
+
 <span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.tick`.</span>
-<span class="sd">        </span>
+
 <span class="sd">        :param int event: the observed event</span>
 <span class="sd">        :param int value: the number of observations</span>
 <span class="sd">        :raises IndexError: if ``event &lt; 0 or len(self) &lt;= event``</span>
@@ -439,8 +433,8 @@
 <span class="sd">        of observations of said *event*.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist(5)</span>
 <span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
@@ -449,7 +443,7 @@
 <span class="sd">            &gt;&gt;&gt; list(d)</span>
 <span class="sd">            [1, 1, 1, 1, 1]</span>
 
-<span class="sd">        ::</span>
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([0,1,2,3])</span>
 <span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
@@ -459,7 +453,7 @@
 <span class="sd">            [1, 2, 3, 4]</span>
 
 <span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.__setitem__`.</span>
-<span class="sd">        </span>
+
 <span class="sd">        :param int event: the observed event</span>
 <span class="sd">        :return: the total number of observations of *event*</span>
 <span class="sd">        :rtype: int</span>
@@ -474,8 +468,8 @@
 <span class="sd">        Compute the empiricial probability of an *event*.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([1,1,1,1])</span>
 <span class="sd">            &gt;&gt;&gt; for i, _ in enumerate(d):</span>
@@ -483,7 +477,7 @@
 <span class="sd">            ...</span>
 
 <span class="sd">        See also :py:meth:`.__getitem__` and :py:meth:`.dump`.</span>
-<span class="sd">        </span>
+
 <span class="sd">        :param int event: the observed event</span>
 <span class="sd">        :return: the empirical probability *event*</span>
 <span class="sd">        :rtype: float</span>
@@ -502,12 +496,12 @@
 <span class="sd">        the result as an array.</span>
 
 <span class="sd">        .. rubric:: Examples:</span>
-<span class="sd">        </span>
-<span class="sd">        ::</span>
+
+<span class="sd">        .. doctest:: Dist</span>
 
 <span class="sd">            &gt;&gt;&gt; d = Dist([1,2,2,1])</span>
 <span class="sd">            &gt;&gt;&gt; d.dump()</span>
-<span class="sd">            array([ 0.16666667,  0.33333333,  0.33333333,  0.16666667])</span>
+<span class="sd">            array([0.16666667, 0.33333333, 0.33333333, 0.16666667])</span>
 
 <span class="sd">        See also :py:meth:`.probability`.</span>
 
@@ -526,6 +520,7 @@
         <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;cannot dump the distribution&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">probs</span></div></div>
+
 
 <span class="n">_dist_alloc</span> <span class="o">=</span> <span class="n">_inform</span><span class="o">.</span><span class="n">inform_dist_alloc</span>
 <span class="n">_dist_alloc</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ulong</span><span class="p">]</span>
@@ -581,9 +576,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -592,11 +585,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, ELIFE.
+        &copy; Copyright 2016-2019, Douglas G. Moore
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -609,37 +602,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.0.5',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>
