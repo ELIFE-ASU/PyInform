@@ -11,6 +11,8 @@ python:
   - "3.7"
 
 install:
+  - wget http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.29-0ubuntu2_amd64.deb
+  - dpkg -i libc_2.29-0ubuntu2_amd64.deb
   - wget https://github.com/ELIFE-ASU/Inform/releases/download/v1.0.1/inform-1.0.1_mixed.zip
   - unzip inform-1.0.1_mixed.zip
   - mv inform-1.0.1 pyinform/inform-1.0.1
