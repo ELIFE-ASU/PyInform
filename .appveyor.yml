@@ -11,10 +11,10 @@ environment:
     - PYTHON: "C:\\Python37-x64"
 
 install:
-  - ps: Invoke-RestMethod https://github.com/ELIFE-ASU/Inform/releases/download/v1.0.0/inform-1.0.0_mixed.zip -OutFile inform-1.0.0_mixed.zip
-  - ps: 7z x inform-1.0.0_mixed.zip
-  - ps: Move-Item inform-1.0.0 pyinform/inform-1.0.0
-  - ps: Remove-Item inform-1.0.0_mixed.zip
+  - ps: Invoke-RestMethod https://github.com/ELIFE-ASU/Inform/releases/download/v1.0.1/inform-1.0.1_mixed.zip -OutFile inform-1.0.1_mixed.zip
+  - ps: 7z x inform-1.0.1_mixed.zip
+  - ps: Move-Item inform-1.0.1 pyinform/inform-1.0.1
+  - ps: Remove-Item inform-1.0.1_mixed.zip
   - cmd: "%PYTHON%\\python.exe -m pip install lxml nose"
   - cmd: "%PYTHON%\\python.exe -m pip install ."
 

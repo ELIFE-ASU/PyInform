@@ -16,7 +16,7 @@ So far the python wrapper has been tested under :code:`python2.7`, :code:`python
 with open('LICENSE') as f:
     license = f.read()
 
-inform_version = "1.0.0"
+inform_version = "1.0.1"
 inform_files = [
     "README.rst",
     "LICENSE",
@@ -27,7 +27,7 @@ inform_files = [
 
 setup(
     name='pyinform',
-    version='0.2.0',
+    version='0.2.1',
     description='A wrapper for the Inform library',
     long_description=long_description,
     maintainer='Douglas G. Moore',
