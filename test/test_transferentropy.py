@@ -203,6 +203,27 @@ class TestTransferEntropy(unittest.TestCase):
         self.assertAlmostEqual(0.000000, transfer_entropy(
             xs, ys, 2, condition=cs), places=6)
 
+        xs = [[0,0],[0,1],[1,0]]
+        ys = [[0,1],[1,0],[1,1]]
+        cs = [[0,0],[0,1],[0,1]]
+
+        self.assertAlmostEqual(0.666667, transfer_entropy(
+            ys, xs, condition=cs, k=1), places=6)
+        self.assertAlmostEqual(0.666667, transfer_entropy(
+            xs, ys, condition=cs, k=1), places=6)
+
+        xs = [0,1,1,1,1,0,0,0,0]
+        ys = [0,0,1,1,1,1,0,0,0]
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, condition=xs, k=2), places=6)
+
+        xs = [[1,0,0,0,0,1,1,1,1], [1,1,1,1,0,0,0,1,1]]
+        ys = [[0,0,1,1,1,1,0,0,0], [1,0,0,0,0,1,1,1,0]]
+
+        self.assertAlmostEqual(0.000000, transfer_entropy(
+            xs, ys, condition=xs, k=2), places=6)
+
 
 class TestLocalTransferEntropy(unittest.TestCase):
     def test_transfer_entropy_empty(self):
